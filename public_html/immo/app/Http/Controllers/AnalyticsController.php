@@ -18,8 +18,12 @@ class AnalyticsController extends Controller
 
     public function index()
     {
-        $user   = auth()->user();
-        $agent  = Fournisseur::where('user_id', $user->id)->first();
+        $user = auth()->user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $agent = Fournisseur::where('user_id', $user->id)->first();
 
         if (!$agent) {
             abort(403, "Vous n'êtes pas un agent.");

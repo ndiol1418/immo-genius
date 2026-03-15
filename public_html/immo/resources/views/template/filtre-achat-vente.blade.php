@@ -98,14 +98,43 @@
 
             <div class="col-2 col-lg-2 p-1 mb-1 mt-1">
                 {{-- <label for="btn"></label> --}}
-                <button class="radius btn btn-dark btn-lg p-1 w-100 d-none d-sm-block text-secondary" style="padding: 8px !important;background: #061630 !important"> Rechercher 
+                <button class="radius btn btn-dark btn-lg p-1 w-100 d-none d-sm-block text-secondary" style="padding: 8px !important;background: #061630 !important"> Rechercher
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="m19.485 20.154l-6.262-6.262q-.75.639-1.725.989t-1.96.35q-2.402 0-4.066-1.663T3.808 9.503T5.47 5.436t4.064-1.667t4.068 1.664T15.268 9.5q0 1.042-.369 2.017t-.97 1.668l6.262 6.261zM9.539 14.23q1.99 0 3.36-1.37t1.37-3.361t-1.37-3.36t-3.36-1.37t-3.361 1.37t-1.37 3.36t1.37 3.36t3.36 1.37"/></svg>
                 </button>
                 <button class="radius btn btn-danger p-1 w-100 d-block d-sm-none" style="height: 35px;margin-top: 18px;"> <i class="fa fa-search"></i> </button>
             </div>
         </div>
+        {{-- Bouton Géolocalisation --}}
+        <div class="col-12 px-2 pb-2">
+            <button type="button" id="btnNearMeFiltre" onclick="nearMeRedirectFiltre(this)"
+                style="background:none;border:none;color:#888;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:0;">
+                <span style="font-size:14px;">📍</span> Annonces près de moi
+            </button>
+        </div>
     </div>
 </form>
+
+@push('subScript')
+<script>
+function nearMeRedirectFiltre(btn) {
+    if (!navigator.geolocation) {
+        alert("La géolocalisation n'est pas supportée par votre navigateur.");
+        return;
+    }
+    btn.textContent = '⏳ Localisation en cours...';
+    btn.disabled = true;
+    navigator.geolocation.getCurrentPosition(function(pos) {
+        var lat = pos.coords.latitude;
+        var lon = pos.coords.longitude;
+        window.location.href = '/louer?near=1&lat=' + lat + '&lon=' + lon + '&rayon=10';
+    }, function() {
+        btn.disabled = false;
+        btn.innerHTML = '<span style="font-size:14px;">📍</span> Annonces près de moi';
+        alert("Impossible d'obtenir votre position. Vérifiez les autorisations.");
+    });
+}
+</script>
+@endpush
 @include('template.pages.formulaires.modal-tri')
 
 @push('subScript')

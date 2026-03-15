@@ -61,7 +61,9 @@ Route::get('/estimation', [App\Http\Controllers\EstimationController::class, 'in
 Route::post('/estimation', [App\Http\Controllers\EstimationController::class, 'estimer'])->name('estimation.estimer');
 
 // Analytics agent
-Route::middleware(['auth'])->get('/agent/analytics', [App\Http\Controllers\AnalyticsController::class, 'index'])->name('agent.analytics');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/agent/analytics', [App\Http\Controllers\AnalyticsController::class, 'index'])->name('agent.analytics');
+});
 
 // Géolocalisation — annonces près de moi
 Route::post('/annonces/near-me', [App\Http\Controllers\SearchController::class, 'nearMe'])->name('annonces.nearMe');
