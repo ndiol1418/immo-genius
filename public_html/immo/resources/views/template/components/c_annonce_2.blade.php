@@ -69,7 +69,7 @@
                     <button onclick="toggleCompare({{ $annonce->id }}, '{{ addslashes($annonce->name) }}', this)"
                         data-compare-id="{{ $annonce->id }}" data-compare-btn
                         title="Comparer"
-                        style="position:absolute;top:50px;right:10px;z-index:10;background:#f8f9fa;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);font-size:16px;">
+                        style="position:absolute;top:10px;left:10px;z-index:10;background:rgba(255,255,255,.9);border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);font-size:16px;">
                         ⚖️
                     </button>
                     <section id="hero" class="hero section dark-background" style="border-radius: 20px">

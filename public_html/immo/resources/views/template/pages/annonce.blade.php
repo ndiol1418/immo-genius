@@ -205,9 +205,10 @@
 
         </div><!-- End Section Title -->
 
-        {{-- Bouton favori --}}
+        {{-- Boutons Favori + Comparer --}}
         @php $isFavori = auth()->check() ? \App\Models\Favori::where('user_id', auth()->id())->where('annonce_id', $annonce->id)->exists() : false; @endphp
-        <div class="container mb-2">
+        <div class="container mb-2 d-flex align-items-center" style="gap:10px;flex-wrap:wrap;">
+          {{-- Favori --}}
           <button onclick="toggleFavoriDetail({{ $annonce->id }}, this)"
             id="btnFavoriDetail"
             data-favori="{{ $isFavori ? '1' : '0' }}"
@@ -218,7 +219,56 @@
             </svg>
             <span id="favoriLabel">{{ $isFavori ? 'Retiré des favoris' : 'Ajouter aux favoris' }}</span>
           </button>
+
+          {{-- Comparer --}}
+          <button id="btnCompareDetail"
+            onclick="toggleCompareDetail({{ $annonce->id }}, '{{ addslashes($annonce->name) }}', this)"
+            style="background:#fff;border:2px solid #ddd;border-radius:30px;padding:8px 20px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#333;">
+            <span style="font-size:16px;">⚖️</span>
+            <span id="compareDetailLabel">Comparer</span>
+          </button>
         </div>
+        <script>
+        (function() {
+            var annId = '{{ $annonce->id }}';
+            var annName = '{{ addslashes($annonce->name) }}';
+            function toggleCompareDetail(id, name, btn) {
+                var ids = JSON.parse(localStorage.getItem('compareIds') || '[]');
+                var idx = ids.indexOf(String(id));
+                var label = document.getElementById('compareDetailLabel');
+                if (idx > -1) {
+                    ids.splice(idx, 1);
+                    btn.style.borderColor = '#ddd';
+                    btn.style.background = '#fff';
+                    btn.style.color = '#333';
+                    label.textContent = 'Comparer';
+                } else {
+                    if (ids.length >= 3) { alert('Maximum 3 annonces comparables.'); return; }
+                    ids.push(String(id));
+                    btn.style.borderColor = '#0d1c2e';
+                    btn.style.background = '#0d1c2e';
+                    btn.style.color = '#27E3C0';
+                    label.textContent = 'Dans la comparaison ✓';
+                }
+                localStorage.setItem('compareIds', JSON.stringify(ids));
+                if (typeof syncCompareBar === 'function') syncCompareBar();
+            }
+            window.toggleCompareDetail = toggleCompareDetail;
+            // Restore state on load
+            document.addEventListener('DOMContentLoaded', function() {
+                var ids = JSON.parse(localStorage.getItem('compareIds') || '[]');
+                if (ids.includes(String(annId))) {
+                    var btn = document.getElementById('btnCompareDetail');
+                    if (btn) {
+                        btn.style.borderColor = '#0d1c2e';
+                        btn.style.background = '#0d1c2e';
+                        btn.style.color = '#27E3C0';
+                        document.getElementById('compareDetailLabel').textContent = 'Dans la comparaison ✓';
+                    }
+                }
+            });
+        })();
+        </script>
 
         {{-- Modal Contact Agent --}}
         <div id="modalContactAgent" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.55);align-items:center;justify-content:center;">
@@ -243,14 +293,13 @@
           </div>
         </div>
 
-        {{-- Simulateur de prêt rapide --}}
-        @if($annonce->type_location_id == 1)
+        {{-- Simulateur de prêt / coût mensuel --}}
         <div class="container mt-4 mb-2">
           <div class="card border-0 shadow-sm p-4" style="border-left:4px solid #27E3C0 !important;">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="mb-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15c0-1.09 1.01-1.85 2.7-1.85c1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61c0 2.31 1.91 3.46 4.7 4.13c2.5.6 3 1.48 3 2.41c0 .69-.49 1.79-2.7 1.79c-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55c0-2.84-2.43-3.81-4.7-4.4"/></svg>
-                Simuler mon financement
+                💰
+                {{ $annonce->type_location_id == 1 ? 'Simuler mon financement' : 'Simuler le coût mensuel' }}
               </h5>
               <a href="{{ route('calculateur') }}" class="btn btn-sm btn-light" style="font-size:12px;">Simulateur complet →</a>
             </div>
@@ -295,6 +344,119 @@
             document.addEventListener('DOMContentLoaded', simCalculer);
         })();
         </script>
+
+        {{-- Section Avis sur l'agent --}}
+        @php $agentAvis = $annonce->immo?->fournisseur; @endphp
+        @if($agentAvis)
+        <div class="container mt-4 mb-2">
+          <div class="card border-0 shadow-sm p-4">
+            @php
+                $avisListe    = $agentAvis->avis()->with('user')->latest()->get();
+                $noteMoyAvis  = $agentAvis->noteMoyenne();
+                $nbAvis       = $avisListe->count();
+                $monAvisAgent = auth()->check() ? $agentAvis->avis()->where('user_id', auth()->id())->first() : null;
+            @endphp
+
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="mb-0">
+                ⭐ Avis sur
+                <a href="{{ route('agent.show', $agentAvis->id) }}" class="text-dark text-capitalize">{{ $agentAvis->nom_complet }}</a>
+              </h5>
+              <div class="d-flex align-items-center" style="gap:6px;">
+                @if($noteMoyAvis > 0)
+                  <span style="font-size:20px;font-weight:700;color:#f59e0b;">{{ $noteMoyAvis }}</span>
+                  <div>
+                    @for($s = 1; $s <= 5; $s++)
+                      <i class="fas fa-star" style="font-size:13px;color:{{ $s <= round($noteMoyAvis) ? '#f59e0b' : '#ddd' }};"></i>
+                    @endfor
+                    <span style="font-size:12px;color:#888;margin-left:4px;">({{ $nbAvis }} avis)</span>
+                  </div>
+                @else
+                  <span style="font-size:12px;color:#aaa;">Aucun avis pour l'instant</span>
+                @endif
+              </div>
+            </div>
+
+            @if($avisListe->count())
+              <div class="mb-3" style="max-height:220px;overflow-y:auto;">
+                @foreach($avisListe as $avi)
+                  <div class="d-flex" style="gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5;">
+                    <div style="width:36px;height:36px;border-radius:50%;background:#0d1c2e;color:#27E3C0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">
+                      {{ strtoupper(substr($avi->user->name ?? 'A', 0, 1)) }}
+                    </div>
+                    <div class="flex-grow-1">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <strong style="font-size:13px;">{{ $avi->user->name ?? 'Anonyme' }}</strong>
+                        <span>
+                          @for($s = 1; $s <= 5; $s++)
+                            <i class="fas fa-star" style="font-size:11px;color:{{ $s <= $avi->note ? '#f59e0b' : '#ddd' }};"></i>
+                          @endfor
+                        </span>
+                      </div>
+                      @if($avi->commentaire)
+                        <p style="font-size:13px;margin:3px 0 2px;color:#444;">{{ $avi->commentaire }}</p>
+                      @endif
+                      <span style="font-size:10px;color:#aaa;">{{ $avi->created_at->diffForHumans() }}</span>
+                    </div>
+                  </div>
+                @endforeach
+              </div>
+            @endif
+
+            @if(session('success'))
+              <div class="alert alert-success py-1 px-2 mb-2" style="font-size:13px;">{{ session('success') }}</div>
+            @endif
+
+            @auth
+              <div style="border-top:1px solid #f0f0f0;padding-top:16px;">
+                <p class="mb-2" style="font-size:13px;font-weight:600;">{{ $monAvisAgent ? 'Modifier mon avis' : 'Laisser un avis sur cet agent' }}</p>
+                <form action="{{ route('avis.store') }}" method="POST">
+                  @csrf
+                  <input type="hidden" name="fournisseur_id" value="{{ $agentAvis->id }}">
+                  <input type="hidden" name="annonce_id" value="{{ $annonce->id }}">
+                  {{-- Étoiles interactives --}}
+                  <div class="d-flex mb-2" id="starRatingAvis" style="gap:4px;">
+                    @for($s = 1; $s <= 5; $s++)
+                      <label style="cursor:pointer;font-size:28px;line-height:1;color:{{ $monAvisAgent && $monAvisAgent->note >= $s ? '#f59e0b' : '#ddd' }};" data-val="{{ $s }}">
+                        <input type="radio" name="note" value="{{ $s }}" style="display:none;" {{ $monAvisAgent && $monAvisAgent->note == $s ? 'checked' : '' }}>
+                        ★
+                      </label>
+                    @endfor
+                  </div>
+                  <textarea name="commentaire" class="form-control mb-2" rows="2"
+                    placeholder="Votre commentaire (optionnel)"
+                    style="font-size:13px;resize:none;">{{ $monAvisAgent?->commentaire }}</textarea>
+                  <button type="submit" class="btn btn-sm btn-dark text-white">
+                    {{ $monAvisAgent ? 'Mettre à jour mon avis' : 'Publier l\'avis' }}
+                  </button>
+                </form>
+              </div>
+              <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                  var stars = document.querySelectorAll('#starRatingAvis label');
+                  stars.forEach(function(lbl, idx) {
+                      lbl.addEventListener('mouseenter', function() {
+                          stars.forEach(function(l, i) { l.style.color = i <= idx ? '#f59e0b' : '#ddd'; });
+                      });
+                      lbl.addEventListener('click', function() {
+                          lbl.querySelector('input').checked = true;
+                          stars.forEach(function(l, i) { l.style.color = i <= idx ? '#f59e0b' : '#ddd'; });
+                      });
+                  });
+                  document.getElementById('starRatingAvis').addEventListener('mouseleave', function() {
+                      var checked = document.querySelector('#starRatingAvis input:checked');
+                      var ci = checked ? parseInt(checked.value) - 1 : -1;
+                      stars.forEach(function(l, i) { l.style.color = i <= ci ? '#f59e0b' : '#ddd'; });
+                  });
+              });
+              </script>
+            @else
+              <p style="font-size:13px;color:#888;padding-top:12px;border-top:1px solid #f0f0f0;">
+                <a href="{{ route('login') }}">Connectez-vous</a> pour laisser un avis sur cet agent.
+              </p>
+            @endauth
+          </div>
+        </div>
         @endif
 
         <div class="container">
