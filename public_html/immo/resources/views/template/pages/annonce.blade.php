@@ -243,6 +243,60 @@
           </div>
         </div>
 
+        {{-- Simulateur de prêt rapide --}}
+        @if($annonce->type_location_id == 1)
+        <div class="container mt-4 mb-2">
+          <div class="card border-0 shadow-sm p-4" style="border-left:4px solid #27E3C0 !important;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15c0-1.09 1.01-1.85 2.7-1.85c1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61c0 2.31 1.91 3.46 4.7 4.13c2.5.6 3 1.48 3 2.41c0 .69-.49 1.79-2.7 1.79c-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55c0-2.84-2.43-3.81-4.7-4.4"/></svg>
+                Simuler mon financement
+              </h5>
+              <a href="{{ route('calculateur') }}" class="btn btn-sm btn-light" style="font-size:12px;">Simulateur complet →</a>
+            </div>
+            <div class="row g-3 align-items-end">
+              <div class="col-md-3 col-6">
+                <label style="font-size:12px;color:#888;">Apport (CFA)</label>
+                <input type="number" id="sim_apport" class="form-control form-control-sm" value="0" min="0" step="500000" oninput="simCalculer()">
+              </div>
+              <div class="col-md-3 col-6">
+                <label style="font-size:12px;color:#888;">Durée (ans)</label>
+                <input type="number" id="sim_duree" class="form-control form-control-sm" value="20" min="1" max="30" oninput="simCalculer()">
+              </div>
+              <div class="col-md-3 col-6">
+                <label style="font-size:12px;color:#888;">Taux (%)</label>
+                <input type="number" id="sim_taux" class="form-control form-control-sm" value="7" min="0.1" max="25" step="0.1" oninput="simCalculer()">
+              </div>
+              <div class="col-md-3 col-6">
+                <div class="rounded p-2 text-center" style="background:#0d1c2e;color:#fff;">
+                  <div style="font-size:10px;opacity:.7;">Mensualité</div>
+                  <div id="sim_result" style="font-size:18px;font-weight:700;color:#27E3C0;">—</div>
+                  <div style="font-size:10px;opacity:.6;">CFA/mois</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+        (function() {
+            var prix = {{ $annonce->prix ?? 0 }};
+            function simCalculer() {
+                var apport  = parseFloat(document.getElementById('sim_apport').value) || 0;
+                var duree   = parseInt(document.getElementById('sim_duree').value) || 1;
+                var taux    = parseFloat(document.getElementById('sim_taux').value) || 0;
+                var capital = prix - apport;
+                if (capital <= 0) { document.getElementById('sim_result').textContent = '0'; return; }
+                var tm = taux / 100 / 12;
+                var n  = duree * 12;
+                var m  = tm === 0 ? capital / n : capital * tm * Math.pow(1+tm,n) / (Math.pow(1+tm,n)-1);
+                document.getElementById('sim_result').textContent = Math.round(m).toLocaleString('fr-FR');
+            }
+            window.simCalculer = simCalculer;
+            document.addEventListener('DOMContentLoaded', simCalculer);
+        })();
+        </script>
+        @endif
+
         <div class="container">
           <div class="row">
             <div class="col-lg-12 col-12">

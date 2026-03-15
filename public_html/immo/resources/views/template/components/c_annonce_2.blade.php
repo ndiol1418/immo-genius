@@ -65,6 +65,13 @@
                             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/>
                         </svg>
                     </button>
+                    {{-- Bouton Comparer --}}
+                    <button onclick="toggleCompare({{ $annonce->id }}, '{{ addslashes($annonce->name) }}', this)"
+                        data-compare-id="{{ $annonce->id }}" data-compare-btn
+                        title="Comparer"
+                        style="position:absolute;top:50px;right:10px;z-index:10;background:#f8f9fa;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);font-size:16px;">
+                        ⚖️
+                    </button>
                     <section id="hero" class="hero section dark-background" style="border-radius: 20px">
                         <div id="hero-carousel-{{ $id??'' }}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000" style="min-height: 250px !important;">
                             @isset($annonce)

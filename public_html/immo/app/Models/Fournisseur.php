@@ -25,6 +25,14 @@ class Fournisseur extends Model
     public function commentaires() {
         return $this->hasMany(Commentaire::class);
     }
+
+    public function avis() {
+        return $this->hasMany(Avi::class);
+    }
+
+    public function noteMoyenne() {
+        return round($this->avis()->avg('note') ?? 0, 1);
+    }
     public function getNomCompletAttribute() {
         return $this->prenom .' ' . $this->nom;
     }

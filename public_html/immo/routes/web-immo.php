@@ -46,3 +46,16 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/alertes/{alerte}', [App\Http\Controllers\AlertesController::class, 'destroy'])->name('alertes.destroy');
     Route::post('/alertes/{alerte}/toggle', [App\Http\Controllers\AlertesController::class, 'toggle'])->name('alertes.toggle');
 });
+
+// Avis
+Route::post('/avis', [App\Http\Controllers\AvisController::class, 'store'])->name('avis.store');
+
+// Comparaison
+Route::get('/comparer', [App\Http\Controllers\ComparaisonController::class, 'index'])->name('comparer');
+
+// Calculateur de prêt
+Route::get('/calculateur-pret', [App\Http\Controllers\CalculateurController::class, 'index'])->name('calculateur');
+
+// Estimation de bien
+Route::get('/estimation', [App\Http\Controllers\EstimationController::class, 'index'])->name('estimation');
+Route::post('/estimation', [App\Http\Controllers\EstimationController::class, 'estimer'])->name('estimation.estimer');

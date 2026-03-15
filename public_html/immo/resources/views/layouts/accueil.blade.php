@@ -273,6 +273,7 @@ font-size: 10px;
   <!-- Preloader -->
   <div id="preloader"></div>
   @include('loginModal')
+  @include('comparaison.floating_bar')
 
   <!-- Vendor JS Files -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

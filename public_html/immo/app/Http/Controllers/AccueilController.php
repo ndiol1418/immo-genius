@@ -347,6 +347,7 @@ class AccueilController extends Controller
 
 
         $annonce = Annonce::withoutGlobalScope(AnnonceScope::class)->where('slug',$slug)->first();
+        if (!$annonce) abort(404);
         $annonces = Annonce::withoutGlobalScope(AnnonceScope::class)->with(['immo.bien'])->where('type_location_id',$annonce->type_location_id)->inRandomOrder()->limit(4)->get();
         $url = route('annonce', $annonce->slug);
         // $url = 'https://vytimo.softek-group.com/annonces/test-2-annonce22';

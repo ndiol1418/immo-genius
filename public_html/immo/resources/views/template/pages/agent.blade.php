@@ -134,9 +134,14 @@
                         </div>
                         <div class="profile-name-row">
                             <h1 class="profile-name text-capitalize">{{ $agent->nom_complet }}</h1>
+                            @php $noteMoyenne = $agent->noteMoyenne(); $nbAvis = $agent->avis()->count(); @endphp
                             <div class="profile-rating">
-                                <span class="rating-score">4.9</span>
-                                <span class="rating-star"> <i class="fas fa-star-half-alt"></i>
+                                <span class="rating-score">{{ $noteMoyenne > 0 ? $noteMoyenne : '—' }}</span>
+                                <span class="rating-star">
+                                    @for($s = 1; $s <= 5; $s++)
+                                        <i class="fas fa-star{{ $s <= round($noteMoyenne) ? '' : ($s - 0.5 <= $noteMoyenne ? '-half-alt' : '') }}" style="color:{{ $s <= $noteMoyenne ? '#f59e0b' : '#ccc' }};font-size:12px;"></i>
+                                    @endfor
+                                    <small style="font-size:11px;color:#888;">({{ $nbAvis }})</small>
                                 </span>
                             </div>
                         </div>
@@ -218,9 +223,13 @@
                 </div>
                 <div class="accordion-item">
                     <div class="accordion-header">
-                        <div class="accordion-title">Evaluations et Commentaires ({{ count($agent->commentaires) }})</div>
+                        <div class="accordion-title">
+                            Avis &amp; Évaluations ({{ $agent->avis()->count() }})
+                            @if($agent->noteMoyenne() > 0)
+                                — <span style="color:#f59e0b;">{{ $agent->noteMoyenne() }}/5</span>
+                            @endif
+                        </div>
                         <a href="javascript:void(0);" id="toggleCommentaires" class="text-primary d-inline-flex align-items-center" style="font-size: 12px;">
-                            <span class="me-1"></span>
                             <svg id="iconToggle" class="accordion-icon" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" xmlns="http://www.w3.org/2000/svg"
                                  style="transition: transform 0.3s;">
@@ -228,30 +237,64 @@
                             </svg>
                         </a>
                     </div>
-                        <!--Contenu-->
-                        @if (count($agent->commentaires))
-                        <div class="row p-2">
-                            @foreach ($agent->commentaires as $index => $commentaire)
-                                <div class="col-12 commentaire-item bg-light mb-1 text-sm px-2 py-1 rounded"
-                                     style="{{ $index >= 3 ? 'display: none;' : '' }}">
-                                    {{ $commentaire->description }}
-                                    <div class="text-end" style="font-size: 10px;">
-                                        {{ $commentaire->created_at->diffForHumans() }}
-                                    </div>
-                                </div>
-                            @endforeach
-                    
-                        </div>
+
+                    @if(session('success'))
+                        <div class="alert alert-success py-1 px-2 mt-1" style="font-size:13px;">{{ session('success') }}</div>
                     @endif
-                    
-                        <form action="{{ route('commentaires.store') }}" method="POST">
-                            @csrf
-                            <div class="form-group">
-                                <textarea  class="form-control" id="" name="description" required cols="30"></textarea>
-                                <input type="hidden" name="fournisseur_id" value="{{ $agent->id }}">
+                    @if(session('error'))
+                        <div class="alert alert-danger py-1 px-2 mt-1" style="font-size:13px;">{{ session('error') }}</div>
+                    @endif
+
+                    @php $avisAgent = $agent->avis()->with('user')->latest()->get(); @endphp
+
+                    @if($avisAgent->count())
+                    <div class="row p-2">
+                        @foreach($avisAgent as $index => $avi)
+                            <div class="col-12 commentaire-item bg-light mb-1 text-sm px-2 py-2 rounded"
+                                 style="{{ $index >= 3 ? 'display: none;' : '' }}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <strong style="font-size:13px;">{{ $avi->user->name ?? 'Anonyme' }}</strong>
+                                    <span style="color:#f59e0b;">
+                                        @for($s = 1; $s <= 5; $s++)
+                                            <i class="fas fa-star" style="font-size:11px;color:{{ $s <= $avi->note ? '#f59e0b' : '#ccc' }};"></i>
+                                        @endfor
+                                    </span>
+                                </div>
+                                @if($avi->commentaire)
+                                    <div class="mt-1">{{ $avi->commentaire }}</div>
+                                @endif
+                                <div class="text-end" style="font-size:10px;color:#888;">{{ $avi->created_at->diffForHumans() }}</div>
                             </div>
-                            <button class="btn btn-sm btn-dark text-white mt-2">Valider</button>
-                        </form>
+                        @endforeach
+                    </div>
+                    @else
+                        <p class="text-sm text-muted px-2 py-1">Aucun avis pour l'instant.</p>
+                    @endif
+
+                    @auth
+                        @php $monAvis = $agent->avis()->where('user_id', auth()->id())->first(); @endphp
+                        <div class="p-2">
+                            <p class="text-sm mb-1"><strong>{{ $monAvis ? 'Modifier mon avis' : 'Laisser un avis' }}</strong></p>
+                            <form action="{{ route('avis.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="fournisseur_id" value="{{ $agent->id }}">
+                                <div class="d-flex mb-2" style="gap:6px;">
+                                    @for($s = 1; $s <= 5; $s++)
+                                        <label style="cursor:pointer;font-size:22px;color:{{ $monAvis && $monAvis->note >= $s ? '#f59e0b' : '#ccc' }};" title="{{ $s }} étoile{{ $s>1?'s':'' }}">
+                                            <input type="radio" name="note" value="{{ $s }}" style="display:none;" {{ $monAvis && $monAvis->note == $s ? 'checked' : '' }}>
+                                            &#9733;
+                                        </label>
+                                    @endfor
+                                </div>
+                                <div class="form-group mb-2">
+                                    <textarea class="form-control" name="commentaire" rows="2" placeholder="Votre commentaire (optionnel)" style="font-size:13px;">{{ $monAvis?->commentaire }}</textarea>
+                                </div>
+                                <button class="btn btn-sm btn-dark text-white">{{ $monAvis ? 'Mettre à jour' : 'Publier' }}</button>
+                            </form>
+                        </div>
+                    @else
+                        <p class="text-sm px-2 py-1"><a href="{{ route('login') }}">Connectez-vous</a> pour laisser un avis.</p>
+                    @endauth
                 </div>
                 <div class="accordion-item d-none">
                     <div class="accordion-header">
@@ -335,23 +378,40 @@
 @section('scriptBottom')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Toggle avis
             const toggleBtn = document.getElementById('toggleCommentaires');
             const icon = document.getElementById('iconToggle');
             let expanded = false;
-
-            toggleBtn.addEventListener('click', function () {
-                const items = document.querySelectorAll('.commentaire-item');
-
-                items.forEach((item, index) => {
-                    if (index >= 5) {
-                        item.style.display = expanded ? 'none' : 'block';
-                    }
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function () {
+                    const items = document.querySelectorAll('.commentaire-item');
+                    items.forEach((item, index) => {
+                        if (index >= 3) item.style.display = expanded ? 'none' : 'block';
+                    });
+                    icon.style.transform = expanded ? 'rotate(0deg)' : 'rotate(180deg)';
+                    expanded = !expanded;
                 });
+            }
 
-                toggleBtn.querySelector('span').textContent = expanded ? '' : '';
-                icon.style.transform = expanded ? 'rotate(0deg)' : 'rotate(180deg)';
-                expanded = !expanded;
+            // Interactive star rating
+            const starLabels = document.querySelectorAll('label[title]');
+            starLabels.forEach((label, idx) => {
+                label.addEventListener('mouseenter', () => {
+                    starLabels.forEach((l, i) => l.style.color = i <= idx ? '#f59e0b' : '#ccc');
+                });
+                label.addEventListener('click', () => {
+                    label.querySelector('input').checked = true;
+                    starLabels.forEach((l, i) => l.style.color = i <= idx ? '#f59e0b' : '#ccc');
+                });
             });
+            const starContainer = document.querySelector('.d-flex.mb-2');
+            if (starContainer) {
+                starContainer.addEventListener('mouseleave', () => {
+                    const checked = starContainer.querySelector('input:checked');
+                    const checkedIdx = checked ? parseInt(checked.value) - 1 : -1;
+                    starLabels.forEach((l, i) => l.style.color = i <= checkedIdx ? '#f59e0b' : '#ccc');
+                });
+            }
         });
     </script>
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.0/mapbox-gl.js"></script>

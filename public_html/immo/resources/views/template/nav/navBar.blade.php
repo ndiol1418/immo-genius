@@ -49,6 +49,8 @@ $ref = isset($explode_path[1]) ? $explode_path[1] : null;
           <li><a class="{{ $ref=='acheter'?'active':'' }}" href="{{ route('acheter') }}">Acheter</a></li> --}}
           <li><a class="{{ $ref=='agents'?'active':'' }}" href="{{ route('agents') }}">Agent</a></li>
           <li><a class="{{ $ref=='faq'?'active':'' }}" href="{{ route('faq') }}">FAQ</a></li>
+          <li><a class="{{ $ref=='calculateur-pret'?'active':'' }}" href="{{ route('calculateur') }}">Simulateur</a></li>
+          <li><a class="{{ $ref=='estimation'?'active':'' }}" href="{{ route('estimation') }}">Estimation</a></li>
 
           @if (auth()->check())
             @php
