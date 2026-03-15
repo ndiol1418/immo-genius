@@ -76,6 +76,35 @@
     </div>
 </div>
 @include('partials.uploadMultipleFiles')
+
+{{-- ===== Visite Virtuelle (admin) ===== --}}
+<div class="col-12 mt-3">
+    <div class="card border">
+        <div class="card-body">
+            <h6 class="card-title">Visite Virtuelle</h6>
+            <div class="row">
+                <div class="col-12 col-lg-4">
+                    <label class="col-form-label">Type</label>
+                    <select name="visite_virtuelle_type" class="form-control form-control-sm">
+                        <option value="none"       {{ ($immo&&$immo->annonce&&$immo->annonce->visite_virtuelle_type=='none')?'selected':'' }}>Aucune</option>
+                        <option value="pannellum"  {{ ($immo&&$immo->annonce&&$immo->annonce->visite_virtuelle_type=='pannellum')?'selected':'' }}>Photos 360° (Pannellum)</option>
+                        <option value="matterport" {{ ($immo&&$immo->annonce&&$immo->annonce->visite_virtuelle_type=='matterport')?'selected':'' }}>Matterport 3D</option>
+                    </select>
+                </div>
+                <div class="col-12 col-lg-8">
+                    <label class="col-form-label">URL Matterport</label>
+                    <input type="text"
+                           name="matterport_url"
+                           class="form-control form-control-sm"
+                           value="{{ $immo&&$immo->annonce?$immo->annonce->matterport_url:'' }}"
+                           placeholder="https://my.matterport.com/show/?m=XXXXX">
+                    <small class="text-muted">Uniquement si le type est Matterport 3D</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="col-12 col-lg-12">
     <label for="name" class="col-form-label text-md-right">{{ __("Description") }}</label>
     <textarea name="description" id="description" cols="10" rows="4" class="form-control">{{ $immo&&$immo->annonce?$immo->annonce->description:'' }}</textarea>

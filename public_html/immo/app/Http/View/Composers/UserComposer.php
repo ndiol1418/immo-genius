@@ -6,6 +6,7 @@ use App\Models\Commande;
 use App\Models\Comodite;
 use App\Models\Liste;
 use App\Models\Profil;
+use App\Models\Region;
 use App\Models\TypeImmo;
 use App\Models\TypeLocation;
 use App\Models\User;
@@ -17,6 +18,10 @@ use Illuminate\View\View;
 class UserComposer {
     //required method
     public function compose(View $view) {
+        $regions = Region::with(['departements' => function($q) {
+            $q->actif()->with(['communes' => function($q2) { $q2->actif(); }]);
+        }])->where('status', 1)->get();
+
         if(Auth::check()) {
             $user = Auth::user();
             $espace = 'admin';
@@ -33,6 +38,7 @@ class UserComposer {
                 '_profils'=>Profil::all(),
                 'type_immos'=>TypeImmo::all(),
                 'comodites'=>Comodite::all(),
+                'regions' => $regions,
             ]);
         }
         else {
@@ -41,6 +47,7 @@ class UserComposer {
                 'type_locations'=>TypeLocation::all(),
                 'type_immos'=>TypeImmo::all(),
                 'comodites'=>Comodite::all(),
+                'regions' => $regions,
             ]);
         }
     }

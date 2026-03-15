@@ -28,7 +28,7 @@
   <link rel="manifest" href="{{ asset('manifest.json') }}" />
   <link href="{{ asset('assets/css/map.css') }}" rel="stylesheet">
 
-<link rel="stylesheet" href="https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform">
+{{-- Styles Places Autocomplete : intégrés via PlaceAutocompleteElement (web component) --}}
 
   {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -109,7 +109,38 @@ font-size: 10px;
         /*box-shadow: inset 0 0 1px #ccc;*/
     }
     .col-form-label{font-size: 14px}
+    /* Fix champ Lieu (ship-address) */
+    input#ship-address, input[id="ship-address"] {
+        background-color: #ffffff !important;
+        color: #333333 !important;
+        color-scheme: light !important;
+    }
+    /* Google Places Autocomplete dropdown */
+    .pac-container {
+        background-color: #fff !important;
+        color: #333 !important;
+        z-index: 9999 !important;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .pac-item {
+        background-color: #fff !important;
+        color: #333 !important;
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+    .pac-item:hover {
+        background-color: #f5f5f5 !important;
+    }
+    .pac-item-query {
+        color: #333 !important;
+    }
     </style>
+
+  <!-- Pannellum — Photos 360° -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
 
   <!-- Main CSS File -->
   <link href="{{ asset("assets/css/style.css") }}" rel="stylesheet">
@@ -285,6 +316,7 @@ font-size: 10px;
                 $('#staticBackdrop').modal('show');
             @endif
     </script>
+
 </body>
 
 </html>

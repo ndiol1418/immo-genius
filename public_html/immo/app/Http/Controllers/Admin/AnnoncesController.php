@@ -12,6 +12,7 @@ use App\Models\Immo;
 use App\Models\Level;
 use App\Models\Piece;
 use App\Models\TypeImmo;
+use App\Models\Region;
 use App\Models\TypeLocation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -112,9 +113,12 @@ class AnnoncesController extends Controller
         $type_immos = TypeImmo::all();
         $communes = Commune::actif()->get();
         $departements = Departement::actif()->get();
+        $regions = Region::with(['departements' => function($q) {
+            $q->actif()->with(['communes' => function($q2) { $q2->actif(); }]);
+        }])->where('status', 1)->get();
         $type = 'edit';
         $annonce = Annonce::find($id);
-        return view('template.pages.publication',compact('annonce','immo','pieces','biens','levels','type_locations','type_immos','communes','departements'));
+        return view('template.pages.publication',compact('annonce','immo','pieces','biens','levels','type_locations','type_immos','communes','departements','regions'));
     }
 
     /**

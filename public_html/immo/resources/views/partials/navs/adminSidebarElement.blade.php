@@ -69,7 +69,7 @@ $ref = isset($explode_path[2]) ? $explode_path[2] : null;
         @endif
         <form method="GET" action="{{ route('search') }}" class="form-inline px-2 shadow-sm pb-2">
             <div class="input-group my-1 mt-2" data-widget="sidebar-search">
-                <input class="form-control form-control-sm form-control-sidebar" name="search" type="search" value="{{ request()->query('search') }}" placeholder="Recherche"
+                <input class="form-control form-control-sm form-control-sidebar" name="search" type="text" value="{{ request()->query('search') }}" placeholder="Recherche"
                     aria-label="Search">
                 <div class="input-group-append">
                     <button class="btn btn-xs btn-sidebar bg-white">

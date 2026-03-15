@@ -13,6 +13,7 @@ use App\Models\Immo;
 use App\Models\Level;
 use App\Models\Piece;
 use App\Models\TypeImmo;
+use App\Models\Region;
 use App\Models\TypeLocation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -66,7 +67,10 @@ class ImmosController extends Controller
         $communes = Commune::actif()->get();
         $departements = Departement::actif()->get();
         $comodites = Comodite::all();
-        return view($this->espace.'.immos.create',compact('immo','pieces','biens','levels','type_locations','type_immos','communes','departements','comodites'));
+        $regions = Region::with(['departements' => function($q) {
+            $q->actif()->with(['communes' => function($q2) { $q2->actif(); }]);
+        }])->where('status', 1)->get();
+        return view($this->espace.'.immos.create',compact('immo','pieces','biens','levels','type_locations','type_immos','communes','departements','comodites','regions'));
     }
 
     /**

@@ -10156,3 +10156,18 @@ a.text-dark:focus {
         border-color: #dee2e6;
     }
 }
+/* Fix Google Places Autocomplete dark background */
+.pac-container,
+.pac-container * {
+    background-color: #fff !important;
+    color: #333 !important;
+}
+input.pac-target-input,
+input[id="ship-address"],
+.inputMaterial input {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #333333 !important;
+    color-scheme: light only !important;
+    forced-color-adjust: none !important;
+}

@@ -88,12 +88,16 @@
             <div class="col-lg-6 mb-2">
               <div class="img_annonce" style="height: 300px !important">
                 <img src="{{ asset($annonce->images&&count($annonce->images)?$annonce->images[0]->url:'') }}" alt="" width="100%" style="height: 300px;object-fit:cover;border-radius: 5px;">
-                @isset($annonce->visite_virtuelle)
-                  <a href="{{ $annonce->visite_virtuelle }}" target="blank" class="badge" style="position: absolute;    left: 5px;bottom: 5px;border: 10px;background: #06e5ca;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.55 2.876L4.595 6.182a2.98 2.98 0 0 0-1.529 2.611v6.414a2.98 2.98 0 0 0 1.529 2.61l5.957 3.307a2.98 2.98 0 0 0 2.898 0l5.957-3.306a2.98 2.98 0 0 0 1.529-2.611V8.793a2.98 2.98 0 0 0-1.529-2.61L13.45 2.876a2.98 2.98 0 0 0-2.898 0Z"/><path d="M20.33 6.996L12 12L3.67 6.996M12 21.49V12"/></g></svg>
-                    Vue 3D
-                  </a>
-                @endisset
+                @if(!empty($annonce->visite_virtuelle_type) && $annonce->visite_virtuelle_type !== 'none')
+                  <button type="button"
+                    onclick="document.getElementById('modalVisiteVirtuelle').style.display='flex'"
+                    style="position:absolute;left:10px;bottom:10px;background:#27E3C0;color:#fff;border:none;
+                           border-radius:20px;padding:6px 14px;font-size:12px;font-weight:bold;cursor:pointer;
+                           display:flex;align-items:center;gap:6px;z-index:5;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.55 2.876L4.595 6.182a2.98 2.98 0 0 0-1.529 2.611v6.414a2.98 2.98 0 0 0 1.529 2.61l5.957 3.307a2.98 2.98 0 0 0 2.898 0l5.957-3.306a2.98 2.98 0 0 0 1.529-2.611V8.793a2.98 2.98 0 0 0-1.529-2.61L13.45 2.876a2.98 2.98 0 0 0-2.898 0Z"/><path d="M20.33 6.996L12 12L3.67 6.996M12 21.49V12"/></g></svg>
+                    Visite Virtuelle 🏠
+                  </button>
+                @endif
               </div>
             </div>
             <div class="col-lg-6">
@@ -200,6 +204,45 @@
           </div>
 
         </div><!-- End Section Title -->
+
+        {{-- Bouton favori --}}
+        @php $isFavori = auth()->check() ? \App\Models\Favori::where('user_id', auth()->id())->where('annonce_id', $annonce->id)->exists() : false; @endphp
+        <div class="container mb-2">
+          <button onclick="toggleFavoriDetail({{ $annonce->id }}, this)"
+            id="btnFavoriDetail"
+            data-favori="{{ $isFavori ? '1' : '0' }}"
+            style="background:{{ $isFavori ? '#e74c3c' : '#fff' }};border:2px solid {{ $isFavori ? '#e74c3c' : '#ddd' }};border-radius:30px;padding:8px 20px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:{{ $isFavori ? '#fff' : '#333' }};">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+              fill="{{ $isFavori ? '#fff' : 'none' }}" stroke="{{ $isFavori ? '#fff' : '#e74c3c' }}" stroke-width="2">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/>
+            </svg>
+            <span id="favoriLabel">{{ $isFavori ? 'Retiré des favoris' : 'Ajouter aux favoris' }}</span>
+          </button>
+        </div>
+
+        {{-- Modal Contact Agent --}}
+        <div id="modalContactAgent" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.55);align-items:center;justify-content:center;">
+          <div style="background:#fff;border-radius:16px;padding:28px 30px;width:90%;max-width:480px;position:relative;">
+            <button onclick="document.getElementById('modalContactAgent').style.display='none'"
+              style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#999;">&times;</button>
+            <h5 style="margin:0 0 6px;color:#061630;">Contacter l'agent</h5>
+            <p style="font-size:12px;color:#888;margin-bottom:16px;">{{ $annonce->name }}</p>
+            @if(auth()->check())
+              <form method="POST" action="{{ route('messages.contact', $annonce->id) }}">
+                @csrf
+                <textarea name="contenu" rows="4" required placeholder="Bonjour, je suis intéressé par cette annonce..."
+                  style="width:100%;border:1px solid #ddd;border-radius:10px;padding:12px;font-size:13px;resize:none;outline:none;"></textarea>
+                <button type="submit" style="margin-top:12px;width:100%;background:#27E3C0;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:bold;cursor:pointer;">
+                  Envoyer le message
+                </button>
+              </form>
+            @else
+              <p style="text-align:center;color:#555;font-size:13px;">Vous devez être connecté pour envoyer un message.</p>
+              <a href="{{ route('login') }}" style="display:block;text-align:center;background:#27E3C0;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-weight:bold;">Se connecter</a>
+            @endif
+          </div>
+        </div>
+
         <div class="container">
           <div class="row">
             <div class="col-lg-12 col-12">
@@ -250,6 +293,34 @@
         background-color: #f8f9fa;
     }
 </style>
+
+<script>
+function toggleFavoriDetail(annonceId, btn) {
+    @if(!auth()->check())
+        window.location.href = '{{ route("login") }}';
+        return;
+    @endif
+    fetch('{{ url("/favoris/toggle") }}/' + annonceId, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' }
+    })
+    .then(r => r.json())
+    .then(data => {
+        const svg = btn.querySelector('svg');
+        const label = document.getElementById('favoriLabel');
+        if (data.status === 'added') {
+            btn.style.background = '#e74c3c'; btn.style.borderColor = '#e74c3c'; btn.style.color = '#fff';
+            svg.setAttribute('fill','#fff'); svg.setAttribute('stroke','#fff');
+            label.textContent = 'Retiré des favoris';
+        } else {
+            btn.style.background = '#fff'; btn.style.borderColor = '#ddd'; btn.style.color = '#333';
+            svg.setAttribute('fill','none'); svg.setAttribute('stroke','#e74c3c');
+            label.textContent = 'Ajouter aux favoris';
+        }
+    });
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') document.getElementById('modalContactAgent').style.display='none'; });
+</script>
 
 @section('scriptBottom')
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.0/mapbox-gl.js"></script>
@@ -355,5 +426,99 @@
         return num <= 999 ? num : (0.1 * Math.floor(num / 100)).toFixed(1).replace('.0','') + 'k';
     }
 </script>
+
+@php
+    $vvType   = $annonce->visite_virtuelle_type ?? 'none';
+    $vv360    = $annonce->visite_360_images ?? [];
+    $vvMatter = $annonce->matterport_url ?? '';
+@endphp
+
+@if($vvType !== 'none')
+{{-- =============================================
+     MODAL VISITE VIRTUELLE — plein écran
+     ============================================= --}}
+<div id="modalVisiteVirtuelle"
+     style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.95);
+            flex-direction:column;align-items:center;justify-content:center;">
+
+    {{-- Barre titre + fermer --}}
+    <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;
+                justify-content:space-between;padding:12px 20px;background:rgba(0,0,0,0.6);z-index:2;">
+        <span id="vvTitrePiece" style="color:#fff;font-size:16px;font-weight:bold;">
+            @if($vvType === 'pannellum' && !empty($vv360))Salon@else Visite Matterport 3D @endif
+        </span>
+        <button onclick="fermerVisiteVirtuelle()"
+                style="background:#27E3C0;border:none;border-radius:50%;width:36px;height:36px;
+                       color:#fff;font-size:20px;cursor:pointer;line-height:1;">✕</button>
+    </div>
+
+    @if($vvType === 'pannellum')
+        <div id="panorama" style="width:100vw;height:100vh;"></div>
+    @elseif($vvType === 'matterport')
+        <iframe src="{{ $vvMatter }}"
+                width="100%" height="100%"
+                style="border:none;position:absolute;inset:0;"
+                allowfullscreen allow="xr-spatial-tracking"></iframe>
+    @endif
+</div>
+
+<script>
+function fermerVisiteVirtuelle() {
+    document.getElementById('modalVisiteVirtuelle').style.display = 'none';
+}
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') fermerVisiteVirtuelle();
+});
+
+@if($vvType === 'pannellum' && !empty($vv360))
+let pannellumInitialized = false;
+
+document.getElementById('modalVisiteVirtuelle')
+    .addEventListener('click', function initPannellum() {
+        if (pannellumInitialized) return;
+        pannellumInitialized = true;
+
+        @php
+            $pieceNames = ['Salon','Chambre','Cuisine','Salle de bain','Entrée','Bureau','Terrasse','Jardin','Garage','Autre'];
+            $scenes = [];
+            foreach ($vv360 as $i => $url) {
+                $key = 'scene'.($i+1);
+                $scenes[$key] = [
+                    'title'    => $pieceNames[$i] ?? 'Pièce '.($i+1),
+                    'hfov'     => 110,
+                    'pitch'    => -3,
+                    'yaw'      => 0,
+                    'type'     => 'equirectangular',
+                    'panorama' => asset($url),
+                    'hotSpots' => [],
+                ];
+            }
+            foreach ($vv360 as $i => $url) {
+                if ($i + 1 < count($vv360)) {
+                    $scenes['scene'.($i+1)]['hotSpots'][] = [
+                        'pitch'   => -10,
+                        'yaw'     => 90,
+                        'type'    => 'scene',
+                        'text'    => $pieceNames[$i+1] ?? 'Pièce '.($i+2),
+                        'sceneId' => 'scene'.($i+2),
+                    ];
+                }
+            }
+            $firstScene = 'scene1';
+        @endphp
+
+        const scenes = @json($scenes);
+        const viewer = pannellum.viewer('panorama', {
+            default: { firstScene: '{{ $firstScene }}', sceneFadeDuration: 1000, autoLoad: true },
+            scenes: scenes,
+        });
+        viewer.on('scenechange', function(sceneId) {
+            const t = scenes[sceneId]?.title ?? '';
+            document.getElementById('vvTitrePiece').textContent = t;
+        });
+    }, { once: true });
+@endif
+</script>
+@endif
 
 @endsection

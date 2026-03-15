@@ -55,6 +55,16 @@
                             <span>Verifié</span>
                         </div>
                     @endif
+                    @php $isFavori = auth()->check() ? \App\Models\Favori::where('user_id', auth()->id())->where('annonce_id', $annonce->id)->exists() : false; @endphp
+                    <button onclick="toggleFavori(event, {{ $annonce->id }}, this)"
+                        data-favori="{{ $isFavori ? '1' : '0' }}"
+                        style="position:absolute;top:10px;right:10px;z-index:10;background:rgba(255,255,255,.9);border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                            fill="{{ $isFavori ? '#e74c3c' : 'none' }}"
+                            stroke="{{ $isFavori ? '#e74c3c' : '#999' }}" stroke-width="2">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5C2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/>
+                        </svg>
+                    </button>
                     <section id="hero" class="hero section dark-background" style="border-radius: 20px">
                         <div id="hero-carousel-{{ $id??'' }}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000" style="min-height: 250px !important;">
                             @isset($annonce)
@@ -138,6 +148,36 @@
         </div>
     </div>
 </div>
+@once
+<script>
+function toggleFavori(e, annonceId, btn) {
+    e.preventDefault();
+    e.stopPropagation();
+    @if(!auth()->check())
+        window.location.href = '{{ route("login") }}';
+        return;
+    @endif
+    fetch('{{ url("/favoris/toggle") }}/' + annonceId, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' }
+    })
+    .then(r => r.json())
+    .then(data => {
+        const svg = btn.querySelector('svg');
+        if (data.status === 'added') {
+            svg.setAttribute('fill', '#e74c3c');
+            svg.setAttribute('stroke', '#e74c3c');
+            btn.setAttribute('data-favori', '1');
+        } else {
+            svg.setAttribute('fill', 'none');
+            svg.setAttribute('stroke', '#999');
+            btn.setAttribute('data-favori', '0');
+        }
+    });
+}
+</script>
+@endonce
+
 {{-- @push('subScript')
     <script>
         $(function() {

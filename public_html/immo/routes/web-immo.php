@@ -24,3 +24,25 @@ Route::post('/annonces/update/{annonce}', [App\Http\Controllers\AccueilControlle
 // Recherche d'annonces
 Route::post('/search', [App\Http\Controllers\SearchController::class, 'search'])->name('annonce.search');
 Route::post('/search-more', [App\Http\Controllers\SearchController::class, 'searchMore'])->name('annonce.searchMore');
+
+// Favoris
+Route::middleware(['auth'])->group(function () {
+    Route::post('/favoris/toggle/{annonce_id}', [App\Http\Controllers\FavorisController::class, 'toggle'])->name('favoris.toggle');
+    Route::get('/mes-favoris', [App\Http\Controllers\FavorisController::class, 'index'])->name('favoris.index');
+});
+
+// Messagerie
+Route::middleware(['auth'])->group(function () {
+    Route::get('/messages', [App\Http\Controllers\MessagesController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{conversation}', [App\Http\Controllers\MessagesController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{conversation}', [App\Http\Controllers\MessagesController::class, 'store'])->name('messages.store');
+    Route::post('/contact/{annonce_id}', [App\Http\Controllers\MessagesController::class, 'contact'])->name('messages.contact');
+});
+
+// Alertes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mes-alertes', [App\Http\Controllers\AlertesController::class, 'index'])->name('alertes.index');
+    Route::post('/alertes', [App\Http\Controllers\AlertesController::class, 'store'])->name('alertes.store');
+    Route::delete('/alertes/{alerte}', [App\Http\Controllers\AlertesController::class, 'destroy'])->name('alertes.destroy');
+    Route::post('/alertes/{alerte}/toggle', [App\Http\Controllers\AlertesController::class, 'toggle'])->name('alertes.toggle');
+});

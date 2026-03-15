@@ -26,11 +26,11 @@
                 <div class="d-flex justify-content-left align-items-center p-1 bg-white" style="gap: 10px;border-radius: 30px;border: 2px solid #0be6cb;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 32"><g fill="#27E3C0"><path d="M12 0C5.383 0 0 5.394 0 12.022c0 9.927 11.201 19.459 11.678 19.86a.5.5 0 0 0 .64.004C12.795 31.492 24 22.124 24 12.022C24 5.394 18.617 0 12 0m.002 30.838C10.161 29.193 1 20.579 1 12.022C1 5.944 5.935 1 12 1s11 4.944 11 11.022c0 8.702-9.152 17.193-10.998 18.816"/><path d="M12 6c-3.309 0-6 2.691-6 6s2.691 6 6 6s6-2.691 6-6s-2.691-6-6-6m0 11c-2.757 0-5-2.243-5-5s2.243-5 5-5s5 2.243 5 5s-2.243 5-5 5"/></g></svg>
                     <div class="w-100">
-                        <input type="search" 
+                        <input type="text"
                             id="ship-address"
                             required
                             autocomplete="off"
-                            name="search[adresse]" 
+                            name="search[adresse]"
                             required class="form-control p-1 border-radius-left radius-input2" placeholder="Dakar,Thies ...">
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="#0be6cb" stroke-linecap="round" stroke-width="1"><path d="M5 12V4m14 16v-3M5 20v-4m14-3V4m-7 3V4m0 16v-9"/><circle cx="5" cy="14" r="2"/><circle cx="12" cy="9" r="2"/><circle cx="19" cy="15" r="2"/></g></svg>

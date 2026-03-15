@@ -290,98 +290,36 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaSfdQyOwQoWtaDwtL5AMOm3eA492dg9M&callback=initAutocomplete&libraries=places&v=weekly" defer></script>
 <script>
     let autocomplete;
-    let address1Field = '';
-    let address2Field;
-    let postalField;
 
     function initAutocomplete() {
+        const address1Field = document.querySelector("#ship-address");
+        if (!address1Field) return;
 
-        address1Field = document.querySelector("#ship-address");
-        address2Field = document.querySelector("#address2");
-        postalField = document.querySelector("#postcode");
-        // Create the autocomplete object, restricting the search predictions to
-        // addresses in the US and Canada.
         autocomplete = new google.maps.places.Autocomplete(address1Field, {
-            componentRestrictions: {
-                country: ["sn"]
-            }
-            , fields: ["address_components", "geometry"]
-            , types: ["address"]
-        , });
-        address1Field.focus();
-        // When the user selects an address from the drop-down, populate the
-        // address fields in the form.
+            componentRestrictions: { country: ["sn"] },
+            fields: ["address_components", "geometry"],
+            types: ["address"],
+        });
+
         autocomplete.addListener("place_changed", fillInAddress);
     }
 
-    async function fillInAddress() {
-        // Get the place details from the autocomplete object.
+    function fillInAddress() {
         const place = autocomplete.getPlace();
         let address1 = "";
         let postcode = "";
 
-        // Get each component of the address from the place details,
-        // and then fill-in the corresponding field on the form.
-        // place.address_components are google.maps.GeocoderAddressComponent objects
-        // which are documented at http://goo.gle/3l5i5Mr
         for (const component of place.address_components) {
-            // @ts-ignore remove once typings fixed
-            const componentType = component.types[0];
-            // console.log(component);
-            switch (componentType) {
-                case "street_number": {
-                    address1 = `${component.long_name} ${address1}`;
-                    break;
-                }
-
-                case "route": {
-                    address1 += component.short_name;
-                    break;
-                }
-
-                case "postal_code": {
-                    // postcode = `${component.long_name}${postcode}`;
-                    postcode = `${component.long_name}`;
-                    break;
-                }
-
-                case "postal_code_suffix": {
-                    postcode = `${postcode}-${component.long_name}`;
-                    break;
-                }
-                case "locality":
-                    // document.querySelector("#locality").value = component.long_name;
-                    break;
-                case "administrative_area_level_1": {
-                    // document.querySelector("#state").value = component.short_name;
-                    break;
-                }
-                case "country":
-                    // document.querySelector("#country").value = component.long_name;
-                    break;
+            const type = component.types[0];
+            switch (type) {
+                case "street_number": address1 = `${component.long_name} ${address1}`; break;
+                case "route":        address1 += component.short_name; break;
+                case "postal_code":  postcode = component.long_name; break;
             }
         }
 
-        address1Field.value = address1;
-        const token = "AIzaSyCaSfdQyOwQoWtaDwtL5AMOm3eA492dg9M"; // Ta clé Mapbox
-        // const address = "Université Cheikh Anta Diop, Dakar, Sénégal";
-        const address = "1600 Amphitheatre Parkway, Mountain View, CA";
-
-        fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${token}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "OK") {
-                    const result = data.results[0];
-                    const location = result.geometry.location;
-                    console.log("Adresse:", result.formatted_address);
-                    console.log("Latitude:", location.lat);
-                    console.log("Longitude:", location.lng);
-                } else {
-                    console.error("Erreur:", data.status);
-                }
-            })
-            .catch(err => console.error("Erreur réseau:", err));
-
+        const address1Field = document.querySelector("#ship-address");
+        address1Field.value = address1 || place.formatted_address;
     }
 
     window.initAutocomplete = initAutocomplete;

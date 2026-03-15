@@ -330,160 +330,61 @@
         marker = new mapboxgl.Marker({ draggable: true });
         let marker2 = new mapboxgl.Marker();
         let timeout = null;
+
         let autocomplete;
-        let address1Field = '';
-        let address2Field;
-        let postalField;
 
         function initAutocomplete() {
+            const address1Field = document.querySelector("#ship-address");
+            if (!address1Field) return;
 
-            address1Field = document.querySelector("#ship-address");
-            // Create the autocomplete object, restricting the search predictions to
-            // addresses in the US and Canada.
             autocomplete = new google.maps.places.Autocomplete(address1Field, {
-                componentRestrictions: {
-                    country: ["sn"]
-                }
-                , fields: ["address_components", "geometry"]
-                , types: ['geocode']
+                componentRestrictions: { country: ["sn"] },
+                fields: ["address_components", "geometry"],
+                types: ["address"],
             });
-            address1Field.focus();
-            // autocomplete.addListener("place_changed", fillInAddress);
-            autocomplete.addListener("place_changed", () => {
-                const place = autocomplete.getPlace();
-                if (place.geometry) {
-                    const lat = place.geometry.location.lat();
-                    const lng = place.geometry.location.lng();
-                    map.flyTo({ center: [lng, lat], zoom: 13 });
-                    map2.flyTo({ center: [lng, lat], zoom: 13 });
 
-                    marker.setLngLat([lng, lat]).addTo(map);
-                    marker2.setLngLat([lng, lat]).addTo(map2);
-
-                    document.getElementById('lon').value = lng;
-                    document.getElementById('lat').value = lat;
-
-                    marker.on('dragend', () => {
-                        const geocoder = new google.maps.Geocoder();
-                        
-                        const lngLat = marker.getLngLat();
-                        // console.log('Nouveau LngLat:', lngLat);
-                        alert(`Nouvelle position : ${lngLat.lng}, ${lngLat.lat}`);
-                        const newLatLng = { lat: lngLat.lat, lng: lngLat.lng };
-                        geocoder.geocode({ location: newLatLng }, (results, status) => {
-                            if (status === "OK" && results[0]) {
-                                const adresse = results[0].formatted_address;
-                                document.getElementById('ship-address').value = adresse;
-                                // alert(`Nouvelle position : ${lngLat.lng}, ${lngLat.lat}\nAdresse : ${adresse}`);
-                            } else {
-                                alert(`Nouvelle position : ${lngLat.lng}, ${lngLat.lat}\nAdresse introuvable`);
-                            }
-                        });
-                    });
-                } else {
-                    console.warn("Aucune géométrie trouvée pour le lieu sélectionné.");
-                }
-            });
+            autocomplete.addListener("place_changed", fillInAddress);
         }
 
-        async function fillInAddress() {
-            // Get the place details from the autocomplete object.
+        function fillInAddress() {
             const place = autocomplete.getPlace();
+            if (!place.geometry) return;
+
+            const lat = place.geometry.location.lat();
+            const lng = place.geometry.location.lng();
+
+            map.flyTo({ center: [lng, lat], zoom: 13 });
+            map2.flyTo({ center: [lng, lat], zoom: 13 });
+            marker.setLngLat([lng, lat]).addTo(map);
+            marker2.setLngLat([lng, lat]).addTo(map2);
+
+            document.getElementById('lon').value = lng;
+            document.getElementById('lat').value = lat;
 
             let address1 = "";
-            let postcode = "";
-            // Get each component of the address from the place details,
-            // and then fill-in the corresponding field on the form.
-            // place.address_components are google.maps.GeocoderAddressComponent objects
-            // which are documented at http://goo.gle/3l5i5Mr
             for (const component of place.address_components) {
-                // @ts-ignore remove once typings fixed
-                const componentType = component.types[0];
-                console.log(place);
-                switch (componentType) {
-                    case "street_number": {
-                        address1 = `${component.short_name} ${address1}`;
-                        break;
-                    }
-
-                    case "route": {
-                        address1 += component.short_name;
-                        // address1 = `${component.short_name} ${address1}`;
-
-                        break;
-                    }
-
-                    case "postal_code": {
-                        // postcode = `${component.short_name}${postcode}`;
-                        // postcode = `${component.short_name}`;
-
-                        break;
-                    }
-
-                    case "postal_code_suffix": {
-                        // address1 += component.short_name;
-
-                        // postcode = `${postcode}-${component.short_name}`;
-                        break;
-                    }
-                    case "locality":
-                        // document.querySelector("#locality").value = component.short_name;
-
-                        break;
-                    case "administrative_area_level_1": {
-                        // address1 += component.short_name;
-
-                        // document.querySelector("#state").value = component.short_name;
-                        break;
-                    }
-                    case "country":
-                        // address1 += component.short_name;
-
-                        // document.querySelector("#country").value = component.short_name;
-                        break;
-                    case "sublocality_level_1":
-                        // address1 += component.short_name;
-                        // document.querySelector("#country").value = component.long_name;
-                        break;
+                const type = component.types[0];
+                switch (type) {
+                    case "street_number": address1 = `${component.long_name} ${address1}`; break;
+                    case "route":        address1 += component.short_name; break;
                 }
             }
+            document.querySelector("#ship-address").value = address1 || place.formatted_address;
 
-            address1Field.value = address1;
-            const token = "AIzaSyCaSfdQyOwQoWtaDwtL5AMOm3eA492dg9M"; // Ta clé Mapbox
-            // const address = "Université Cheikh Anta Diop, Dakar, Sénégal";
-            const address = address1;
-            const input = document.getElementById('ship-address').value;
-            // alert(address)
-            await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(input)}&key=${token}&region=sn&language=fr`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "OK") {
-                        const result = data.results[0];
-                        const location = result.geometry.location;
-                        address1Field.value = result.formatted_address
-                        // console.log("Adresse:", result.formatted_address);
-                        // console.log("Latitude:", location.lat);
-                        // var annonce = @json($annonce??[])
-                        // console.log(annonce);
-                        document.getElementById('lon').value = location.lng;
-                        document.getElementById('lat').value = location.lat;
-
-                        map.flyTo({ center: [location.lng, location.lat], zoom: 13 });
-                        map2.flyTo({ center: [location.lng, location.lat], zoom: 13 });
-                        marker.setLngLat([location.lng, location.lat]).addTo(map);
-                        marker2.setLngLat([location.lng, location.lat]).addTo(map2);
-
-                    } else {
-                        alert('Pas de coordonnees')
-                        // console.error("Erreur:", data.status);
+            marker.on('dragend', () => {
+                const geocoder = new google.maps.Geocoder();
+                const lngLat = marker.getLngLat();
+                const newLatLng = { lat: lngLat.lat, lng: lngLat.lng };
+                geocoder.geocode({ location: newLatLng }, (results, status) => {
+                    if (status === "OK" && results[0]) {
+                        document.querySelector("#ship-address").value = results[0].formatted_address;
                     }
-                })
-                .catch(err => {
-                    // address1Field.value = address1;
-                    console.error("Erreur réseau:", err)
+                    document.getElementById('lon').value = lngLat.lng;
+                    document.getElementById('lat').value = lngLat.lat;
                 });
-
+            });
         }
+
         window.initAutocomplete = initAutocomplete;
 
     </script>

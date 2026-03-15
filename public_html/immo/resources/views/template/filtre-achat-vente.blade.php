@@ -31,7 +31,7 @@
                     <div class="w-100">
                         <label for="lieu">Lieu</label>
 
-                        <input type="search" 
+                        <input type="text" 
                             id="address"
                             required
                             autocomplete="off"
@@ -123,80 +123,68 @@
                 $('#acheter').addClass('btn-light') 
             }
         })
-        let autocomplete;
-        let address1Field = '';
-        let address2Field;
-        let postalField;
+        async function initAutocomplete() {
+            const { PlaceAutocompleteElement } = await google.maps.importLibrary("places");
 
-        function initAutocomplete() {
+            const originalInput = document.querySelector("#address");
+            if (!originalInput) return;
 
-            address1Field = document.querySelector("#address");
-            // Create the autocomplete object, restricting the search predictions to
-            // addresses in the US and Canada.
-            autocomplete = new google.maps.places.Autocomplete(address1Field, {
-                componentRestrictions: {
-                    country: ["sn"]
-                }
-                , fields: ["address_components", "geometry"]
-                , types: []
+            // Insérer un conteneur avant le champ existant et le masquer
+            const wrapper = document.createElement("div");
+            wrapper.style.cssText = "width:100%;display:flex;align-items:center;";
+            originalInput.parentNode.insertBefore(wrapper, originalInput);
+            originalInput.type = "hidden";
+
+            const placeAutocomplete = new PlaceAutocompleteElement({
+                includedRegionCodes: ["sn"],
             });
-            address1Field.focus();
-            // When the user selects an address from the drop-down, populate the
-            // address fields in the form.
-            autocomplete.addListener("place_changed", fillInAddress);
-        }
+            placeAutocomplete.style.cssText = "width:100%;font-size:12px;border:none;";
+            wrapper.appendChild(placeAutocomplete);
 
-        async function fillInAddress() {
-            // Get the place details from the autocomplete object.
-            const place = autocomplete.getPlace();
-            let address1 = "";
-            let postcode = "";
+            placeAutocomplete.addEventListener("gmp-placeselect", async ({ place }) => {
+                await place.fetchFields({
+                    fields: ["formattedAddress", "addressComponents"],
+                });
 
-            // Get each component of the address from the place details,
-            // and then fill-in the corresponding field on the form.
-            // place.address_components are google.maps.GeocoderAddressComponent objects
-            // which are documented at http://goo.gle/3l5i5Mr
-            for (const component of place.address_components) {
-                // @ts-ignore remove once typings fixed
-                const componentType = component.types[0];
-                switch (componentType) {
-                    case "street_number": {
-                        address1 = `${component.long_name} ${address1}`;
-                        break;
+                let address1 = "";
+                let postcode = "";
+                for (const component of place.addressComponents) {
+                    const type = component.types[0];
+                    switch (type) {
+                        case "street_number":
+                            address1 = `${component.longText} ${address1}`;
+                            break;
+                        case "route":
+                            address1 += component.shortText;
+                            break;
+                        case "postal_code":
+                            postcode = `${component.longText}${postcode}`;
+                            address1 += component.shortText;
+                            break;
+                        case "postal_code_suffix":
+                            postcode = `${postcode}-${component.longText}`;
+                            break;
+                        case "locality": {
+                            const el = document.querySelector("#locality");
+                            if (el) el.value = component.longText;
+                            break;
+                        }
+                        case "administrative_area_level_1": {
+                            const el = document.querySelector("#state");
+                            if (el) el.value = component.shortText;
+                            break;
+                        }
+                        case "country": {
+                            const el = document.querySelector("#country");
+                            if (el) el.value = component.longText;
+                            break;
+                        }
                     }
-
-                    case "route": {
-                        address1 += component.short_name;
-                        break;
-                    }
-
-                    case "postal_code": {
-                        postcode = `${component.long_name}${postcode}`;
-                        address1 += component.short_name;
-
-                        break;
-                    }
-
-                    case "postal_code_suffix": {
-                        postcode = `${postcode}-${component.long_name}`;
-                        break;
-                    }
-                    case "locality":
-                        document.querySelector("#locality").value = component.long_name;
-                        break;
-                    case "administrative_area_level_1": {
-                        document.querySelector("#state").value = component.short_name;
-                        break;
-                    }
-                    case "country":
-                        document.querySelector("#country").value = component.long_name;
-                        break;
                 }
-            }
-
-            address1Field.value = address1;
+                originalInput.value = address1 || place.formattedAddress;
+            });
         }
         window.initAutocomplete = initAutocomplete;
-        
+
     </script>
 @endpush

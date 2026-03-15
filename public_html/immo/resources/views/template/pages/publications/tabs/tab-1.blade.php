@@ -161,13 +161,13 @@
 
                         <div class="col-12 col-lg-4">
                             <div class="input-container">
-                                <input type="search" 
+                                <input type="text"
                                 id="ship-address"
                                 value="{{ old('adresse', $annonce->adresse??'') }}"
                                 required
                                 autocomplete="off"
-                                name="adresse" 
-                                required  placeholder="rue xxx , Dakar" >
+                                name="adresse"
+                                required placeholder="rue xxx , Dakar">
                                 {{-- <input type="text" id="address" required placeholder="Commencez à taper une adresse..." name="immo[adresse]" oninput="handleInput()" autocomplete="off"/>
                                 <ul id="suggestions"></ul> --}}
                                
@@ -181,28 +181,117 @@
                             </span>
                             @enderror
                         </div>
+                        @php
+                            $geoData = [];
+                            if(isset($regions)) {
+                                foreach($regions as $reg) {
+                                    $geoData[$reg->id] = ['name'=>$reg->name,'departements'=>[]];
+                                    foreach($reg->departements as $dept) {
+                                        $geoData[$reg->id]['departements'][$dept->id] = ['name'=>$dept->name,'communes'=>[]];
+                                        foreach($dept->communes as $com) {
+                                            $geoData[$reg->id]['departements'][$dept->id]['communes'][$com->id] = $com->name;
+                                        }
+                                    }
+                                }
+                            }
+                        @endphp
                         <div class="col-md-4 col-sm-6 col-12">
                             <div class="input-container">
-                                <select name="departement_id" id="" id="departement_id" class="@error('departement_id') is-invalid @enderror" name="immo[departement_id]" placeholder=" " required>
+                                <select name="region" id="region_select" class="form-control" required>
+                                    <option value="">-- Sélectionner --</option>
+                                    @foreach ($regions ?? [] as $reg)
+                                        <option value="{{ $reg->name }}" {{ isset($annonce) && $annonce->region == $reg->name ? 'selected' : '' }}>{{ $reg->name }}</option>
+                                    @endforeach
+                                </select>
+                                <label for="region_select">Région (*)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-12">
+                            <div class="input-container">
+                                <select name="departement_id" id="departement_id" class="form-control @error('departement_id') is-invalid @enderror" required>
+                                    <option value="">-- Sélectionner --</option>
                                     @foreach ($departements as $departement)
-                                        <option value="{{ $departement->id }}" {{ isset($annone)&&$annonce->immo->departement_id == $departement->id ? 'selected' : '' }}>{{ $departement->name }}</option>
+                                        <option value="{{ $departement->id }}" {{ isset($annonce)&&$annonce->immo&&$annonce->immo->departement_id == $departement->id ? 'selected' : '' }}>{{ $departement->name }}</option>
                                     @endforeach
                                 </select>
-                                <label for="montant">Départements (*)</label>
+                                <label for="departement_id">Département (*)</label>
                             </div>
-                            
                         </div>
                         <div class="col-md-4 col-sm-6 col-12">
                             <div class="input-container">
-                                <select name="commune_id" id="" id="commune_id" class="@error('commune_id') is-invalid @enderror" name="immo[commune_id]" placeholder=" " required>
+                                <select name="commune_id" id="commune_id" class="form-control @error('commune_id') is-invalid @enderror" required>
+                                    <option value="">-- Sélectionner --</option>
                                     @foreach ($communes as $commune)
-                                        <option value="{{ $commune->id }}" {{ isset($annonce) && $annonce->immo->commune_id == $commune->id ? 'selected' : '' }}>{{ $commune->name }}</option>
-
+                                        <option value="{{ $commune->id }}" {{ isset($annonce) && $annonce->immo && $annonce->immo->commune_id == $commune->id ? 'selected' : '' }}>{{ $commune->name }}</option>
                                     @endforeach
                                 </select>
-                                <label for="montant">Communes (*)</label>
+                                <label for="commune_id">Commune (*)</label>
                             </div>
                         </div>
+
+                        {{-- Cascade JS data --}}
+                        <script>
+                        var senegalGeo = @json($geoData ?? []);
+
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var regionSel = document.getElementById('region_select');
+                            var deptSel   = document.getElementById('departement_id');
+                            var commSel   = document.getElementById('commune_id');
+
+                            function findRegionIdByName(name) {
+                                for (var rid in senegalGeo) {
+                                    if (senegalGeo[rid].name === name) return rid;
+                                }
+                                return null;
+                            }
+
+                            function populateDepts(regionId, selectedDeptId) {
+                                deptSel.innerHTML = '<option value="">-- Sélectionner --</option>';
+                                commSel.innerHTML = '<option value="">-- Sélectionner --</option>';
+                                if (!regionId || !senegalGeo[regionId]) return;
+                                var depts = senegalGeo[regionId].departements;
+                                for (var did in depts) {
+                                    var opt = document.createElement('option');
+                                    opt.value = did;
+                                    opt.text  = depts[did].name;
+                                    if (selectedDeptId && String(selectedDeptId) === String(did)) opt.selected = true;
+                                    deptSel.appendChild(opt);
+                                }
+                            }
+
+                            function populateCommunes(regionId, deptId, selectedCommId) {
+                                commSel.innerHTML = '<option value="">-- Sélectionner --</option>';
+                                if (!regionId || !deptId || !senegalGeo[regionId] || !senegalGeo[regionId].departements[deptId]) return;
+                                var communes = senegalGeo[regionId].departements[deptId].communes;
+                                for (var cid in communes) {
+                                    var opt = document.createElement('option');
+                                    opt.value = cid;
+                                    opt.text  = communes[cid];
+                                    if (selectedCommId && String(selectedCommId) === String(cid)) opt.selected = true;
+                                    commSel.appendChild(opt);
+                                }
+                            }
+
+                            regionSel.addEventListener('change', function() {
+                                var rid = findRegionIdByName(this.value);
+                                populateDepts(rid, null);
+                            });
+
+                            deptSel.addEventListener('change', function() {
+                                var rid = findRegionIdByName(regionSel.value);
+                                populateCommunes(rid, this.value, null);
+                            });
+
+                            // Restore on edit
+                            @if(isset($annonce) && $annonce->region)
+                                var initRid = findRegionIdByName("{{ $annonce->region }}");
+                                if (initRid) {
+                                    populateDepts(initRid, {{ $annonce->immo->departement_id ?? 'null' }});
+                                    populateCommunes(initRid, {{ $annonce->immo->departement_id ?? 'null' }}, {{ $annonce->immo->commune_id ?? 'null' }});
+                                }
+                            @endif
+                        });
+                        </script>
                         <div class="col-12">
                             <div id="map"></div>
                               
@@ -273,5 +362,7 @@
             </div>
         </div>
     </div>
+
+    @include('partials.visite-virtuelle-form')
 
 </div>

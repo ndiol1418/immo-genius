@@ -17,6 +17,7 @@ use App\Models\Level;
 use App\Models\Piece;
 use App\Models\Specialisation;
 use App\Models\Type;
+use App\Models\Region;
 use App\Models\TypeImmo;
 use App\Models\TypeLocation;
 use App\Models\User;
@@ -39,8 +40,8 @@ class AccueilController extends Controller
     public function __construct()
     {
         $this->apiKey = "AIzaSyCaSfdQyOwQoWtaDwtL5AMOm3eA492dg9M";
-        $json = file_get_contents('communes.json');
-        $this->regions = json_decode($json, true);
+        $json = @file_get_contents(base_path('communes.json')) ?: '[]';
+        $this->regions = json_decode($json, true) ?? [];
         // $communes = ["Dakar", "Saint-Louis", "Thiès", "Ziguinchor", "Kaolack"];
         // foreach ($communes as $commune) {
         //     $url = "https://maps.googleapis.com/maps/api/geocode/json?address=" . urlencode($commune . ", Sénégal") . "&key=" . $this->apiKey;
@@ -154,8 +155,21 @@ class AccueilController extends Controller
             $annonce->prix = $immo->montant;
             $annonce->name = $immo->name;
             $annonce->adresse = $adresse;
-            $annonce->url_video = request('url_video');
-            $annonce->visite_virtuelle = request('visite_virtuelle');
+            $annonce->url_video             = request('url_video');
+            $annonce->visite_virtuelle      = request('visite_virtuelle');
+            $annonce->visite_virtuelle_type = request('visite_virtuelle_type', 'none');
+            $annonce->matterport_url        = request('matterport_url');
+
+            // Upload photos 360° (max 10)
+            if (request('visite_virtuelle_type') === 'pannellum' && $request->hasFile('visite_360_images')) {
+                $urls = [];
+                foreach (array_slice($request->file('visite_360_images'), 0, 10) as $file360) {
+                    $path = $file360->store('annonces/360', 'public');
+                    $urls[] = 'storage/' . $path;
+                }
+                $annonce->visite_360_images = $urls;
+            }
+
             $annonce->type_immo_id = $immo->type_immo_id;
             // $annonce->commune_id = $immo->bien?$immo->bien->commune_id:null;
             // $annonce->departement_id = $immo->bien&&$immo->commune?$immo->commune->departement_id:null;
@@ -170,6 +184,7 @@ class AccueilController extends Controller
             $annonce->type_location_id = $immo->type_location_id;
             $annonce->commune_id = $data['commune_id'];
             $annonce->departement_id = $data['departement_id'];
+            $annonce->region = $data['region'] ?? null;
             if (Auth::user() && Auth::user()->fournisseur && Auth::user()->fournisseur->is_premium) {
                 $annonce->is_premium = 1;
             }
@@ -243,6 +258,7 @@ class AccueilController extends Controller
             $annonce->type_location_id = $immo->type_location_id;
             $annonce->commune_id = $data['commune_id'];
             $annonce->departement_id = $data['departement_id'];
+            $annonce->region = $data['region'] ?? null;
             $annonce->is_premium = 0;
 
             if (Auth::user()->fournisseur && Auth::user()->fournisseur->is_premium) {
@@ -276,7 +292,10 @@ class AccueilController extends Controller
             $type_immos = TypeImmo::all();
             $communes = Commune::actif()->get();
             $departements = Departement::actif()->get();
-            return view('template.pages.publication',compact('immo','pieces','biens','levels','type_locations','type_immos','communes','departements'));
+            $regions = Region::with(['departements' => function($q) {
+                $q->actif()->with(['communes' => function($q2) { $q2->actif(); }]);
+            }])->where('status', 1)->get();
+            return view('template.pages.publication',compact('immo','pieces','biens','levels','type_locations','type_immos','communes','departements','regions'));
         } 
         return view('template.pages.inscription');
     }

@@ -14,8 +14,9 @@ class Annonce extends Model
     use HasFactory;
     protected $guarded = ['id'];
     protected $casts = [
-        'pieces' => AsArrayObject::class,
-        'comodites' => AsArrayObject::class,
+        'pieces'               => AsArrayObject::class,
+        'comodites'            => AsArrayObject::class,
+        'visite_360_images'    => 'array',
     ];
     public function images() {
         return $this->morphMany(Image::class, 'imageable');

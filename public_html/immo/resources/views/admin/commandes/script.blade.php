@@ -14,7 +14,7 @@
         var array = produits.filter((item) =>  item.fournisseur_id == id );
 
         var view = '';
-        //  view += '<input type="search" class="form-control form-control-sm mb-2" id="search" placeholder="rechercher...">';
+        //  view += '<input type="text" class="form-control form-control-sm mb-2" id="search" placeholder="rechercher...">';
         view +='<div class="bg-light p-2 row rounded"  style="height:calc(100vh - (342px));overflow:auto;"><form id="form" name="formulaire" class="col-12">';
         array.forEach(element => {
             var tva_vente = 0;

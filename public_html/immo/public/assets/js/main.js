@@ -126,6 +126,18 @@
         swiperElement.querySelector(".swiper-config").innerHTML.trim()
       );
 
+      // Désactiver le mode loop si le nombre de slides est insuffisant.
+      // Swiper requiert au minimum max(3, slidesPerView × 2) slides pour
+      // un défilement en boucle stable (sans artefacts visuels ni console warnings).
+      if (config.loop) {
+        const slideCount = swiperElement.querySelectorAll('.swiper-slide').length;
+        const perView = typeof config.slidesPerView === 'number' ? config.slidesPerView : 1;
+        const minRequired = Math.max(3, perView * 2);
+        if (slideCount < minRequired) {
+          config.loop = false;
+        }
+      }
+
       if (swiperElement.classList.contains("swiper-tab")) {
         initSwiperWithCustomPagination(swiperElement, config);
       } else {

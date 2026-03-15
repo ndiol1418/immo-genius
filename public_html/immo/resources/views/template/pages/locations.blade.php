@@ -108,8 +108,21 @@
         </div>
 
         <div class="container section-title mt-4 d-none d-sm-block" data-aos="fade-up">
-          {{-- <h2>Dernieres Publications</h2> --}}
-          <p>{{ count($annonces) }}  @isset($_GET['name']) {{ $_GET['name'].'(s)' }}@endisset trouvé(e)s</p>
+          <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap:10px;">
+            <p class="mb-0">{{ count($annonces) }}  @isset($_GET['name']) {{ $_GET['name'].'(s)' }}@endisset trouvé(e)s</p>
+            @php
+              $alerteParams = array_filter([
+                'type_transaction' => isset($search['type_location_id']) ? ($search['type_location_id'] == 1 ? 'louer' : 'acheter') : null,
+                'type_bien'        => $search['type'] ?? null,
+                'commune'          => $search['adresse'] ?? null,
+              ]);
+            @endphp
+            <a href="{{ route('alertes.index', $alerteParams) }}"
+               style="background:#27E3C0;color:#fff;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:bold;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2m6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1z"/></svg>
+              Créer une alerte pour cette recherche
+            </a>
+          </div>
           @isset($search['name'])
             <p>
               <span class="badge btn-primary text-sm text-capitalize">

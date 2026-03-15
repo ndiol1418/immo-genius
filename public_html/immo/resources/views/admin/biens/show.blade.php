@@ -163,7 +163,7 @@
                                 'col'=>'col-12'
                             ])
                             <div class="col-12 d-flex justify-content-end mb-2 text-center">
-                                <input type="search" class="form-control form-control-sm mb-2 col-6 col-lg-3" id="search" placeholder="Rechercher...">
+                                <input type="text" class="form-control form-control-sm mb-2 col-6 col-lg-3" id="search" placeholder="Rechercher...">
                             </div>
                         </div>
                     </div>

@@ -39,7 +39,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="#27E3C0" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.067 5c.592.958.933 2.086.933 3.293c0 3.476-2.83 6.294-6.32 6.294c-.636 0-2.086-.146-2.791-.732l-.882.878c-.735.732-.147.732.147 1.317c0 0 .735 1.025 0 2.05c-.441.585-1.676 1.404-3.086 0l-.294.292s.881 1.025.147 2.05c-.441.585-1.617 1.17-2.646.146l-1.028 1.024c-.706.703-1.568.293-1.91 0l-.883-.878c-.823-.82-.343-1.708 0-2.05l7.642-7.61s-.735-1.17-.735-2.78c0-3.476 2.83-6.294 6.32-6.294c.819 0 1.601.155 2.319.437"/><path d="M17.885 8.294a2.2 2.2 0 0 1-2.204 2.195a2.2 2.2 0 0 1-2.205-2.195a2.2 2.2 0 0 1 2.205-2.196a2.2 2.2 0 0 1 2.204 2.196Z"/></g></svg>
                     <div class="w-100">
                         <label for="">Mot cles</label>
-                        <input type="search" name="search[name]" required class="form-control p-1 border-radius-left radius-input" placeholder="Appartement, ...">
+                        <input type="text" name="search[name]" required class="form-control p-1 border-radius-left radius-input" placeholder="Appartement, ...">
                     </div>
                 </div>
             </div> --}}
@@ -47,12 +47,11 @@
                 <div class="d-flex justify-content-left align-items-center inputMaterial" style="gap: 10px">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 32"><g fill="#27E3C0"><path d="M12 0C5.383 0 0 5.394 0 12.022c0 9.927 11.201 19.459 11.678 19.86a.5.5 0 0 0 .64.004C12.795 31.492 24 22.124 24 12.022C24 5.394 18.617 0 12 0m.002 30.838C10.161 29.193 1 20.579 1 12.022C1 5.944 5.935 1 12 1s11 4.944 11 11.022c0 8.702-9.152 17.193-10.998 18.816"/><path d="M12 6c-3.309 0-6 2.691-6 6s2.691 6 6 6s6-2.691 6-6s-2.691-6-6-6m0 11c-2.757 0-5-2.243-5-5s2.243-5 5-5s5 2.243 5 5s-2.243 5-5 5"/></g></svg>
                     <div class="w-100">
-                        <input type="search" 
+                        <input type="text"
                             id="ship-address"
-                            
                             autocomplete="off"
-                            name="lieu" 
-                             class="form-control p-1 border-radius-left radius-input" placeholder="Ville,Departemnt,Quartier ...">
+                            name="lieu"
+                            class="form-control p-1 border-radius-left radius-input" placeholder="Ville,Departemnt,Quartier ...">
                     </div>
                 </div>
             </div>
