@@ -2,18 +2,21 @@
 
 namespace App\Providers;
 
+use App\Events\AnnonceSubmitted;
+use App\Events\AnnonceValidated;
 use App\Events\MailEvent;
+use App\Events\NewComment;
 use App\Listeners\MailListener;
+use App\Listeners\NotifyAdminAnnonceSubmitted;
+use App\Listeners\NotifyAgentAnnonceValidated;
+use App\Listeners\NotifyAgentNewComment;
 use App\Models\Commande;
 use App\Models\Fournisseur;
-use App\Models\Immo;
 use App\Observers\CommandeObserver;
 use App\Observers\FournisseurObserver;
-use App\Observers\ImmoObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -30,14 +33,23 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\ActionLog::class => [
             \App\Listeners\SaveLogAction::class,
         ],
-        // \App\Events\DocumentsEvent::class => [
-        //     \App\Listeners\DocumentsListener::class,
-        // ],
 
-        // 'Illuminate\Mail\Events\MessageSending' => [
-        //     '\App\Listeners\CheckEmailPreferences',
-        // ],
-        MailEvent::class=>[MailListener::class]
+        MailEvent::class => [
+            MailListener::class,
+        ],
+
+        // ── Notifications temps réel ──────────────────────────────────────
+        AnnonceSubmitted::class => [
+            NotifyAdminAnnonceSubmitted::class,
+        ],
+
+        AnnonceValidated::class => [
+            NotifyAgentAnnonceValidated::class,
+        ],
+
+        NewComment::class => [
+            NotifyAgentNewComment::class,
+        ],
     ];
 
     /**

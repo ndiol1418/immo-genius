@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewComment;
 use App\Models\Commentaire;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -42,8 +43,9 @@ class CommentairesController extends Controller
             'description'=>'required'
         ]);
         $commentaire = Commentaire::create($validate);
+        NewComment::dispatch($commentaire);
         Session::flash('success', "Le commentaire a été créé.");
-		return back();
+        return back();
     }
 
     /**

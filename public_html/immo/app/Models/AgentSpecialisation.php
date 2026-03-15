@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class AgentSpecialisation extends Model
 {
     use HasFactory;
+
+    public function specialisation()
+    {
+        return $this->belongsTo(Specialisation::class);
+    }
 }

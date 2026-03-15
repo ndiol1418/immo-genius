@@ -1,16 +1,69 @@
 @extends('layouts.accueil')
 <link href="{{ asset('css/marker.css') }}" rel="stylesheet">
 @php
-    // $mainImage = 'https://vytimo.softek-group.com/uploads/annonces/0QSuupload.png';
-    $mainImage = $annonce->images && count($annonce->images) ? asset($annonce->images[0]->url) : '';
+    $mainImage   = $annonce->images && count($annonce->images) ? asset($annonce->images[0]->url) : '';
+    $typeLocation = $annonce->type_location_id == 1 ? 'à vendre' : 'à louer';
+    $commune      = $annonce->commune?->name ?? '';
+    $typeImmo     = $annonce->type_immo?->name ?? 'bien immobilier';
+    $descSeo      = Str::limit(strip_tags($annonce->description ?? ''), 155) ?: "{$typeImmo} {$typeLocation} à {$commune} — {$annonce->adresse}. Prix : " . number_format($annonce->prix, 0, '', ' ') . ' CFA.';
+    $keywordsSeo  = implode(', ', array_filter([
+        $annonce->name,
+        $typeImmo,
+        $typeLocation,
+        $commune,
+        $annonce->adresse,
+        'immobilier Sénégal',
+        'annonce immobilière',
+        config('app.name'),
+    ]));
+    $canonicalUrl = $url ?? request()->fullUrl();
 @endphp
 
+@section('title', $annonce->name . ' — ' . ucfirst($typeImmo) . ' ' . $typeLocation . ($commune ? ' à ' . $commune : '') . ' | ' . config('app.name'))
+
 @section('meta')
-    <meta property="og:title" content="{{ $annonce->name }}" />
-    <meta property="og:description" content="{{ Str::limit(strip_tags($annonce->description), 100) }}" />
-    <meta property="og:image" content="{{ $mainImage }}" />
-    <meta property="og:url" content="{{ $url ?? request()->fullUrl() }}" />
-    <meta property="og:type" content="article" />
+    {{-- Description & Keywords --}}
+    <meta name="description" content="{{ $descSeo }}">
+    <meta name="keywords" content="{{ $keywordsSeo }}">
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+
+    {{-- Open Graph --}}
+    <meta property="og:type"        content="article">
+    <meta property="og:site_name"   content="{{ config('app.name') }}">
+    <meta property="og:url"         content="{{ $canonicalUrl }}">
+    <meta property="og:title"       content="{{ $annonce->name }} — {{ ucfirst($typeImmo) }} {{ $typeLocation }}{{ $commune ? ' à ' . $commune : '' }}">
+    <meta property="og:description" content="{{ $descSeo }}">
+    @if($mainImage)
+    <meta property="og:image"       content="{{ $mainImage }}">
+    <meta property="og:image:alt"   content="{{ $annonce->name }}">
+    @endif
+    <meta property="og:locale"      content="fr_SN">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       content="{{ $annonce->name }} — {{ ucfirst($typeImmo) }} {{ $typeLocation }}{{ $commune ? ' à ' . $commune : '' }}">
+    <meta name="twitter:description" content="{{ $descSeo }}">
+    @if($mainImage)
+    <meta name="twitter:image"       content="{{ $mainImage }}">
+    @endif
+
+    {{-- Schema.org RealEstateListing --}}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "RealEstateListing",
+        "name": "{{ addslashes($annonce->name) }}",
+        "description": "{{ addslashes($descSeo) }}",
+        "url": "{{ $canonicalUrl }}",
+        @if($mainImage)"image": "{{ $mainImage }}",@endif
+        "offers": {
+            "@type": "Offer",
+            "price": "{{ $annonce->prix }}",
+            "priceCurrency": "XOF"
+        }
+        @if($commune),"address": {"@type": "PostalAddress", "addressLocality": "{{ $commune }}", "addressCountry": "SN"}@endif
+    }
+    </script>
 @endsection
 
 <style>

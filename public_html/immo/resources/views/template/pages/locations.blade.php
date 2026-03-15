@@ -1,4 +1,56 @@
 @extends('layouts.accueil')
+
+@php
+    $typeLabel   = isset($type) && $type == 1 ? 'Acheter' : (isset($type) && $type == 2 ? 'Louer' : 'Acheter ou louer');
+    $searchName  = $search['name']    ?? null;
+    $searchAddr  = $search['adresse'] ?? null;
+    $nbResultats = count($annonces);
+
+    $pageTitle = $typeLabel . ' un bien immobilier au Sénégal';
+    if ($searchName) $pageTitle = $typeLabel . ' ' . $searchName . ($searchAddr ? ' à ' . $searchAddr : '') . ' au Sénégal';
+
+    $descSeo = "Découvrez {$nbResultats} annonce" . ($nbResultats > 1 ? 's' : '') . " immobilière" . ($nbResultats > 1 ? 's' : '')
+        . ($searchName  ? " de type {$searchName}" : '')
+        . ($searchAddr  ? " à {$searchAddr}" : ' au Sénégal')
+        . ". Achat, location, villa, appartement, terrain — trouvez votre bien sur " . config('app.name') . '.';
+
+    $keywordsSeo = implode(', ', array_filter([
+        $searchName,
+        $searchAddr,
+        'annonces immobilières Sénégal',
+        'acheter maison Sénégal',
+        'louer appartement Dakar',
+        'immobilier Sénégal',
+        config('app.name'),
+    ]));
+    $canonicalUrl = request()->fullUrl();
+    $ogImage = asset('img/og-default.png');
+@endphp
+
+@section('title', $pageTitle . ' | ' . config('app.name'))
+
+@section('meta')
+    {{-- Description & Keywords --}}
+    <meta name="description" content="{{ $descSeo }}">
+    <meta name="keywords" content="{{ $keywordsSeo }}">
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+
+    {{-- Open Graph --}}
+    <meta property="og:type"        content="website">
+    <meta property="og:site_name"   content="{{ config('app.name') }}">
+    <meta property="og:url"         content="{{ $canonicalUrl }}">
+    <meta property="og:title"       content="{{ $pageTitle }} | {{ config('app.name') }}">
+    <meta property="og:description" content="{{ $descSeo }}">
+    <meta property="og:image"       content="{{ $ogImage }}">
+    <meta property="og:locale"      content="fr_SN">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       content="{{ $pageTitle }} | {{ config('app.name') }}">
+    <meta name="twitter:description" content="{{ $descSeo }}">
+    <meta name="twitter:image"       content="{{ $ogImage }}">
+@endsection
+
 <style>
   #map { height: 750px}
   td{font-size: 12px}

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route::middleware(['auth'])->middleware(['2fa'])->group(function () {
 
-    Route::middleware(['fournisseur_middleware'])
+    Route::middleware(['auth', '2fa', 'role:fournisseur|admin'])
             ->prefix("agent")
             ->name("agent.")
             ->group(function () {

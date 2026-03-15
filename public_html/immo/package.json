@@ -9,6 +9,10 @@
         "prod": "npm run production",
         "production": "mix --production"
     },
+    "dependencies": {
+        "laravel-echo": "^1.15.3",
+        "pusher-js": "^8.3.0"
+    },
     "devDependencies": {
         "axios": "^0.21",
         "bootstrap": "^4.6.0",

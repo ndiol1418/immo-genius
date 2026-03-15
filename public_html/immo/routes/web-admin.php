@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', '2fa', 'translate', 'admin_middleware'])
+Route::middleware(['auth', '2fa', 'translate', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {

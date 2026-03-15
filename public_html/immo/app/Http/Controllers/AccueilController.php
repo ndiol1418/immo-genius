@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AnnonceSubmitted;
 use App\Events\MailEvent;
 use App\Models\Annonce;
 use App\Models\AnnonceFront;
@@ -177,6 +178,7 @@ class AccueilController extends Controller
 
                 if($annonce->save()){
                     if(count($data['images']) > 0) $annonce->savePJ($data['images'],'App\Models\Annonce');
+                    AnnonceSubmitted::dispatch($annonce);
                 }
                 DB::commit();
                 //code...

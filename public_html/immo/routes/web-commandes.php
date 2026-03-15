@@ -62,7 +62,7 @@ Route::middleware(['auth', '2fa', 'translate'])->group(function () {
     });
 
     // Gérant
-    Route::middleware(['gerant_middleware'])
+    Route::middleware(['role:gerant'])
         ->prefix('gerant')
         ->name('gerant.')
         ->group(function () {

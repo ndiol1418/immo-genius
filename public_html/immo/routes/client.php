@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['gerant_middleware'])
+Route::middleware(['auth', '2fa', 'role:client'])
 ->prefix("client")
 ->name("client.")
 ->group(function () {

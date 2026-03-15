@@ -1,6 +1,62 @@
 @extends('layouts.accueil')
 <link href="{{ asset("assets/css/agent.css") }}" rel="stylesheet">
 
+@php
+    $agentPhoto   = $agent->user->image ? asset($agent->user->image->url) : asset('img/agent-default.png');
+    $zonesNoms    = $agent->mes_zones()->pluck('name')->implode(', ');
+    $bioText      = Str::limit(strip_tags($agent->bio ?? $agent->description ?? ''), 155)
+                    ?: "Agent immobilier spécialisé à {$zonesNoms}. Contactez {$agent->nom_complet} pour vos projets d'achat ou de location.";
+    $keywordsAgent = implode(', ', array_filter([
+        $agent->nom_complet,
+        'agent immobilier',
+        $zonesNoms,
+        'immobilier Sénégal',
+        config('app.name'),
+    ]));
+    $canonicalUrl = $url ?? request()->fullUrl();
+@endphp
+
+@section('title', $agent->nom_complet . ' — Agent immobilier' . ($zonesNoms ? ' · ' . Str::limit($zonesNoms, 50) : '') . ' | ' . config('app.name'))
+
+@section('meta')
+    {{-- Description & Keywords --}}
+    <meta name="description" content="{{ $bioText }}">
+    <meta name="keywords" content="{{ $keywordsAgent }}">
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+
+    {{-- Open Graph --}}
+    <meta property="og:type"        content="profile">
+    <meta property="og:site_name"   content="{{ config('app.name') }}">
+    <meta property="og:url"         content="{{ $canonicalUrl }}">
+    <meta property="og:title"       content="{{ $agent->nom_complet }} — Agent immobilier | {{ config('app.name') }}">
+    <meta property="og:description" content="{{ $bioText }}">
+    <meta property="og:image"       content="{{ $agentPhoto }}">
+    <meta property="og:image:alt"   content="Photo de {{ $agent->nom_complet }}">
+    <meta property="og:locale"      content="fr_SN">
+    <meta property="profile:first_name" content="{{ $agent->prenom ?? '' }}">
+    <meta property="profile:last_name"  content="{{ $agent->nom ?? '' }}">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card"        content="summary">
+    <meta name="twitter:title"       content="{{ $agent->nom_complet }} — Agent immobilier | {{ config('app.name') }}">
+    <meta name="twitter:description" content="{{ $bioText }}">
+    <meta name="twitter:image"       content="{{ $agentPhoto }}">
+
+    {{-- Schema.org Person --}}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "RealEstateAgent",
+        "name": "{{ addslashes($agent->nom_complet) }}",
+        "description": "{{ addslashes($bioText) }}",
+        "url": "{{ $canonicalUrl }}",
+        "image": "{{ $agentPhoto }}"
+        @if($agent->telephone),"telephone": "{{ $agent->telephone }}"@endif
+        @if($agent->adresse),"address": {"@type": "PostalAddress", "streetAddress": "{{ addslashes($agent->adresse) }}", "addressCountry": "SN"}@endif
+    }
+    </script>
+@endsection
+
 <style>
     #map {
         height: 500px !important

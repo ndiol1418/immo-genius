@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\AnnonceValidated;
 use App\Http\Controllers\Controller;
 use App\Models\Annonce;
 use App\Models\Bien;
@@ -158,9 +159,10 @@ class AnnoncesController extends Controller
         return view($this->espace.'.annonces.index',compact('annonces','titre'));
     }
     public function valideAnnonce($id){
-        $annonce = Annonce::find($id);
-        $annonce->update(['status'=>1]);
-        Session::flash('success', "L'operation a été supprimé avec succès.");
+        $annonce = Annonce::with('immo')->findOrFail($id);
+        $annonce->update(['status' => 1]);
+        AnnonceValidated::dispatch($annonce);
+        Session::flash('success', "L'annonce a été validée avec succès.");
         return back();
     }
     

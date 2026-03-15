@@ -66,9 +66,9 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'centralisation_auth' => \App\Http\Middleware\CentralisationAuthMiddleware::class,
-        'admin_middleware' => \App\Http\Middleware\AdminMiddleware::class,
-        'fournisseur_middleware'=>\App\Http\Middleware\FournisseurMiddleware::class,
-        'gerant_middleware'=>\App\Http\Middleware\GerantMiddleware::class,
-        '2fa'=>\App\Http\Middleware\EnsureTwoFactorAuth::class
+        '2fa'                 => \App\Http\Middleware\EnsureTwoFactorAuth::class,
+        'role'                => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission'          => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        'role_or_permission'  => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
     ];
 }

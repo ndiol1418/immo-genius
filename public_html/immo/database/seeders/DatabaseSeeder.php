@@ -21,10 +21,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call([
-        //     CollaborateurSeeder::class,
-        //     ProfilSeeder::class,
-        // ]);
+        $this->call([
+            RolesSeeder::class,
+            // CollaborateurSeeder::class,
+            // ProfilSeeder::class,
+        ]);
                 // \App\Models\User::factory(2)->create();
 
         User::factory(1)
