@@ -12,6 +12,11 @@
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> --}}
   <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}" sizes="32x32" />
   <link rel="icon" type="image/png" href="{{ asset('favicon-16x16.png') }}" sizes="16x16" />
+  <meta name="theme-color" content="#27E3C0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Vytimo">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -316,6 +321,11 @@ font-size: 10px;
             @if (count($errors) > 0)
                 $('#staticBackdrop').modal('show');
             @endif
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(function(){});
+        }
     </script>
 
 </body>

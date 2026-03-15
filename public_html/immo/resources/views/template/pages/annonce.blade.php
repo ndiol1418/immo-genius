@@ -146,13 +146,61 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 14c2.206 0 4-1.794 4-4s-1.794-4-4-4s-4 1.794-4 4s1.794 4 4 4m0-6c1.103 0 2 .897 2 2s-.897 2-2 2s-2-.897-2-2s.897-2 2-2"/><path fill="currentColor" d="M11.42 21.814a1 1 0 0 0 1.16 0C12.884 21.599 20.029 16.44 20 10c0-4.411-3.589-8-8-8S4 5.589 4 9.995c-.029 6.445 7.116 11.604 7.42 11.819M12 4c3.309 0 6 2.691 6 6.005c.021 4.438-4.388 8.423-6 9.73c-1.611-1.308-6.021-5.294-6-9.735c0-3.309 2.691-6 6-6"/></svg>
                     {{ $annonce->adresse }}
                   </p>
-                  <p>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($url) }}&quote={{ urlencode($annonce->name) }}"
-                      target="_blank" rel="noopener noreferrer"
-                      class="btn btn-primary btn-sm">
-                      Partager sur Facebook
-                   </a>
-                  </p>
+                  {{-- Panel de partage --}}
+                  @php
+                    $shareUrl   = urlencode($url);
+                    $shareText  = urlencode($annonce->name . ' — ' . number_format($annonce->prix, 0, ',', ' ') . ' CFA');
+                    $whatsappMsg= urlencode("🏠 *{$annonce->name}*\n💰 " . number_format($annonce->prix, 0, ',', ' ') . " CFA\n📍 {$annonce->adresse}\n🔗 {$url}");
+                  @endphp
+                  <div class="d-flex flex-wrap align-items-center mt-1 mb-1" style="gap:6px;">
+                    {{-- WhatsApp --}}
+                    <a href="https://wa.me/?text={{ $whatsappMsg }}" target="_blank" rel="noopener"
+                       style="background:#25D366;color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967c-.273-.099-.471-.148-.67.15c-.197.297-.767.966-.94 1.164c-.173.199-.347.223-.644.075c-.297-.15-1.255-.463-2.39-1.475c-.883-.788-1.48-1.761-1.653-2.059c-.173-.297-.018-.458.13-.606c.134-.133.298-.347.446-.52c.149-.174.198-.298.298-.497c.099-.198.05-.371-.025-.52c-.075-.149-.669-1.612-.916-2.207c-.242-.579-.487-.5-.669-.51a13 13 0 0 0-.57-.01c-.198 0-.52.074-.792.372c-.272.297-1.04 1.016-1.04 2.479c0 1.462 1.065 2.875 1.213 3.074c.149.198 2.096 3.2 5.077 4.487c.709.306 1.262.489 1.694.625c.712.227 1.36.195 1.871.118c.571-.085 1.758-.719 2.006-1.413c.248-.694.248-1.289.173-1.413c-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214l-3.741.982l.998-3.648l-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884c2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                      WhatsApp
+                    </a>
+                    {{-- Facebook --}}
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}&quote={{ $shareText }}" target="_blank" rel="noopener"
+                       style="background:#1877F2;color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669c1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                      Facebook
+                    </a>
+                    {{-- Twitter/X --}}
+                    <a href="https://twitter.com/intent/tweet?text={{ $shareText }}&url={{ $shareUrl }}" target="_blank" rel="noopener"
+                       style="background:#000;color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26l8.502 11.24H16.17l-4.714-6.231l-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                      X
+                    </a>
+                    {{-- Copier le lien --}}
+                    <button onclick="copierLien('{{ $url }}')" id="btnCopier"
+                       style="background:#f8f9fa;color:#333;border:1px solid #ddd;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg>
+                      <span id="copierLabel">Copier</span>
+                    </button>
+                  </div>
+                  <script>
+                  function copierLien(url) {
+                      navigator.clipboard.writeText(url).then(function() {
+                          var btn = document.getElementById('btnCopier');
+                          var lbl = document.getElementById('copierLabel');
+                          lbl.textContent = 'Copié ✓';
+                          btn.style.background = '#d1fae5';
+                          btn.style.borderColor = '#27E3C0';
+                          setTimeout(function() {
+                              lbl.textContent = 'Copier';
+                              btn.style.background = '#f8f9fa';
+                              btn.style.borderColor = '#ddd';
+                          }, 2500);
+                      }).catch(function() {
+                          // Fallback pour navigateurs anciens
+                          var ta = document.createElement('textarea');
+                          ta.value = url; document.body.appendChild(ta);
+                          ta.select(); document.execCommand('copy');
+                          document.body.removeChild(ta);
+                          document.getElementById('copierLabel').textContent = 'Copié ✓';
+                      });
+                  }
+                  </script>
                 </div>
                 <span style="font-size: 18px">{{ number_format($annonce->prix,0,'',' ') }} CFA</span>
               </div>

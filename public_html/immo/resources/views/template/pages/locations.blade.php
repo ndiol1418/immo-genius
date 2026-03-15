@@ -109,7 +109,22 @@
 
         <div class="container section-title mt-4 d-none d-sm-block" data-aos="fade-up">
           <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap:10px;">
-            <p class="mb-0">{{ count($annonces) }}  @isset($_GET['name']) {{ $_GET['name'].'(s)' }}@endisset trouvé(e)s</p>
+            <div class="d-flex align-items-center" style="gap:10px;flex-wrap:wrap;">
+              <p class="mb-0" id="nbResultats">{{ count($annonces) }}  @isset($_GET['name']) {{ $_GET['name'].'(s)' }}@endisset trouvé(e)s</p>
+              {{-- Bouton Géolocalisation --}}
+              <button id="btnNearMe" onclick="rechercherProchesMoi()"
+                style="background:#0d1c2e;color:#27E3C0;border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
+                📍 Annonces près de moi
+              </button>
+              {{-- Slider rayon (caché initialement) --}}
+              <div id="rayonContainer" style="display:none;align-items:center;gap:8px;">
+                <label style="font-size:12px;white-space:nowrap;">Rayon : <strong id="rayonVal">10</strong> km</label>
+                <input type="range" id="rayonSlider" min="1" max="50" value="10"
+                  oninput="document.getElementById('rayonVal').textContent=this.value;rechercherProchesMoi()"
+                  style="width:120px;">
+                <button onclick="resetNearMe()" style="background:none;border:1px solid #ccc;border-radius:12px;padding:2px 10px;font-size:11px;cursor:pointer;">✕</button>
+              </div>
+            </div>
             @php
               $alerteParams = array_filter([
                 'type_transaction' => isset($search['type_location_id']) ? ($search['type_location_id'] == 1 ? 'louer' : 'acheter') : null,
@@ -122,6 +137,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2m6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1z"/></svg>
               Créer une alerte pour cette recherche
             </a>
+          </div>
           </div>
           @isset($search['name'])
             <p>
@@ -203,6 +219,20 @@
       zoom: 10,
       attributionControl: false
     });
+
+    // Bouton "Me localiser" sur la carte
+    class LocaliserControl {
+        onAdd(map) {
+            this._map = map;
+            this._container = document.createElement('div');
+            this._container.className = 'mapboxgl-ctrl mapboxgl-ctrl-group';
+            this._container.innerHTML = `<button title="Me localiser" style="font-size:18px;line-height:1;padding:4px 8px;" onclick="rechercherProchesMoi()">📍</button>`;
+            return this._container;
+        }
+        onRemove() { this._container.parentNode.removeChild(this._container); this._map = undefined; }
+    }
+    map.addControl(new LocaliserControl(), 'top-right');
+    map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
     // const locations = [
     //   {
     //     coords: [-16.785, 14.436],
@@ -321,6 +351,125 @@
     function kConverter(num) {
           return num <= 999 ? num : (0.1 * Math.floor(num / 100)).toFixed(1).replace('.0','') + 'k';
       }
+
+    // ─── Géolocalisation — Annonces près de moi ───────────────────────────
+    var userMarker = null;
+    var userCircle = null;
+    var nearMeActive = false;
+
+    function rechercherProchesMoi() {
+        if (!navigator.geolocation) {
+            alert("La géolocalisation n'est pas supportée par votre navigateur.");
+            return;
+        }
+        var btn = document.getElementById('btnNearMe');
+        btn.textContent = '⏳ Localisation...';
+        btn.disabled = true;
+
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            var lat   = pos.coords.latitude;
+            var lon   = pos.coords.longitude;
+            var rayon = parseInt(document.getElementById('rayonSlider').value) || 10;
+
+            // Centre la carte sur l'utilisateur
+            map.flyTo({ center: [lon, lat], zoom: 11 });
+
+            // Marqueur utilisateur
+            if (userMarker) userMarker.remove();
+            var el = document.createElement('div');
+            el.style.cssText = 'width:18px;height:18px;background:#27E3C0;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 4px rgba(39,227,192,.3)';
+            userMarker = new mapboxgl.Marker(el).setLngLat([lon, lat]).addTo(map);
+
+            // Cercle de rayon (approximation visuelle via GeoJSON)
+            if (map.getSource('user-circle')) {
+                map.getSource('user-circle').setData(makeCircle(lon, lat, rayon));
+            } else {
+                map.addSource('user-circle', { type: 'geojson', data: makeCircle(lon, lat, rayon) });
+                map.addLayer({ id: 'user-circle-fill', type: 'fill', source: 'user-circle',
+                    paint: { 'fill-color': '#27E3C0', 'fill-opacity': 0.1 } });
+                map.addLayer({ id: 'user-circle-line', type: 'line', source: 'user-circle',
+                    paint: { 'line-color': '#27E3C0', 'line-width': 2 } });
+            }
+
+            // Fetch annonces proches via AJAX
+            fetch('{{ route("annonces.nearMe") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ lat, lon, rayon })
+            })
+            .then(r => r.json())
+            .then(data => {
+                btn.textContent = '📍 Annonces près de moi';
+                btn.disabled = false;
+                document.getElementById('rayonContainer').style.display = 'flex';
+                document.getElementById('nbResultats').textContent = data.total + ' annonce(s) dans un rayon de ' + rayon + ' km';
+                nearMeActive = true;
+
+                // Afficher les résultats dans la liste
+                var listContainer = document.querySelector('.row[style*="max-height"]');
+                if (listContainer) {
+                    if (data.annonces.length === 0) {
+                        listContainer.innerHTML = '<div class="col-12 p-4 text-center text-muted">Aucune annonce trouvée dans ce rayon.</div>';
+                    } else {
+                        listContainer.innerHTML = data.annonces.map(a => `
+                            <div class="col-12 col-sm-6 mb-3">
+                                <a href="${a.url}" class="text-decoration-none text-dark">
+                                    <div class="card border-0 shadow-sm">
+                                        ${a.image ? `<img src="/${a.image.replace(/^\/+/,'')}" class="card-img-top" style="height:120px;object-fit:cover;" alt="">` : ''}
+                                        <div class="card-body p-2">
+                                            <div class="fw-bold" style="font-size:13px;">${Number(a.prix).toLocaleString('fr-FR')} CFA</div>
+                                            <div style="font-size:11px;color:#888;">${a.commune ?? ''}</div>
+                                            <div style="font-size:11px;color:#27E3C0;">📍 ${a.distance} km</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        `).join('');
+                    }
+                }
+            })
+            .catch(() => {
+                btn.textContent = '📍 Annonces près de moi';
+                btn.disabled = false;
+                alert('Erreur lors de la recherche.');
+            });
+        }, function() {
+            btn.textContent = '📍 Annonces près de moi';
+            btn.disabled = false;
+            alert("Impossible d'obtenir votre position.");
+        });
+    }
+
+    function resetNearMe() {
+        nearMeActive = false;
+        if (userMarker) { userMarker.remove(); userMarker = null; }
+        if (map.getLayer('user-circle-fill')) map.removeLayer('user-circle-fill');
+        if (map.getLayer('user-circle-line')) map.removeLayer('user-circle-line');
+        if (map.getSource('user-circle')) map.removeSource('user-circle');
+        document.getElementById('rayonContainer').style.display = 'none';
+        document.getElementById('nbResultats').textContent = '{{ count($annonces) }} trouvé(e)s';
+        location.reload();
+    }
+
+    // Génère un polygone circulaire en GeoJSON
+    function makeCircle(cx, cy, radiusKm, points=64) {
+        var coords = [], d = radiusKm / 6371;
+        var lat1 = cy * Math.PI / 180, lon1 = cx * Math.PI / 180;
+        for (var i = 0; i < points; i++) {
+            var brng = (i * 360 / points) * Math.PI / 180;
+            var lat2 = Math.asin(Math.sin(lat1)*Math.cos(d) + Math.cos(lat1)*Math.sin(d)*Math.cos(brng));
+            var lon2 = lon1 + Math.atan2(Math.sin(brng)*Math.sin(d)*Math.cos(lat1), Math.cos(d)-Math.sin(lat1)*Math.sin(lat2));
+            coords.push([lon2 * 180/Math.PI, lat2 * 180/Math.PI]);
+        }
+        coords.push(coords[0]);
+        return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [coords] } };
+    }
+    // ──────────────────────────────────────────────────────────────────────
+
   </script>
   <script>
     let timeout = null;

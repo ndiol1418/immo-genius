@@ -152,6 +152,57 @@ class SearchController extends Controller
         return $condition;
     }
 
+    /**
+     * Annonces proches via formule Haversine.
+     * POST /annonces/near-me
+     * Body: { lat, lon, rayon (km, défaut 10) }
+     */
+    public function nearMe(Request $request)
+    {
+        $request->validate([
+            'lat'   => ['required', 'numeric', 'between:-90,90'],
+            'lon'   => ['required', 'numeric', 'between:-180,180'],
+            'rayon' => ['nullable', 'numeric', 'min:1', 'max:100'],
+        ]);
+
+        $lat   = (float) $request->lat;
+        $lon   = (float) $request->lon;
+        $rayon = (float) ($request->rayon ?? 10);
+
+        // Haversine en SQL (R = 6371 km)
+        $haversine = "(6371 * ACOS(
+            COS(RADIANS({$lat})) * COS(RADIANS(lat)) *
+            COS(RADIANS(lon) - RADIANS({$lon})) +
+            SIN(RADIANS({$lat})) * SIN(RADIANS(lat))
+        ))";
+
+        $annonces = Annonce::withoutGlobalScope(AnnonceScope::class)
+            ->with(['immo', 'images', 'commune'])
+            ->whereNotNull('lat')
+            ->whereNotNull('lon')
+            ->whereRaw("{$haversine} <= ?", [$rayon])
+            ->selectRaw("*, {$haversine} AS distance")
+            ->orderByRaw($haversine)
+            ->limit(50)
+            ->get();
+
+        return response()->json([
+            'annonces' => $annonces->map(fn($a) => [
+                'id'       => $a->id,
+                'name'     => $a->name,
+                'slug'     => $a->slug,
+                'prix'     => $a->prix,
+                'lat'      => $a->lat,
+                'lon'      => $a->lon,
+                'distance' => round($a->distance, 2),
+                'image'    => $a->images->first()?->url,
+                'commune'  => $a->commune?->name,
+                'url'      => route('annonce', $a->slug),
+            ]),
+            'total' => $annonces->count(),
+        ]);
+    }
+
     public function agentSearch(Request $request){
         $query = Fournisseur::withoutGlobalScope(AnnonceScope::class)->actif();
         $specialisations = Specialisation::all();

@@ -59,3 +59,9 @@ Route::get('/calculateur-pret', [App\Http\Controllers\CalculateurController::cla
 // Estimation de bien
 Route::get('/estimation', [App\Http\Controllers\EstimationController::class, 'index'])->name('estimation');
 Route::post('/estimation', [App\Http\Controllers\EstimationController::class, 'estimer'])->name('estimation.estimer');
+
+// Analytics agent
+Route::middleware(['auth'])->get('/agent/analytics', [App\Http\Controllers\AnalyticsController::class, 'index'])->name('agent.analytics');
+
+// Géolocalisation — annonces près de moi
+Route::post('/annonces/near-me', [App\Http\Controllers\SearchController::class, 'nearMe'])->name('annonces.nearMe');

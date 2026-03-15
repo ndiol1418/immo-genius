@@ -17,6 +17,7 @@ use App\Models\Level;
 use App\Models\Piece;
 use App\Models\Specialisation;
 use App\Models\Type;
+use App\Models\AnnonceVue;
 use App\Models\Region;
 use App\Models\TypeImmo;
 use App\Models\TypeLocation;
@@ -348,6 +349,22 @@ class AccueilController extends Controller
 
         $annonce = Annonce::withoutGlobalScope(AnnonceScope::class)->where('slug',$slug)->first();
         if (!$annonce) abort(404);
+
+        // Enregistre la vue (1 par IP toutes les 24h)
+        $ip = request()->ip();
+        $deja = AnnonceVue::where('annonce_id', $annonce->id)
+            ->where('ip_address', $ip)
+            ->where('created_at', '>=', now()->subHours(24))
+            ->exists();
+        if (!$deja) {
+            AnnonceVue::create([
+                'annonce_id' => $annonce->id,
+                'ip_address' => $ip,
+                'user_agent' => substr(request()->userAgent() ?? '', 0, 255),
+                'created_at' => now(),
+            ]);
+        }
+
         $annonces = Annonce::withoutGlobalScope(AnnonceScope::class)->with(['immo.bien'])->where('type_location_id',$annonce->type_location_id)->inRandomOrder()->limit(4)->get();
         $url = route('annonce', $annonce->slug);
         // $url = 'https://vytimo.softek-group.com/annonces/test-2-annonce22';
