@@ -75,7 +75,10 @@ class AccueilController extends Controller
         $apiKey = $this->apiKey;
         $type_locations = TypeLocation::all();
         // event(new MailEvent('inscription:new', 'abnsndoye@gmail.com'));
-        return view('welcome',compact('types','type_immos','annonce_news','agents','annonce_premium','regions','apiKey','annonce_zones','type_locations'));
+        // Recommandations IA pour la page d'accueil
+        $recommandations = (new \App\Services\RecommandationService())->recommander();
+
+        return view('welcome',compact('types','type_immos','annonce_news','agents','annonce_premium','regions','apiKey','annonce_zones','type_locations','recommandations'));
     }
     public function acheter(){
         $types = Type::actif()->get();
@@ -367,9 +370,22 @@ class AccueilController extends Controller
 
         $annonces = Annonce::withoutGlobalScope(AnnonceScope::class)->with(['immo.bien'])->where('type_location_id',$annonce->type_location_id)->inRandomOrder()->limit(4)->get();
         $url = route('annonce', $annonce->slug);
-        // $url = 'https://vytimo.softek-group.com/annonces/test-2-annonce22';
-        // dd($url);
-        return view('template.pages.annonce',compact('annonce','annonces','url','message'));
+
+        // Enregistre l'historique de navigation pour la recommandation IA
+        try {
+            \App\Models\HistoriqueNavigation::create([
+                'user_id'    => auth()->id(),
+                'session_id' => session()->getId(),
+                'annonce_id' => $annonce->id,
+                'duree_vue'  => 0,
+                'created_at' => now(),
+            ]);
+        } catch (\Throwable $e) {}
+
+        // Recommandations IA
+        $recommandations = (new \App\Services\RecommandationService())->recommander($annonce->id);
+
+        return view('template.pages.annonce',compact('annonce','annonces','url','message','recommandations'));
     }
 
     public function agentView($id){

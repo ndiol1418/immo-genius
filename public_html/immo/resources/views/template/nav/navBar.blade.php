@@ -77,6 +77,10 @@ $ref = isset($explode_path[1]) ? $explode_path[1] : null;
               <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24"><path fill="#27E3C0" d="M16 11.78L20.24 4.45L21.97 5.45L16.74 14.5L10.23 10.75L5.46 19H22V21H2V3H4V17.54L9.5 8Z"/></svg>
               Analytics
             </a></li>
+            <li><a href="{{ route('gestion-locative.index') }}" class="d-flex align-items-center" style="gap:4px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24"><path fill="#27E3C0" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-7 14H7v-2h5zm5-4H7v-2h10zm0-4H7V7h10z"/></svg>
+              Locatif
+            </a></li>
             @endif
             <li>
               <a href="{{ route('login') }}" class="d-sm-block d-md-none _d-flex justify-content-start" style="gap: 10px">

@@ -157,6 +157,9 @@
 
 </section><!-- /Agents Section -->
 
+{{-- Section Recommandations IA --}}
+@include('recommandations.widget')
+
 <!-- Testimonials Section -->
 <section id="testimonials" class="testimonials section d-none">
 

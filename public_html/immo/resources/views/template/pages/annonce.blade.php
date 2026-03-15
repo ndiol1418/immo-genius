@@ -520,7 +520,9 @@
       </div>
   
     </section><!-- /Services Section -->
-  
+
+  @include('recommandations.widget')
+
 @endsection
 
   {{-- <script src="https://www.google.com/recaptcha/api.js"></script>

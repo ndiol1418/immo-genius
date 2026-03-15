@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('alertes:verifier')->dailyAt('08:00');
+        $schedule->command('loyer:notifications')->dailyAt('09:00');
     }
 
     /**

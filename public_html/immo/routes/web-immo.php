@@ -67,3 +67,15 @@ Route::middleware(['auth'])->group(function () {
 
 // Géolocalisation — annonces près de moi
 Route::post('/annonces/near-me', [App\Http\Controllers\SearchController::class, 'nearMe'])->name('annonces.nearMe');
+
+// Gestion Locative
+Route::middleware(['auth'])->group(function () {
+    Route::get('/gestion-locative', [App\Http\Controllers\GestionLocativeController::class, 'index'])->name('gestion-locative.index');
+    Route::get('/gestion-locative/creer', [App\Http\Controllers\GestionLocativeController::class, 'create'])->name('gestion-locative.create');
+    Route::post('/gestion-locative', [App\Http\Controllers\GestionLocativeController::class, 'store'])->name('gestion-locative.store');
+    Route::get('/gestion-locative/{contrat}', [App\Http\Controllers\GestionLocativeController::class, 'show'])->name('gestion-locative.show');
+    Route::post('/gestion-locative/{contrat}/paiement', [App\Http\Controllers\GestionLocativeController::class, 'enregistrerPaiement'])->name('gestion-locative.paiement');
+    Route::get('/gestion-locative/{contrat}/quittance/{mois}', [App\Http\Controllers\GestionLocativeController::class, 'quittancePdf'])->name('gestion-locative.quittance');
+    Route::post('/gestion-locative/{contrat}/signer', [App\Http\Controllers\GestionLocativeController::class, 'signer'])->name('gestion-locative.signer');
+    Route::get('/gestion-locative/{contrat}/pdf', [App\Http\Controllers\GestionLocativeController::class, 'contratPdf'])->name('gestion-locative.pdf');
+});
