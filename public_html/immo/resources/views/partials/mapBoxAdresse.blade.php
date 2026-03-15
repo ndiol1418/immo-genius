@@ -2,7 +2,7 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.0/mapbox-gl.css" rel="stylesheet">
 
 <script>
-    mapboxgl.accessToken = 'pk.eyJ1Ijoidnl0aW1vIiwiYSI6ImNtOThpNnNpNDAyZnYyanNlbmR1dDFpMjcifQ.Z3zUfwJ59hZX2t6V5cE8Tw';
+    mapboxgl.accessToken = '{{ config("services.mapbox.token") }}';
 
     const map = new mapboxgl.Map({
     container: 'map',

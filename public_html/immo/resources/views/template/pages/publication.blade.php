@@ -307,7 +307,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaSfdQyOwQoWtaDwtL5AMOm3eA492dg9M&callback=initAutocomplete&libraries=places&v=weekly" defer></script>
 
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1Ijoidnl0aW1vIiwiYSI6ImNtOThpNnNpNDAyZnYyanNlbmR1dDFpMjcifQ.Z3zUfwJ59hZX2t6V5cE8Tw';
+        mapboxgl.accessToken = '{{ config("services.mapbox.token") }}';
 
         const map = new mapboxgl.Map({
             container: 'map',

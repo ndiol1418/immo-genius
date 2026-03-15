@@ -41,4 +41,8 @@ return [
         'redirect' => env('FACEBOOK_CLIENT_CALLBACK')
     ],
 
+    'mapbox' => [
+        'token' => env('MAPBOX_TOKEN'),
+    ],
+
 ];

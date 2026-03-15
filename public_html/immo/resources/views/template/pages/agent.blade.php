@@ -325,7 +325,7 @@
 
   </script>
   <script>
-    mapboxgl.accessToken = 'pk.eyJ1Ijoidnl0aW1vIiwiYSI6ImNtOThpNnNpNDAyZnYyanNlbmR1dDFpMjcifQ.Z3zUfwJ59hZX2t6V5cE8Tw';
+    mapboxgl.accessToken = '{{ config("services.mapbox.token") }}';
   
     const map = new mapboxgl.Map({
       container: 'map',
