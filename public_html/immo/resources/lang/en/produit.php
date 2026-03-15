@@ -1,0 +1,22 @@
+<?php
+return[
+    'designation'=>'Désignation',
+    'code_barre'=>'Barre Code',
+    'colisage'=>'Packing',
+    'prix_unitaire_ht'=>'Unit Price HT',
+    'prix_ht'=>'Ht price',
+    'designation'=>'Designation',
+    'tva'=>'Vat',
+    'gamme'=>'Range',
+    'coda_barre'=>'Bar_code',
+    'colisage'=>'Packing',
+    'prix_ttc'=>'Price_including_taxes',
+    'fournisseur'=>'Supplier',
+    'action'=>'Action',
+    'prix_unitaire_ht'=>'Unit price ht',
+    'prix_ht'=>'Price ht    ',
+    'famille'=>'Family',
+    'Voulez-vous_vraiment_supprimer_le_produit?'=>'Do_you_really_want_to_remove_the_product?',
+    'annuler'=>'cancel',
+    'qte'=>'qte',
+];

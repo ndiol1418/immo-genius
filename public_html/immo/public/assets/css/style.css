@@ -1,0 +1,139 @@
+.formulaire>div>button {
+    border-radius: 4px;
+}
+
+.border-radius-30 {
+    border-radius: 4px !important;
+}
+
+.border-radius-left {
+    border-radius: 4px 0 0 4px !important;
+}
+
+.border-radius-right {
+    border-radius: 0 4px 4px 0 !important;
+}
+
+.border-radius-0 {
+    border-radius: 0px !important;
+}
+
+.btn-focus {
+    background: color-mix(in srgb, var(--accent-color), transparent 50%);
+}
+
+._card {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+}
+
+.btn-get-started {
+    border-radius: 4px !important;
+    padding: 10px 25px !important
+}
+
+.fixed-top {
+    position: fixed;
+    /* top: 30;
+    right: 30;
+    left: 30;
+    z-index: 1030;
+    border-radius: 4px; */
+}
+
+.text-primary {
+    color: #071A5F !important;
+}
+
+.btn-primary {
+    background-color: #071A5F !important;
+    border-color: #071A5F !important;
+    border-radius: 5px;
+}
+
+.btn-secondary {
+    background-color: #08E5CB !important;
+    border-color: #08E5CB !important;
+    border-radius: 5px;
+}
+
+.text-secondary {
+    color: #08E5CB !important
+}
+
+.page_title {
+    width: 70%;
+    margin: .7em auto;
+    overflow: hidden;
+    text-align: center;
+    font-weight: 300;
+    color: #adb4bc !important;
+    font-size: 22px;
+}
+
+.page_title:before,
+.page_title:after {
+    content: "";
+    display: inline-block;
+    width: 50%;
+    margin: 2px .5em 0 -55%;
+    vertical-align: middle;
+    border-bottom: 1px solid;
+    color: #ddd
+}
+
+.page_title:after {
+    margin: 2px -55% 0 .5em;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #ddd !important;
+    border-radius: 10px !important;
+    height: 36px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #000;
+    line-height: 34px !important;
+    font-size: 12px !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #06e5ca !important;
+    color: white !important;
+    font-size: 12px !important;
+}
+
+.select2-results__option {
+    padding: 6px;
+    user-select: none;
+    -webkit-user-select: none;
+    font-size: 12px !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #071a5f !important;
+    border-radius: 10px !important;
+}
+
+@media screen and (max-width: 480px) {
+    label#acheter>span {
+        font-size: 12px !important;
+    }
+    label#louer>span {
+        font-size: 12px !important;
+    }
+}

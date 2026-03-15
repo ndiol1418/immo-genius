@@ -1,0 +1,33 @@
+<?php
+return[
+    'title_create'=>'Ajout d\'un fournisseur',
+    'subtitle_create'=>'Ajout d\'un fournisseur',
+    'title_list'=>'Liste des agents',
+    'title_edit'=>'Modification d\'un fournisseur',
+    'subtitle_edit'=>'Modification d\'un fournisseur',
+    'add_fam'=>'Le fournisseur a été créé avec succès!',
+    'update_fam'=>'Le fournisseur a été modifié avec succès.',
+    'success_delete'=>'Le fournisseur a été supprimé avec succès!',
+    'error_delete'=>'Echec de la suppression!',
+    'alert'=>'Voulez vous vraiment supprimer cet fournisseur ?',
+    'nom'=>'Nom',
+    'contact'=>'Contact',
+    'telephone'=>'Téléphone',
+    'adresse'=>'Adresse',
+    'email'=>'Email',
+    'taux_royalties'=>'Taux royalties',
+    'tva'=>'TVA',
+    'code'=>'Code',
+    'fiche'=>"Fiche de l'agent",
+    'produits'=>'Produits',
+    'commandes'=>'Commandes',
+    'year'=>'Année en cours',
+    'tous'=>'Tous',
+    'mois'=>'Mois',
+    'operations'=>'Transactions',
+    'montant'=>'Montant',
+    'chart_title'=>"CA de l'année en cours",
+    'chart_title_line'=>"Nbre Commande par mois",
+    'fournisseur'=>'Fournisseur'
+
+];

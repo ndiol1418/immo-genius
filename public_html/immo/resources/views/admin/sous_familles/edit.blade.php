@@ -1,0 +1,39 @@
+@extends('layouts.admin')
+@section('title',__('sous-famille.title_edit'))
+@section('subtitle',__('sous-famille.title_edit'))
+
+@section('content')
+    {{-- Contenu de la page --}}
+        <div class="col-md-12">
+            <!-- Collapsable Card Example -->
+            <div class="card mb-4">
+                <!-- Card Header - Accordion -->
+                <!-- Card Content - Collapse -->
+                <div class="content-form">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                {{-- <div class="table-responsive"> --}}
+                                    <form method="POST" action="{{ route('admin.sous-familles.update', $sous_famille->id) }}">
+                                        @csrf
+                                        @include('admin.sous_familles.form')
+
+                                        <div class="form-group row  mb-0">
+                                            <div class="col-md-6">
+                                                <button type="submit" class="btn btn-primary">
+                                                    {{ __('general.mis_a_jour') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        @method('PATCH')
+                                    </form>
+                                {{-- </div> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--  -->
+            </div>
+        </div>
+    {{-- Fin contenu --}}
+@endsection

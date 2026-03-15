@@ -1,0 +1,43 @@
+
+<?php
+return [
+
+        'ajout_d_une_staion'=>'Adding_a_station',
+        'name'=>'Name',
+        'nom'=>'Name',
+        'nom_de_la_boutique'=>'Name_of_the_shop',
+        'adresse'=>'Adress',
+        'telephone'=>'Phone',
+        'latitude'=>'Latidue',
+        'longitude'=>'Longitude',
+        'zone'=>'Zone',
+        'gamme'=>'Range',
+        'alcool'=>'Alcohol',
+        'oui'=>'Yes',
+        'non'=>'No',
+        'fermer'=>'Close',
+        'enregister'=>'Save',
+        'cartographie'=>'Mapping',
+        'libelle'=>'Wording',
+        'adresse'=>'Address',
+        'code'=>'Code',
+        'alcool'=>'Alcohol',
+        'gamme'=>'Range',
+        'zone'=>'Zone',
+        'station'=>'Shop',
+        'actions'=>'Actions',
+        'email'=>'Email',
+        'ca'=>'Sels Revenu',
+        'commandes'=>'Orders',
+        'annee_encours'=>'Current Year',
+        'ca_mois_en_cours'=>'Sels Revenu of current month',
+        'mois_precedent'=>'Previous Month',
+        'commandes_encours'=>'Current Order',
+        'title_visualisation'=>'Visualization',
+        'infos'=>'Informations',
+        'statistique'=>'Statistiques',
+        'gerant'=>'Manager',
+        'ajout_title'=>'Add Shop',
+        'gammes'=>'Range'
+
+];

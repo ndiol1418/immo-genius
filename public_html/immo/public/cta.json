@@ -1,0 +1,199 @@
+{
+    "data": [{
+            "structure": "2W LOGISTIC",
+            "gerant": "Mr Cheikh Ahmadou Bamba M.FALL",
+            "telephone": null,
+            "email": "tamsir.ousmane@gmail.com#mailto:tamsir.ousmane@gmail.com#",
+            "activite": "fret aérien",
+            "montant": "39 525 000"
+        },
+        {
+            "structure": "Africa Air Assistance",
+            "gerant": "Mr Youssoupha GUEYE",
+            "telephone": null,
+            "email": "masylla6@hotmail.com#mailto:masylla6@hotmail.com#",
+            "activite": "pax-fret-maintenance",
+            "montant": "157 335 000"
+        },
+        {
+            "structure": "AVIATION&CO",
+            "gerant": "Mr Ibra Birane WANE",
+            "telephone": null,
+            "email": "dakar@aviationandco.com#mailto:dakar@aviationandco.com#",
+            "activite": "transport aérien-pax",
+            "montant": "63 750 000"
+        },
+        {
+            "structure": "COMATRA",
+            "gerant": "Mr Ibrahima DIOP",
+            "telephone": null,
+            "email": "cmatra.transit@gmail.com#mailto:cmatra.transit@gmail.com#",
+            "activite": "fret aérien",
+            "montant": "22 100 000"
+        },
+        {
+            "structure": "EFFITRANS",
+            "gerant": "Mr Abdou Lahad NIANG",
+            "telephone": null,
+            "email": "abdoul@effitrans.sn#mailto:abdoul@effitrans.sn#",
+            "activite": "fret aérien",
+            "montant": "94 350 000"
+        },
+        {
+            "structure": "EXPERTS ASSOCIES",
+            "gerant": "Mr Cheikh M. D NDIAYE",
+            "telephone": null,
+            "email": "cmdndiaye@expertassocies.com#mailto:cmdndiaye@expertassocies.com#",
+            "activite": "Sûreté",
+            "montant": "73 100 000"
+        },
+        {
+            "structure": "GLOBAL AIR",
+            "gerant": "Mr Ibrahima KEBE",
+            "telephone": null,
+            "email": "ikebe@globalairservices.sn#mailto:ikebe@globalairservices.sn#",
+            "activite": "frey aérien",
+            "montant": "207 400 000"
+        },
+        {
+            "structure": "GLOBAL SARL",
+            "gerant": "Mr Aly MANE",
+            "telephone": null,
+            "email": "yatta76@hotmail.com#mailto:yatta76@hotmail.com#",
+            "activite": "préstation de service",
+            "montant": "760 000 000",
+            "Champ1": "[]"
+        },
+        {
+            "structure": "GLOBEX",
+            "gerant": "Mr Iba Mar DIOP",
+            "telephone": null,
+            "email": "d.ibamar@globexfedex.sn#mailto:d.ibamar@globexfedex.sn#",
+            "activite": "fret aérien",
+            "montant": "136 850 000"
+        },
+        {
+            "structure": "IFPNC",
+            "gerant": "Me Fama G. LAUNJUEL",
+            "telephone": null,
+            "email": "ifpncfama@yahoo.fr#mailto:ifpncfama@yahoo.fr#",
+            "activite": "formation",
+            "montant": "33 932 000"
+        },
+        {
+            "N°": 11,
+            "structure": "INFINITE LOUNGE",
+            "gerant": null,
+            "telephone": null,
+            "email": "a.ndiaye@infiniteairport.com#mailto:a.ndiaye@infiniteairport.com#",
+            "activite": "préstation service",
+            "montant": "621 300 000"
+        },
+        {
+            "structure": "MAZIZA",
+            "gerant": "Mr Moussa BEYE",
+            "telephone": null,
+            "email": "maziza@mazizalogistique.com#mailto:maziza@mazizalogistique.com#",
+            "activite": "fret aérien",
+            "montant": "25 500 000"
+        },
+        {
+            "structure": "OATT",
+            "gerant": "Mr Omar TRAORE",
+            "telephone": null,
+            "email": "omartra18@gmail.com#mailto:omartra18@gmail.com#",
+            "activite": null,
+            "montant": "53 550 000"
+        },
+        {
+            "structure": "SECCO CAFE",
+            "gerant": null,
+            "telephone": null,
+            "email": "oytun.ertan@secco.com.tr#mailto:oytun.ertan@secco.com.tr#",
+            "activite": "Préstation",
+            "montant": "218 450 000"
+        },
+        {
+            "N°": 15,
+            "structure": "SECUBAG",
+            "gerant": "Mr Habibou THIMBO",
+            "telephone": null,
+            "email": "habibouthimbo@hotmail.com#mailto:habibouthimbo@hotmail.com#",
+            "activite": "fret aérien",
+            "montant": "233 325 000"
+        },
+        {
+            "N°": 16,
+            "structure": "SEN SICASS",
+            "gerant": null,
+            "telephone": null,
+            "email": "fallsimon@sicass.com#mailto:fallsimon@sicass.com#",
+            "activite": "Sûreté",
+            "montant": "58 650 000"
+        },
+        {
+            "structure": "SHS",
+            "gerant": "Mr Ousmane DIOP",
+            "telephone": null,
+            "email": "ousmane.junior@shs.aero#mailto:ousmane.junior@shs.aero#",
+            "activite": "Handling",
+            "montant": "51 000 000"
+        },
+        {
+            "structure": "SMART SERVICE SENEGAL",
+            "gerant": "Me Mame Diarra Bousso DIOP",
+            "telephone": null,
+            "email": "mamediop55@gmail.com#mailto:mamediop55@gmail.com#",
+            "activite": "Préstation",
+            "montant": "28 900 000"
+        },
+        {
+            "structure": "SOCIETE DE FRET ET DE TRANSIT",
+            "gerant": "Mr Hamdy KOUNTA",
+            "telephone": null,
+            "email": "sftfret@gmail.com#mailto:sftfret@gmail.com#",
+            "activite": "fret aérien",
+            "montant": "8 670 000"
+        },
+        {
+            "structure": "TRANSAIR",
+            "gerant": "Mr Alioune FALL",
+            "telephone": null,
+            "email": "afcargo2000@yahoo.fr#mailto:afcargo2000@yahoo.fr#",
+            "activite": "transport pax",
+            "montant": "902 500 000"
+        },
+        {
+            "structure": "TRANSATLANTIQUE",
+            "gerant": "Mr Mame Khar BADIANE",
+            "telephone": null,
+            "email": "dgtransitatlantic@gmail.com#mailto:dgtransitatlantic@gmail.com#",
+            "activite": "fret aérien",
+            "montant": "25 500 000"
+        },
+        {
+            "structure": "TRANSFRET",
+            "gerant": "Mr Baba TRAORE",
+            "telephone": null,
+            "email": "transfret@orange.sn#mailto:transfret@orange.sn#",
+            "activite": "fret aérien",
+            "montant": "119 850 000"
+        },
+        {
+            "structure": "TRANSGLOBAL",
+            "gerant": "Mr Dame MBAYE",
+            "telephone": null,
+            "email": "dame.mbaye@transglobal.sn#mailto:dame.mbaye@transglobal.sn#",
+            "activite": "fret aérien",
+            "montant": "59 500 000"
+        },
+        {
+            "structure": "TSA",
+            "gerant": "Mr Jean Martin JAMPY",
+            "telephone": null,
+            "email": "jean.martin.jampy@teranga-sa.com#mailto:jean.martin.jampy@teranga-sa.com#",
+            "activite": null,
+            "montant": "510 150 000"
+        }
+    ]
+}

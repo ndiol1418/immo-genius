@@ -1,0 +1,65 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+    margin: 15px 0;
+}
+
+/* Styles pour l'input et le select */
+.input-container input,
+.input-container select {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #21252970;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
+    background: white;
+    transition: border-color 0.3s ease;
+    appearance: none; /* Supprime le style par défaut du select */
+}
+
+/* Ajout d'une icône pour le select */
+.input-container select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%233498db'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 30px;
+    cursor: pointer;
+}
+
+/* Styles du label flottant */
+.input-container label {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    padding: 0 5px;
+    font-size: 14px;
+    color: #212529;
+    transition: all 0.3s ease;
+}
+
+/* Effet sur l'input */
+.input-container input:focus,
+.input-container input:not(:placeholder-shown),
+.input-container select:focus,
+.input-container select:not([value=""]) {
+    border-color: #06e5ca;
+}
+
+.input-container input:focus + label,
+.input-container input:not(:placeholder-shown) + label,
+.input-container select:focus + label,
+.input-container select:not([value=""]) + label {
+    top: 0;
+    left: 10px;
+    font-size: 12px;
+    color: #212529;
+}
