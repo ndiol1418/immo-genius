@@ -15,8 +15,12 @@ class Fournisseur extends Model
         return $this->belongsTo(User::class);
     }
     protected $casts = [
-        'agents' => AsArrayObject::class,
-        'zones' => AsArrayObject::class,
+        'agents'             => AsArrayObject::class,
+        'zones'              => AsArrayObject::class,
+        'specialites'        => 'array',
+        'zones_intervention' => 'array',
+        'certifications'     => 'array',
+        'reseaux_sociaux'    => 'array',
     ];
     // protected static function boot(){
     //     parent::boot();
@@ -77,5 +81,23 @@ class Fournisseur extends Model
     
     public function mes_zones(){
         return Commune::whereIn('id',$this->zones??[])->get();
+    }
+
+    public function disponibilites(){
+        return $this->hasMany(DisponibiliteAgent::class, 'agent_id');
+    }
+
+    public function boosts(){
+        return $this->hasMany(BoostAnnonce::class, 'agent_id');
+    }
+
+    /** Badge de disponibilité */
+    public function getDisponibiliteColorAttribute(): string {
+        return match($this->disponibilite ?? 'disponible') {
+            'disponible' => '#2E7D32',
+            'occupe'     => '#C49A0C',
+            'conge'      => '#dc3545',
+            default      => '#888',
+        };
     }
 }

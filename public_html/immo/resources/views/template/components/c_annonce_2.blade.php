@@ -55,6 +55,23 @@
                             <span>Verifié</span>
                         </div>
                     @endif
+                    {{-- Badge boost actif --}}
+                    @php
+                      try {
+                        $boostCard = \App\Models\BoostAnnonce::where('annonce_id', $annonce->id)
+                            ->where('statut','actif')->where('date_fin','>=',now()->toDateString())
+                            ->orderByRaw("FIELD(type,'vedette','premium','standard')")->first();
+                      } catch(\Exception $e) { $boostCard = null; }
+                    @endphp
+                    @if($boostCard)
+                      @php
+                        $boostBg    = $boostCard->type==='vedette' ? '#dc3545' : ($boostCard->type==='premium' ? '#C49A0C' : '#2E7D32');
+                        $boostEmoji = $boostCard->type==='vedette' ? '🔥 Vedette' : ($boostCard->type==='premium' ? '👑 Premium' : '⭐ Mis en avant');
+                      @endphp
+                      <div style="position:absolute;top:45px;left:6px;z-index:11;background:{{ $boostBg }};color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;">
+                        {{ $boostEmoji }}
+                      </div>
+                    @endif
                     @php $isFavori = auth()->check() ? \App\Models\Favori::where('user_id', auth()->id())->where('annonce_id', $annonce->id)->exists() : false; @endphp
                     <button onclick="toggleFavori(event, {{ $annonce->id }}, this)"
                         data-favori="{{ $isFavori ? '1' : '0' }}"

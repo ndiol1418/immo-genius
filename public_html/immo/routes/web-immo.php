@@ -72,6 +72,28 @@ Route::post('/annonces/near-me', [App\Http\Controllers\SearchController::class, 
 Route::post('/recherche-ia', [App\Http\Controllers\SearchController::class, 'aiSearch'])->name('recherche.ia');
 Route::get('/recherche-ia/suggestions', [App\Http\Controllers\SearchController::class, 'recherchesSuggestions'])->name('recherche.ia.suggestions');
 
+// Matching agent automatique
+Route::get('/trouver-mon-agent', [App\Http\Controllers\AgentMatchController::class, 'index'])->name('agent.match');
+Route::post('/trouver-mon-agent', [App\Http\Controllers\AgentMatchController::class, 'match'])->name('agent.match.post');
+
+// Boosts annonces
+Route::middleware(['auth'])->group(function () {
+    Route::post('/boosts', [App\Http\Controllers\BoostController::class, 'store'])->name('boost.store');
+});
+
+// Profil agent enrichi
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mon-profil-agent', [App\Http\Controllers\ProfilAgentController::class, 'edit'])->name('agent.profil.edit');
+    Route::post('/mon-profil-agent', [App\Http\Controllers\ProfilAgentController::class, 'update'])->name('agent.profil.update');
+});
+
+// Disponibilités agent
+Route::middleware(['auth'])->group(function () {
+    Route::post('/disponibilites', [App\Http\Controllers\DisponibiliteController::class, 'store'])->name('disponibilite.store');
+    Route::delete('/disponibilites/{creneau}', [App\Http\Controllers\DisponibiliteController::class, 'destroy'])->name('disponibilite.destroy');
+    Route::post('/disponibilites/{creneau}/reserver', [App\Http\Controllers\DisponibiliteController::class, 'reserver'])->name('disponibilite.reserver');
+});
+
 // Gestion Locative
 Route::middleware(['auth'])->group(function () {
     Route::get('/gestion-locative', [App\Http\Controllers\GestionLocativeController::class, 'index'])->name('gestion-locative.index');

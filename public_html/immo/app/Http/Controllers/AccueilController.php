@@ -66,9 +66,13 @@ class AccueilController extends Controller
         // dd($imagePath);
         $types = Type::actif()->get();
         $type_immos = TypeImmo::actif()->get();
-        $annonce_news = Annonce::withoutGlobalScope(AnnonceScope::class)->where('is_premium',0)->latest()->take(8)->get();
-        $annonce_zones = Annonce::withoutGlobalScope(AnnonceScope::class)->where('is_premium',0)->latest()->take(4)->get();
-        $annonce_premium = Annonce::withoutGlobalScope(AnnonceScope::class)->where('is_premium',1)->latest()->take(6)->get();
+        $boostOrder = ['vedette' => 0, 'premium' => 1, 'standard' => 2];
+        $annonce_news = Annonce::withoutGlobalScope(AnnonceScope::class)->where('is_premium',0)->latest()->take(8)->get()
+            ->sortBy(fn($a) => $boostOrder[$a->boostActif?->type ?? ''] ?? 3)->values();
+        $annonce_zones = Annonce::withoutGlobalScope(AnnonceScope::class)->where('is_premium',0)->latest()->take(4)->get()
+            ->sortBy(fn($a) => $boostOrder[$a->boostActif?->type ?? ''] ?? 3)->values();
+        $annonce_premium = Annonce::withoutGlobalScope(AnnonceScope::class)->where('is_premium',1)->latest()->take(6)->get()
+            ->sortBy(fn($a) => $boostOrder[$a->boostActif?->type ?? ''] ?? 3)->values();
         
         $agents = Fournisseur::actif()->limit(4)->get();
         $regions = $this->regions;
@@ -96,10 +100,12 @@ class AccueilController extends Controller
     public function acheter(){
         $types = Type::actif()->get();
         $type_immos = TypeImmo::actif()->get();
+        $boostOrder = ['vedette' => 0, 'premium' => 1, 'standard' => 2];
         $annonces = Annonce::withoutGlobalScope(AnnonceScope::class)->with(['immo.bien','images'])->where('type_location_id',1)->get();
         if (isset($_GET['type'])) {
             $annonces = Annonce::withoutGlobalScope(AnnonceScope::class)->with(['immo.bien'])->where('type_immo_id',(int)$_GET['type'])->where('type_location_id',1)->get();
         }
+        $annonces = $annonces->sortBy(fn($a) => $boostOrder[$a->boostActif?->type ?? ''] ?? 3)->values();
         $type_locations = TypeLocation::all();
         $type = 'achat';
         return view('template.pages.locations',compact('types','type_immos','annonces','type_locations','type'));
@@ -107,10 +113,12 @@ class AccueilController extends Controller
     public function louer(){
         $types = Type::actif()->get();
         $type_immos = TypeImmo::actif()->get();
+        $boostOrder = ['vedette' => 0, 'premium' => 1, 'standard' => 2];
         $annonces = Annonce::withoutGlobalScope(AnnonceScope::class)->with(['immo.bien','images'])->where('type_location_id',2)->get();
         if (isset($_GET['type'])) {
             $annonces = Annonce::withoutGlobalScope(AnnonceScope::class)->with(['immo.bien'])->where('type_immo_id',(int)$_GET['type'])->where('type_location_id',2)->get();
         }
+        $annonces = $annonces->sortBy(fn($a) => $boostOrder[$a->boostActif?->type ?? ''] ?? 3)->values();
         // foreach ($a as $key => $value) {
         //     $value->update(['type_immo_id'=>$value->immo->type_immo_id]);
         // }

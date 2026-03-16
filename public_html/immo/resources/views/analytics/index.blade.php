@@ -6,12 +6,102 @@
 <section class="section mt-4" style="min-height:80vh;">
 <div class="container" style="margin-top:100px;">
 
-  <div class="d-flex align-items-center justify-content-between mb-4">
+  <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
     <h4 class="mb-0">
       <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24"><path fill="currentColor" d="M16 11.78L20.24 4.45L21.97 5.45L16.74 14.5L10.23 10.75L5.46 19H22V21H2V3H4V17.54L9.5 8L16 11.78Z"/></svg>
       Dashboard Analytics
     </h4>
-    <span class="text-muted" style="font-size:13px;">Agent : <strong>{{ $agent->nom_complet }}</strong></span>
+    <div class="d-flex gap-2">
+      <a href="{{ route('agent.profil.edit') }}" class="btn btn-sm" style="background:#0d1c2e;color:#fff;border-radius:8px;font-size:12px;">✏️ Mon profil</a>
+      <span class="text-muted" style="font-size:13px;align-self:center;">Agent : <strong>{{ $agent->nom_complet }}</strong></span>
+    </div>
+  </div>
+
+  @if(session('success'))
+    <div class="alert alert-success rounded-3 mb-4">{{ session('success') }}</div>
+  @endif
+
+  {{-- ═══════════════════════════════════════
+       🚀 BOOSTER MES ANNONCES
+       ═══════════════════════════════════════ --}}
+  @php
+    $mesAnnonces = \App\Models\Annonce::withoutGlobalScope(\App\Scopes\AnnonceScope::class)
+        ->where('fournisseur_id', $agent->id)
+        ->with(['boostsActifs' => fn($q) => $q->actif()])
+        ->latest()->get();
+    $tarifs = \App\Models\BoostAnnonce::tarifs();
+  @endphp
+  <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius:16px;">
+    <h6 class="fw-bold mb-3">🚀 Booster mes annonces</h6>
+    <p class="text-muted mb-3" style="font-size:13px;">Augmentez la visibilité de vos annonces en les boostant en haut des résultats.</p>
+
+    @if($mesAnnonces->isEmpty())
+      <p class="text-muted" style="font-size:13px;">Vous n'avez pas encore d'annonces.</p>
+    @else
+    <div class="table-responsive">
+      <table class="table table-sm align-middle" style="font-size:12px;">
+        <thead>
+          <tr style="background:#f8f9fa;">
+            <th>Annonce</th>
+            <th>Prix</th>
+            <th>Boost actuel</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($mesAnnonces as $ann)
+          @php
+            $boostActif = \App\Models\BoostAnnonce::where('annonce_id', $ann->id)->actif()->first();
+          @endphp
+          <tr>
+            <td>
+              <a href="{{ route('annonce', $ann->slug) }}" class="text-decoration-none text-dark" target="_blank">
+                {{ \Str::limit($ann->name ?? 'Annonce #'.$ann->id, 30) }}
+              </a>
+            </td>
+            <td>{{ number_format($ann->prix, 0, ',', ' ') }} CFA</td>
+            <td>
+              @if($boostActif)
+                @php $t = $tarifs[$boostActif->type]; @endphp
+                <span class="badge px-2 py-1" style="background:{{ $boostActif->type==='vedette'?'#dc3545':($boostActif->type==='premium'?'#C49A0C':'#2E7D32') }};font-size:10px;">
+                  {{ $t['emoji'] }} {{ $t['label'] }} — expire {{ $boostActif->date_fin->format('d/m') }}
+                </span>
+              @else
+                <span class="text-muted">—</span>
+              @endif
+            </td>
+            <td class="text-center">
+              <div class="d-flex gap-1 justify-content-center flex-wrap">
+                @foreach($tarifs as $key => $t)
+                <form method="POST" action="{{ route('boost.store') }}" style="display:inline;">
+                  @csrf
+                  <input type="hidden" name="annonce_id" value="{{ $ann->id }}">
+                  <input type="hidden" name="type" value="{{ $key }}">
+                  <button type="submit" title="{{ $t['label'] }} — {{ $t['duree'] }}j — {{ number_format($t['prix'],0,',','.') }} CFA"
+                    style="background:{{ $key==='vedette'?'#dc3545':($key==='premium'?'#C49A0C':'#2E7D32') }};color:#fff;border:none;border-radius:6px;padding:3px 8px;font-size:10px;cursor:pointer;"
+                    onclick="return confirm('Activer boost {{ $t['label'] }} ({{ $t['prix'] }} CFA / {{ $t['duree'] }} jours) ?')">
+                    {{ $t['emoji'] }} {{ $t['label'] }}
+                  </button>
+                </form>
+                @endforeach
+              </div>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+
+    {{-- Légende tarifs --}}
+    <div class="d-flex flex-wrap gap-3 mt-2">
+      @foreach($tarifs as $key => $t)
+      <div style="font-size:11px;color:#666;">
+        <span style="color:{{ $key==='vedette'?'#dc3545':($key==='premium'?'#C49A0C':'#2E7D32') }};font-weight:700;">{{ $t['emoji'] }} {{ $t['label'] }}</span>
+        — {{ $t['duree'] }} jours — <strong>{{ number_format($t['prix'],0,',','.') }} CFA</strong>
+      </div>
+      @endforeach
+    </div>
+    @endif
   </div>
 
   {{-- KPI Cards --}}

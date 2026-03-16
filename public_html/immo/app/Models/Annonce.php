@@ -21,6 +21,14 @@ class Annonce extends Model
     public function images() {
         return $this->morphMany(Image::class, 'imageable');
     }
+
+    public function boostsActifs() {
+        return $this->hasMany(BoostAnnonce::class)->where('statut', 'actif')->where('date_fin', '>=', now()->toDateString());
+    }
+
+    public function boostActif() {
+        return $this->hasOne(BoostAnnonce::class)->where('statut', 'actif')->where('date_fin', '>=', now()->toDateString())->orderByRaw("FIELD(type,'vedette','premium','standard')");
+    }
     public function immo() {
         return $this->belongsTo(Immo::class)->withoutGlobalScope(ImmoScope::class);
     }

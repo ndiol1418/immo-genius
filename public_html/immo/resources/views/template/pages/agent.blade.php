@@ -133,7 +133,16 @@
                             </a>
                         </div>
                         <div class="profile-name-row">
-                            <h1 class="profile-name text-capitalize">{{ $agent->nom_complet }}</h1>
+                            <h1 class="profile-name text-capitalize d-flex align-items-center gap-2 flex-wrap">
+                                {{ $agent->nom_complet }}
+                                @if($agent->disponibilite ?? false)
+                                @php
+                                  $dispColor = $agent->disponibilite === 'disponible' ? '#2E7D32' : ($agent->disponibilite === 'occupe' ? '#C49A0C' : '#dc3545');
+                                  $dispLabel = $agent->disponibilite === 'disponible' ? 'Disponible' : ($agent->disponibilite === 'occupe' ? 'Occupé' : 'En congé');
+                                @endphp
+                                <span style="font-size:11px;font-weight:600;background:{{ $dispColor }};color:#fff;padding:3px 10px;border-radius:20px;white-space:nowrap;">● {{ $dispLabel }}</span>
+                                @endif
+                            </h1>
                             @php $noteMoyenne = $agent->noteMoyenne(); $nbAvis = $agent->avis()->count(); @endphp
                             <div class="profile-rating">
                                 <span class="rating-score">{{ $noteMoyenne > 0 ? $noteMoyenne : '—' }}</span>
@@ -167,8 +176,39 @@
             </section>
             <section class="content-section">
                 <h2 class="section-title">Expérience</h2>
-                <p class="text-sm">{{$agent->experience!=null?$agent->experience:0}} mois</p>
+                @if($agent->experience_annees ?? false)
+                  <p class="text-sm"><strong>{{ $agent->experience_annees }}</strong> an(s) d'expérience</p>
+                @else
+                  <p class="text-sm">{{$agent->experience!=null?$agent->experience:0}} mois</p>
+                @endif
+                @if(($agent->certifications ?? false) && count($agent->certifications ?? []))
+                  <div class="d-flex flex-wrap gap-1 mt-2">
+                    @foreach($agent->certifications as $cert)
+                      <span style="font-size:11px;background:#e8f5e9;color:#2E7D32;border:1px solid #2E7D32;border-radius:20px;padding:2px 10px;font-weight:600;">🏅 {{ $cert }}</span>
+                    @endforeach
+                  </div>
+                @endif
             </section>
+
+            {{-- Spécialités --}}
+            @if(($agent->specialites ?? false) && count($agent->specialites ?? []))
+            <section class="content-section">
+                <h2 class="section-title">Spécialités</h2>
+                <div class="d-flex flex-wrap gap-2">
+                  @foreach($agent->specialites as $spec)
+                    <span style="font-size:12px;background:#f1f8e9;color:#2E7D32;border:2px solid #2E7D32;border-radius:20px;padding:4px 14px;font-weight:600;">{{ $spec }}</span>
+                  @endforeach
+                </div>
+            </section>
+            @endif
+
+            {{-- Description pro --}}
+            @if($agent->description_pro ?? false)
+            <section class="content-section">
+                <h2 class="section-title">Présentation professionnelle</h2>
+                <p class="text-sm">{{ $agent->description_pro }}</p>
+            </section>
+            @endif
 
 
 
@@ -369,6 +409,61 @@
                         <div class="action-text">Prendre RDV</div>
                     </div>
                 </div>
+
+                {{-- Réseaux sociaux --}}
+                @php $rs = $agent->reseaux_sociaux ?? []; @endphp
+                @if(!empty($rs['facebook']) || !empty($rs['linkedin']) || !empty($rs['instagram']))
+                <div class="mt-3" style="border-top:1px solid #f0f0f0;padding-top:12px;">
+                  <div style="font-size:12px;font-weight:600;color:#888;margin-bottom:8px;">Réseaux sociaux</div>
+                  <div class="d-flex gap-2">
+                    @if(!empty($rs['facebook']))
+                    <a href="{{ $rs['facebook'] }}" target="_blank" rel="noopener" style="background:#1877f2;color:#fff;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;text-decoration:none;">f Facebook</a>
+                    @endif
+                    @if(!empty($rs['linkedin']))
+                    <a href="{{ $rs['linkedin'] }}" target="_blank" rel="noopener" style="background:#0a66c2;color:#fff;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;text-decoration:none;">in LinkedIn</a>
+                    @endif
+                    @if(!empty($rs['instagram']))
+                    <a href="{{ $rs['instagram'] }}" target="_blank" rel="noopener" style="background:#e1306c;color:#fff;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;text-decoration:none;">📷 Instagram</a>
+                    @endif
+                  </div>
+                </div>
+                @endif
+
+                {{-- Créneaux de disponibilité --}}
+                @php
+                  try {
+                    $creneauxPub = $agent->disponibilites()
+                      ->where('date', '>=', now()->toDateString())
+                      ->where('statut', 'disponible')
+                      ->orderBy('date')->orderBy('heure_debut')
+                      ->limit(10)->get();
+                  } catch(\Exception $e) { $creneauxPub = collect(); }
+                @endphp
+                @if($creneauxPub->isNotEmpty())
+                <div class="mt-3" style="border-top:1px solid #f0f0f0;padding-top:12px;">
+                  <div style="font-size:12px;font-weight:700;color:#0d1c2e;margin-bottom:10px;">📅 Créneaux disponibles</div>
+                  @foreach($creneauxPub as $c)
+                  <div style="background:#f1f8e9;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:12px;">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div>
+                        <span style="font-weight:700;color:#2E7D32;">{{ $c->date->format('d/m/Y') }}</span>
+                        <span style="color:#666;margin-left:8px;">{{ substr($c->heure_debut,0,5) }} – {{ substr($c->heure_fin,0,5) }}</span>
+                        <span style="background:#e8f5e9;color:#2E7D32;border-radius:10px;padding:1px 8px;font-size:10px;margin-left:6px;">{{ ucfirst($c->type_rdv) }}</span>
+                      </div>
+                      @auth
+                      <form method="POST" action="{{ route('disponibilite.reserver', $c->id) }}" style="display:inline;">
+                        @csrf
+                        <button type="submit" style="background:#2E7D32;color:#fff;border:none;border-radius:6px;padding:3px 10px;font-size:10px;cursor:pointer;"
+                          onclick="return confirm('Réserver ce créneau ?')">Réserver</button>
+                      </form>
+                      @else
+                      <a href="{{ route('login') }}" style="background:#2E7D32;color:#fff;border-radius:6px;padding:3px 10px;font-size:10px;text-decoration:none;">Réserver</a>
+                      @endauth
+                    </div>
+                  </div>
+                  @endforeach
+                </div>
+                @endif
             </div>
         </div>
     </main>
