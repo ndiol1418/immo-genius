@@ -62,7 +62,7 @@
             </div>
           </div>
           <div class="d-flex gap-2">
-            <button type="submit" class="btn" style="background:#27E3C0;color:#0d1c2e;font-weight:700;border-radius:10px;">
+            <button type="submit" class="btn" style="background:#2E7D32;color:#0d1c2e;font-weight:700;border-radius:10px;">
               Créer le contrat
             </button>
             <a href="{{ route('gestion-locative.index') }}" class="btn btn-outline-secondary" style="border-radius:10px;">Annuler</a>

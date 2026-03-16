@@ -33,19 +33,19 @@
                             ])
                             @include('components.fiche',[
                                 'title'=>'Fournisseur',
-                                'value'=>$immo->fournisseur?$immo->fournisseur->nom_complet:'Vytimoo',
+                                'value'=>$immo->fournisseur?$immo->fournisseur->nom_complet:'Teranga Immobiliero',
                                 'style'=>1,
                                 'col'=>'col-12 col-lg-6'
                             ])
                             @include('components.fiche',[
                                 'title'=>'Adresse',
-                                'value'=>$immo->fournisseur?$immo->fournisseur->adresse:'Vytimoo',
+                                'value'=>$immo->fournisseur?$immo->fournisseur->adresse:'Teranga Immobiliero',
                                 'style'=>1,
                                 'col'=>'col-12 col-lg-6'
                             ])
                             @include('components.fiche',[
                                 'title'=>'Telephone',
-                                'value'=>$immo->fournisseur?$immo->fournisseur->telephone:'Vytimoo',
+                                'value'=>$immo->fournisseur?$immo->fournisseur->telephone:'Teranga Immobiliero',
                                 'style'=>1,
                                 'col'=>'col-12 col-lg-6'
                             ])

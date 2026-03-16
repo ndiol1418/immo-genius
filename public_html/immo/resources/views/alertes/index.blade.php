@@ -6,8 +6,8 @@
 <style>
   .alerte-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 16px 20px; margin-bottom: 14px; }
   .alerte-card.inactive { opacity: .55; }
-  .badge-critere { display: inline-block; background: #f0fdf9; border: 1px solid #27E3C0; color: #059669; border-radius: 20px; padding: 2px 10px; font-size: 11px; margin: 2px 3px; }
-  .toggle-btn { background: none; border: 1px solid #27E3C0; border-radius: 20px; padding: 4px 14px; font-size: 12px; color: #27E3C0; cursor: pointer; }
+  .badge-critere { display: inline-block; background: #f0fdf9; border: 1px solid #2E7D32; color: #059669; border-radius: 20px; padding: 2px 10px; font-size: 11px; margin: 2px 3px; }
+  .toggle-btn { background: none; border: 1px solid #2E7D32; border-radius: 20px; padding: 4px 14px; font-size: 12px; color: #2E7D32; cursor: pointer; }
   .toggle-btn.inactive { border-color: #ccc; color: #999; }
 </style>
 <section class="services section mt-4" style="min-height: 60vh;">
@@ -21,7 +21,7 @@
         <div class="card border-0 shadow-sm" style="border-radius:12px;">
           <div class="card-body p-4">
             <h5 class="mb-3" style="color:#061630;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24" style="color:#27E3C0"><path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2m6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24" style="color:#2E7D32"><path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2m6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1z"/></svg>
               Créer une alerte
             </h5>
             <form method="POST" action="{{ route('alertes.store') }}">
@@ -70,7 +70,7 @@
                 <label style="font-size:12px;font-weight:600;">Chambres min</label>
                 <input type="number" name="chambres_min" class="form-control form-control-sm" placeholder="1" value="{{ request('chambres_min') }}" min="0" style="border-radius:8px;">
               </div>
-              <button type="submit" class="btn btn-sm w-100" style="background:#27E3C0;color:#fff;border-radius:8px;">
+              <button type="submit" class="btn btn-sm w-100" style="background:#2E7D32;color:#fff;border-radius:8px;">
                 Créer l'alerte
               </button>
             </form>
@@ -81,7 +81,7 @@
       <div class="col-lg-7">
         <h5 class="mb-3" style="color:#061630;">
           Mes alertes actives
-          <span class="badge" style="background:#27E3C0;color:#fff;border-radius:20px;font-size:12px;">{{ $alertes->count() }}</span>
+          <span class="badge" style="background:#2E7D32;color:#fff;border-radius:20px;font-size:12px;">{{ $alertes->count() }}</span>
         </h5>
 
         @if($alertes->isEmpty())

@@ -12,7 +12,7 @@
               <h4 class="mb-1 fw-bold">🏘️ Gestion Locative</h4>
               <p class="mb-0 text-secondary" style="font-size:13px;">Gérez vos contrats de location et suivez les paiements</p>
             </div>
-            <a href="{{ route('gestion-locative.create') }}" class="btn btn-sm" style="background:#27E3C0;color:#0d1c2e;font-weight:700;border-radius:20px;">
+            <a href="{{ route('gestion-locative.create') }}" class="btn btn-sm" style="background:#2E7D32;color:#0d1c2e;font-weight:700;border-radius:20px;">
               + Nouveau contrat
             </a>
           </div>
@@ -35,10 +35,10 @@
         $totalLoyer = $contrats->where('statut','actif')->sum('loyer_mensuel');
       @endphp
       @foreach([
-        ['Contrats actifs', $actifs, '📋', '#27E3C0'],
+        ['Contrats actifs', $actifs, '📋', '#2E7D32'],
         ['Signés', $signes, '✍️', '#0d1c2e'],
         ['En retard ce mois', $retards, '⚠️', '#e74c3c'],
-        ['Loyer mensuel total', number_format($totalLoyer,0,',',' ').' CFA', '💰', '#27E3C0'],
+        ['Loyer mensuel total', number_format($totalLoyer,0,',',' ').' CFA', '💰', '#2E7D32'],
       ] as [$label,$val,$icon,$color])
       <div class="col-6 col-lg-3">
         <div class="card shadow-sm text-center p-3" style="border-radius:12px;border-top:3px solid {{ $color }}">
@@ -80,7 +80,7 @@
                     @if(!$pm)
                       <span class="badge bg-secondary">Non renseigné</span>
                     @elseif($pm->statut === 'paye')
-                      <span class="badge" style="background:#27E3C0;color:#0d1c2e;">✓ Payé</span>
+                      <span class="badge" style="background:#2E7D32;color:#0d1c2e;">✓ Payé</span>
                     @elseif($pm->statut === 'retard')
                       <span class="badge bg-danger">⚠ Retard</span>
                     @else
@@ -100,7 +100,7 @@
                     </span>
                   </td>
                   <td>
-                    <a href="{{ route('gestion-locative.show', $c->id) }}" class="btn btn-xs btn-sm" style="background:#27E3C0;color:#0d1c2e;font-size:11px;border-radius:10px;">
+                    <a href="{{ route('gestion-locative.show', $c->id) }}" class="btn btn-xs btn-sm" style="background:#2E7D32;color:#0d1c2e;font-size:11px;border-radius:10px;">
                       Voir
                     </a>
                   </td>

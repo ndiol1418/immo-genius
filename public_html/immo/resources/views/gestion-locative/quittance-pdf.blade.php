@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <style>
   body { font-family: DejaVu Sans, sans-serif; font-size: 13px; color: #333; margin: 0; padding: 20px; }
-  .header { text-align: center; border-bottom: 3px solid #27E3C0; padding-bottom: 15px; margin-bottom: 20px; }
+  .header { text-align: center; border-bottom: 3px solid #2E7D32; padding-bottom: 15px; margin-bottom: 20px; }
   .header h1 { font-size: 22px; color: #0d1c2e; margin: 0 0 4px; }
   .header p { margin: 0; color: #666; font-size: 12px; }
-  .badge { background: #27E3C0; color: #0d1c2e; padding: 2px 10px; border-radius: 10px; font-weight: bold; font-size: 11px; }
+  .badge { background: #2E7D32; color: #0d1c2e; padding: 2px 10px; border-radius: 10px; font-weight: bold; font-size: 11px; }
   table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
   td, th { padding: 8px 10px; border: 1px solid #ddd; font-size: 12px; }
   th { background: #0d1c2e; color: #fff; }
   .footer { margin-top: 30px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
-  .montant { font-size: 20px; font-weight: bold; color: #27E3C0; }
+  .montant { font-size: 20px; font-weight: bold; color: #2E7D32; }
 </style>
 </head>
 <body>

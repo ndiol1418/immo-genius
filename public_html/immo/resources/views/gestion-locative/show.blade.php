@@ -28,13 +28,13 @@
             <tr><td class="text-muted">Agent</td><td>{{ $contrat->agent?->name ?? $contrat->agent?->email }}</td></tr>
             <tr><td class="text-muted">Début</td><td>{{ $contrat->date_debut->format('d/m/Y') }}</td></tr>
             <tr><td class="text-muted">Fin</td><td>{{ $contrat->date_fin?->format('d/m/Y') ?? 'Indéterminée' }}</td></tr>
-            <tr><td class="text-muted">Loyer</td><td><strong style="color:#27E3C0;">{{ number_format($contrat->loyer_mensuel,0,',',' ') }} CFA</strong></td></tr>
+            <tr><td class="text-muted">Loyer</td><td><strong style="color:#2E7D32;">{{ number_format($contrat->loyer_mensuel,0,',',' ') }} CFA</strong></td></tr>
             <tr><td class="text-muted">Charges</td><td>{{ number_format($contrat->charges,0,',',' ') }} CFA</td></tr>
             <tr><td class="text-muted">Caution</td><td>{{ number_format($contrat->caution,0,',',' ') }} CFA</td></tr>
             <tr><td class="text-muted">Statut</td><td><span class="badge {{ $contrat->statut === 'actif' ? 'bg-success' : 'bg-secondary' }}">{{ ucfirst($contrat->statut) }}</span></td></tr>
           </table>
           <div class="d-flex gap-2 flex-wrap mt-2">
-            <a href="{{ route('gestion-locative.pdf', $contrat->id) }}" class="btn btn-sm" style="background:#0d1c2e;color:#27E3C0;border-radius:10px;font-size:12px;">
+            <a href="{{ route('gestion-locative.pdf', $contrat->id) }}" class="btn btn-sm" style="background:#0d1c2e;color:#2E7D32;border-radius:10px;font-size:12px;">
               📥 Télécharger PDF
             </a>
           </div>
@@ -57,7 +57,7 @@
               <label class="form-label" style="font-size:12px;">Montant (CFA)</label>
               <input type="number" name="montant" class="form-control form-control-sm" value="{{ $contrat->loyer_mensuel }}" required min="0">
             </div>
-            <button type="submit" class="btn btn-sm w-100" style="background:#27E3C0;color:#0d1c2e;font-weight:700;border-radius:10px;">
+            <button type="submit" class="btn btn-sm w-100" style="background:#2E7D32;color:#0d1c2e;font-weight:700;border-radius:10px;">
               ✓ Enregistrer le paiement
             </button>
           </form>
@@ -85,14 +85,14 @@
                 <td>{{ number_format($p->montant,0,',',' ') }} CFA</td>
                 <td>{{ $p->date_paiement?->format('d/m/Y') ?? '—' }}</td>
                 <td>
-                  @if($p->statut === 'paye') <span class="badge" style="background:#27E3C0;color:#0d1c2e;">✓ Payé</span>
+                  @if($p->statut === 'paye') <span class="badge" style="background:#2E7D32;color:#0d1c2e;">✓ Payé</span>
                   @elseif($p->statut === 'retard') <span class="badge bg-danger">⚠ Retard</span>
                   @else <span class="badge bg-warning text-dark">⏳ En attente</span>
                   @endif
                 </td>
                 <td>
                   @if($p->statut === 'paye')
-                    <a href="{{ route('gestion-locative.quittance', [$contrat->id, $p->mois_concerne]) }}" class="btn btn-xs" style="font-size:10px;background:#e8fdf8;color:#065f46;border:1px solid #27E3C0;border-radius:8px;padding:2px 8px;">PDF</a>
+                    <a href="{{ route('gestion-locative.quittance', [$contrat->id, $p->mois_concerne]) }}" class="btn btn-xs" style="font-size:10px;background:#f1f8e9;color:#065f46;border:1px solid #2E7D32;border-radius:8px;padding:2px 8px;">PDF</a>
                   @endif
                 </td>
               </tr>
@@ -114,13 +114,13 @@
           <div class="p-3 rounded" style="border:1px solid #ddd;background:#fafafa;">
             <p class="fw-semibold mb-2" style="font-size:13px;">Signature de l'agent</p>
             @if($contrat->signature_agent)
-              <img src="{{ $contrat->signature_agent }}" style="max-width:100%;border:1px solid #27E3C0;border-radius:8px;" alt="Signature agent">
+              <img src="{{ $contrat->signature_agent }}" style="max-width:100%;border:1px solid #2E7D32;border-radius:8px;" alt="Signature agent">
               <p class="text-muted mt-1" style="font-size:11px;">Signé le {{ $contrat->date_signature_agent?->format('d/m/Y H:i') }}</p>
             @elseif(auth()->id() === $contrat->agent_id)
-              <canvas id="canvas-agent" width="280" height="110" style="border:2px dashed #27E3C0;border-radius:8px;cursor:crosshair;background:#fff;display:block;"></canvas>
+              <canvas id="canvas-agent" width="280" height="110" style="border:2px dashed #2E7D32;border-radius:8px;cursor:crosshair;background:#fff;display:block;"></canvas>
               <div class="d-flex gap-2 mt-2">
                 <button onclick="clearCanvas('canvas-agent')" class="btn btn-sm btn-outline-secondary" style="font-size:11px;border-radius:8px;">Effacer</button>
-                <button onclick="soumettreSig('agent','canvas-agent')" class="btn btn-sm" style="background:#27E3C0;color:#0d1c2e;font-size:11px;border-radius:8px;font-weight:700;">Signer</button>
+                <button onclick="soumettreSig('agent','canvas-agent')" class="btn btn-sm" style="background:#2E7D32;color:#0d1c2e;font-size:11px;border-radius:8px;font-weight:700;">Signer</button>
               </div>
             @else
               <p class="text-muted" style="font-size:12px;">En attente de la signature de l'agent</p>
@@ -132,13 +132,13 @@
           <div class="p-3 rounded" style="border:1px solid #ddd;background:#fafafa;">
             <p class="fw-semibold mb-2" style="font-size:13px;">Signature du locataire</p>
             @if($contrat->signature_locataire)
-              <img src="{{ $contrat->signature_locataire }}" style="max-width:100%;border:1px solid #27E3C0;border-radius:8px;" alt="Signature locataire">
+              <img src="{{ $contrat->signature_locataire }}" style="max-width:100%;border:1px solid #2E7D32;border-radius:8px;" alt="Signature locataire">
               <p class="text-muted mt-1" style="font-size:11px;">Signé le {{ $contrat->date_signature_locataire?->format('d/m/Y H:i') }}</p>
             @elseif(auth()->id() === $contrat->locataire_id)
-              <canvas id="canvas-locataire" width="280" height="110" style="border:2px dashed #27E3C0;border-radius:8px;cursor:crosshair;background:#fff;display:block;"></canvas>
+              <canvas id="canvas-locataire" width="280" height="110" style="border:2px dashed #2E7D32;border-radius:8px;cursor:crosshair;background:#fff;display:block;"></canvas>
               <div class="d-flex gap-2 mt-2">
                 <button onclick="clearCanvas('canvas-locataire')" class="btn btn-sm btn-outline-secondary" style="font-size:11px;border-radius:8px;">Effacer</button>
-                <button onclick="soumettreSig('locataire','canvas-locataire')" class="btn btn-sm" style="background:#27E3C0;color:#0d1c2e;font-size:11px;border-radius:8px;font-weight:700;">Signer</button>
+                <button onclick="soumettreSig('locataire','canvas-locataire')" class="btn btn-sm" style="background:#2E7D32;color:#0d1c2e;font-size:11px;border-radius:8px;font-weight:700;">Signer</button>
               </div>
             @else
               <p class="text-muted" style="font-size:12px;">En attente de la signature du locataire</p>

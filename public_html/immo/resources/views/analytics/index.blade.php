@@ -25,7 +25,7 @@
     <div class="col-6 col-md-3">
       <div class="card border-0 shadow-sm p-3 text-center h-100">
         <div style="font-size:11px;color:#888;margin-bottom:6px;">CONTACTS REÇUS</div>
-        <div style="font-size:28px;font-weight:700;color:#27E3C0;">{{ number_format($totalContacts) }}</div>
+        <div style="font-size:28px;font-weight:700;color:#2E7D32;">{{ number_format($totalContacts) }}</div>
       </div>
     </div>
     <div class="col-6 col-md-3">
@@ -69,7 +69,7 @@
         @forelse($top5 as $idx => $vue)
           <div class="d-flex align-items-center justify-content-between py-2" style="border-bottom:1px solid #f5f5f5;">
             <div class="d-flex align-items-center" style="gap:10px;">
-              <span style="width:24px;height:24px;border-radius:50%;background:{{ ['#f59e0b','#94a3b8','#cd7f32','#0d1c2e','#27E3C0'][$idx] ?? '#eee' }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">{{ $idx+1 }}</span>
+              <span style="width:24px;height:24px;border-radius:50%;background:{{ ['#f59e0b','#94a3b8','#cd7f32','#0d1c2e','#2E7D32'][$idx] ?? '#eee' }};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">{{ $idx+1 }}</span>
               <div>
                 <div style="font-size:13px;font-weight:600;">{{ \Str::limit($vue->annonce?->name ?? '—', 35) }}</div>
                 <div style="font-size:11px;color:#888;">{{ $vue->annonce?->commune?->name ?? '' }}</div>
@@ -117,7 +117,7 @@
                     @endif
                   </td>
                   <td class="text-center fw-bold">{{ $vue->total }}</td>
-                  <td class="text-center" style="color:#27E3C0;font-weight:600;">{{ $contacts }}</td>
+                  <td class="text-center" style="color:#2E7D32;font-weight:600;">{{ $contacts }}</td>
                   <td class="text-center">
                     <span style="font-size:11px;color:{{ $taux >= 5 ? '#059669' : '#888' }};">{{ $taux }}%</span>
                   </td>
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
       datasets: [{
         label: 'Vues',
         data: @json($barData),
-        backgroundColor: '#27E3C0',
+        backgroundColor: '#2E7D32',
         borderRadius: 6,
       }]
     },
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fill: true,
         tension: 0.3,
         pointRadius: 3,
-        pointBackgroundColor: '#27E3C0',
+        pointBackgroundColor: '#2E7D32',
       }]
     },
     options: {

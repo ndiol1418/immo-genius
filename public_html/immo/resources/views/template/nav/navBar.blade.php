@@ -18,7 +18,7 @@ $ref = isset($explode_path[1]) ? $explode_path[1] : null;
 
       <a href="/" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-         <img src="{{ asset('img/logo.png') }}" alt="">
+         <img src="{{ asset('img/logo-teranga.png') }}" alt="">
         {{-- <h1 class="sitename">VITTY<span>IMMO</span></h1> --}}
         {{-- <h1 class="sitename text-secondary">VYT<span>IMO</span></h1> --}}
       </a>
@@ -62,23 +62,23 @@ $ref = isset($explode_path[1]) ? $explode_path[1] : null;
               Favoris
             </a></li>
             <li><a href="{{ route('messages.index') }}" class="d-flex align-items-center" style="gap:4px;position:relative;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24"><path fill="#27E3C0" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24"><path fill="#2E7D32" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2"/></svg>
               Messages
               @if($navNonLus > 0)
                 <span style="background:#e74c3c;color:#fff;border-radius:50%;font-size:9px;padding:1px 5px;position:absolute;top:-4px;right:-8px;">{{ $navNonLus }}</span>
               @endif
             </a></li>
             <li><a href="{{ route('alertes.index') }}" class="d-flex align-items-center" style="gap:4px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24"><path fill="#27E3C0" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2m6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24"><path fill="#2E7D32" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2m6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1z"/></svg>
               Alertes
             </a></li>
             @if(\App\Models\Fournisseur::where('user_id', auth()->id())->exists())
             <li><a href="{{ route('agent.analytics') }}" class="d-flex align-items-center" style="gap:4px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24"><path fill="#27E3C0" d="M16 11.78L20.24 4.45L21.97 5.45L16.74 14.5L10.23 10.75L5.46 19H22V21H2V3H4V17.54L9.5 8Z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24"><path fill="#2E7D32" d="M16 11.78L20.24 4.45L21.97 5.45L16.74 14.5L10.23 10.75L5.46 19H22V21H2V3H4V17.54L9.5 8Z"/></svg>
               Analytics
             </a></li>
             <li><a href="{{ route('gestion-locative.index') }}" class="d-flex align-items-center" style="gap:4px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24"><path fill="#27E3C0" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-7 14H7v-2h5zm5-4H7v-2h10zm0-4H7V7h10z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1.1em" height="1.1em" viewBox="0 0 24 24"><path fill="#2E7D32" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2m-7 14H7v-2h5zm5-4H7v-2h10zm0-4H7V7h10z"/></svg>
               Locatif
             </a></li>
             @endif

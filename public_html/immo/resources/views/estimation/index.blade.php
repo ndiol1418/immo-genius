@@ -66,7 +66,7 @@
 
         {{-- Résultat --}}
         @isset($result)
-        <div class="card border-0 shadow-sm p-4 mb-4" style="border-left:4px solid #27E3C0 !important;">
+        <div class="card border-0 shadow-sm p-4 mb-4" style="border-left:4px solid #2E7D32 !important;">
           <h6 class="mb-3">Résultat de l'estimation</h6>
           <p class="text-muted mb-3" style="font-size:12px;">
             Basé sur {{ $result['nb_annonces'] }} annonce(s) du marché.
@@ -83,7 +83,7 @@
             <div class="col-4">
               <div class="rounded p-3" style="background:#0d1c2e;color:#fff;">
                 <div style="font-size:10px;opacity:.7;margin-bottom:4px;">ESTIMATION</div>
-                <div style="font-size:20px;font-weight:700;color:#27E3C0;">{{ number_format($result['prix_estime'], 0, ',', ' ') }}</div>
+                <div style="font-size:20px;font-weight:700;color:#2E7D32;">{{ number_format($result['prix_estime'], 0, ',', ' ') }}</div>
                 <div style="font-size:10px;opacity:.6;">CFA</div>
               </div>
             </div>

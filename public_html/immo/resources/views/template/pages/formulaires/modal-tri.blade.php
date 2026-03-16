@@ -1,6 +1,6 @@
 <style>
   .bg-color2{
-    background: #27e3c061 !important;
+    background: #2E7D3261 !important;
   }
 </style>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="    z-index: 10000;">

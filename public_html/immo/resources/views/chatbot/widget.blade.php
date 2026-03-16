@@ -3,21 +3,21 @@
     max-width: 82%; padding: 8px 12px; border-radius: 12px;
     font-size: 12.5px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;
 }
-.chat-msg.bot { background:#e8fdf8; border:1px solid #b2f5e8; align-self:flex-start; border-bottom-left-radius:3px; }
-.chat-msg.user { background:#27E3C0; color:#fff; align-self:flex-end; border-bottom-right-radius:3px; }
+.chat-msg.bot { background:#f1f8e9; border:1px solid #a5d6a7; align-self:flex-start; border-bottom-left-radius:3px; }
+.chat-msg.user { background:#2E7D32; color:#fff; align-self:flex-end; border-bottom-right-radius:3px; }
 .chat-quick-replies { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
-.chat-quick-replies button { background:#fff; border:1px solid #27E3C0; color:#0d1c2e; border-radius:20px; padding:4px 10px; font-size:11px; cursor:pointer; }
-.chat-quick-replies button:hover { background:#e8fdf8; }
+.chat-quick-replies button { background:#fff; border:1px solid #2E7D32; color:#0d1c2e; border-radius:20px; padding:4px 10px; font-size:11px; cursor:pointer; }
+.chat-quick-replies button:hover { background:#f1f8e9; }
 </style>
 
 {{-- Bouton flottant — styles 100% inline pour éviter toute surcharge CSS --}}
 <button
     id="chatbot-btn"
     onclick="toggleChatbot()"
-    title="Assistant Vytimo"
+    title="Assistant Teranga Immobilier"
     style="position:fixed !important;bottom:30px !important;right:30px !important;z-index:99999 !important;
            width:60px !important;height:60px !important;border-radius:50% !important;
-           background:#27E3C0 !important;border:none !important;cursor:pointer !important;
+           background:#2E7D32 !important;border:none !important;cursor:pointer !important;
            font-size:26px !important;box-shadow:0 4px 15px rgba(0,0,0,0.25) !important;
            display:flex !important;align-items:center !important;justify-content:center !important;
            color:#fff !important;padding:0 !important;">
@@ -38,7 +38,7 @@
             <div style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);
                         display:flex;align-items:center;justify-content:center;font-size:18px;">🏠</div>
             <div>
-                <div>Assistant Vytimo</div>
+                <div>Assistant Teranga Immobilier</div>
                 <div style="font-size:10px;font-weight:400;opacity:.8;">● En ligne</div>
             </div>
         </div>
@@ -48,15 +48,15 @@
 
     {{-- Messages --}}
     <div id="chatbot-messages"
-         style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#f8fffe;"></div>
+         style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:#f9fbe7;"></div>
 
     {{-- Footer input --}}
-    <div style="padding:10px;border-top:1px solid #e8fdf8;display:flex;gap:6px;background:#fff;">
+    <div style="padding:10px;border-top:1px solid #f1f8e9;display:flex;gap:6px;background:#fff;">
         <input id="chatbot-input" type="text" placeholder="Posez votre question…"
                onkeydown="if(event.key==='Enter')sendChat()"
                style="flex:1;border:1px solid #ddd;border-radius:20px;padding:7px 14px;font-size:12px;outline:none;">
         <button onclick="sendChat()"
-                style="background:#27E3C0;color:#fff;border:none;border-radius:50%;
+                style="background:#2E7D32;color:#fff;border:none;border-radius:50%;
                        width:36px;height:36px;cursor:pointer;font-size:14px;
                        display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
@@ -91,7 +91,7 @@ function toggleChatbot() {
     if (chatbotOpen && !chatbotGreeted) {
         chatbotGreeted = true;
         setTimeout(function() {
-            addBotMsg("Bonjour ! 👋 Je suis l'assistant Vytimo.\nComment puis-je vous aider aujourd'hui ?", true);
+            addBotMsg("Bonjour ! 👋 Je suis l'assistant Teranga Immobilier.\nComment puis-je vous aider aujourd'hui ?", true);
         }, 300);
     }
 }
@@ -113,7 +113,7 @@ function addBotMsg(text, withQuick) {
         });
         var agentBtn = document.createElement('button');
         agentBtn.textContent = '👥 Parler à un agent';
-        agentBtn.style.cssText = 'background:#27E3C0;color:#fff;border-color:#27E3C0;';
+        agentBtn.style.cssText = 'background:#2E7D32;color:#fff;border-color:#2E7D32;';
         agentBtn.onclick = function() { window.location.href = '/agents'; };
         qr.appendChild(agentBtn);
         msgs.appendChild(qr);

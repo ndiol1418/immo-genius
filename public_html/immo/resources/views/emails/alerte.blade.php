@@ -9,25 +9,25 @@
   .container { max-width: 600px; margin: 30px auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,.08); }
   .header { background: #061630; padding: 28px 30px; text-align: center; }
   .header img { height: 40px; }
-  .header h2 { color: #27E3C0; margin: 12px 0 4px; font-size: 20px; }
+  .header h2 { color: #2E7D32; margin: 12px 0 4px; font-size: 20px; }
   .header p { color: #aaa; font-size: 13px; margin: 0; }
   .body { padding: 24px 30px; }
-  .alerte-box { background: #f0fdf9; border-left: 4px solid #27E3C0; border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #333; }
-  .alerte-box span { display: inline-block; background: #27E3C0; color: #fff; border-radius: 20px; padding: 2px 10px; margin: 2px 3px; font-size: 11px; }
+  .alerte-box { background: #f0fdf9; border-left: 4px solid #2E7D32; border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px; color: #333; }
+  .alerte-box span { display: inline-block; background: #2E7D32; color: #fff; border-radius: 20px; padding: 2px 10px; margin: 2px 3px; font-size: 11px; }
   .card { border: 1px solid #e8e8e8; border-radius: 10px; overflow: hidden; margin-bottom: 18px; }
   .card img { width: 100%; height: 160px; object-fit: cover; }
   .card-body { padding: 14px 16px; }
   .card-body h4 { margin: 0 0 4px; font-size: 15px; color: #061630; }
-  .card-body .prix { color: #27E3C0; font-weight: bold; font-size: 16px; margin: 0 0 6px; }
+  .card-body .prix { color: #2E7D32; font-weight: bold; font-size: 16px; margin: 0 0 6px; }
   .card-body .adresse { font-size: 12px; color: #777; margin: 0 0 10px; }
-  .btn { display: inline-block; background: #27E3C0; color: #fff !important; text-decoration: none; padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+  .btn { display: inline-block; background: #2E7D32; color: #fff !important; text-decoration: none; padding: 8px 20px; border-radius: 20px; font-size: 13px; font-weight: bold; }
   .footer { background: #f4f6f8; text-align: center; padding: 18px; font-size: 11px; color: #aaa; }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
-    <img src="{{ asset('img/logo.png') }}" alt="{{ config('app.name') }}">
+    <img src="{{ asset('img/logo-teranga.png') }}" alt="{{ config('app.name') }}">
     <h2>Nouvelles annonces pour vous !</h2>
     <p>{{ $annonces->count() }} annonce(s) correspondent à votre alerte</p>
   </div>
@@ -62,7 +62,7 @@
   </div>
   <div class="footer">
     Vous recevez cet email car vous avez créé une alerte sur {{ config('app.name') }}.<br>
-    Rendez-vous sur <a href="{{ config('app.url') }}/mes-alertes" style="color:#27E3C0">Mes Alertes</a> pour gérer vos alertes.
+    Rendez-vous sur <a href="{{ config('app.url') }}/mes-alertes" style="color:#2E7D32">Mes Alertes</a> pour gérer vos alertes.
   </div>
 </div>
 </body>

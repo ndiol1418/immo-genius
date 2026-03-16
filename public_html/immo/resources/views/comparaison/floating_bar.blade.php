@@ -17,7 +17,7 @@
             <div id="compareSlots" class="d-flex" style="gap:8px;"></div>
         </div>
         <div class="d-flex" style="gap:8px;">
-            <a id="comparerBtn" href="#" class="btn btn-sm" style="background:#27E3C0;color:#000;font-weight:600;border-radius:8px;">
+            <a id="comparerBtn" href="#" class="btn btn-sm" style="background:#2E7D32;color:#000;font-weight:600;border-radius:8px;">
                 Comparer maintenant
             </a>
             <button onclick="clearCompare()" class="btn btn-sm btn-outline-light" style="border-radius:8px;">
@@ -68,7 +68,7 @@ function toggleCompare(id, name, btn) {
         compareIds.push(String(id));
         if (btn) {
             btn.style.background = '#0d1c2e';
-            btn.style.color = '#27E3C0';
+            btn.style.color = '#2E7D32';
             btn.title = 'Retirer de la comparaison';
         }
     }
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
     compareIds.forEach(id => {
         document.querySelectorAll('[data-compare-id="' + id + '"]').forEach(btn => {
             btn.style.background = '#0d1c2e';
-            btn.style.color = '#27E3C0';
+            btn.style.color = '#2E7D32';
         });
     });
 });

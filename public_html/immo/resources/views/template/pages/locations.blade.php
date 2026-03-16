@@ -113,7 +113,7 @@
               <p class="mb-0" id="nbResultats">{{ count($annonces) }}  @isset($_GET['name']) {{ $_GET['name'].'(s)' }}@endisset trouvé(e)s</p>
               {{-- Bouton Géolocalisation --}}
               <button id="btnNearMe" onclick="rechercherProchesMoi()"
-                style="background:#0d1c2e;color:#27E3C0;border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
+                style="background:#0d1c2e;color:#2E7D32;border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
                 📍 Annonces près de moi
               </button>
               {{-- Slider rayon (caché initialement) --}}
@@ -133,7 +133,7 @@
               ]);
             @endphp
             <a href="{{ route('alertes.index', $alerteParams) }}"
-               style="background:#27E3C0;color:#fff;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:bold;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+               style="background:#2E7D32;color:#fff;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:bold;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2m6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1z"/></svg>
               Créer une alerte pour cette recherche
             </a>
@@ -377,7 +377,7 @@
             // Marqueur utilisateur
             if (userMarker) userMarker.remove();
             var el = document.createElement('div');
-            el.style.cssText = 'width:18px;height:18px;background:#27E3C0;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 4px rgba(39,227,192,.3)';
+            el.style.cssText = 'width:18px;height:18px;background:#2E7D32;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 4px rgba(46,125,50,.3)';
             userMarker = new mapboxgl.Marker(el).setLngLat([lon, lat]).addTo(map);
 
             // Cercle de rayon (approximation visuelle via GeoJSON)
@@ -386,9 +386,9 @@
             } else {
                 map.addSource('user-circle', { type: 'geojson', data: makeCircle(lon, lat, rayon) });
                 map.addLayer({ id: 'user-circle-fill', type: 'fill', source: 'user-circle',
-                    paint: { 'fill-color': '#27E3C0', 'fill-opacity': 0.1 } });
+                    paint: { 'fill-color': '#2E7D32', 'fill-opacity': 0.1 } });
                 map.addLayer({ id: 'user-circle-line', type: 'line', source: 'user-circle',
-                    paint: { 'line-color': '#27E3C0', 'line-width': 2 } });
+                    paint: { 'line-color': '#2E7D32', 'line-width': 2 } });
             }
 
             // Fetch annonces proches via AJAX
@@ -423,7 +423,7 @@
                                         <div class="card-body p-2">
                                             <div class="fw-bold" style="font-size:13px;">${Number(a.prix).toLocaleString('fr-FR')} CFA</div>
                                             <div style="font-size:11px;color:#888;">${a.commune ?? ''}</div>
-                                            <div style="font-size:11px;color:#27E3C0;">📍 ${a.distance} km</div>
+                                            <div style="font-size:11px;color:#2E7D32;">📍 ${a.distance} km</div>
                                         </div>
                                     </div>
                                 </a>
@@ -512,11 +512,11 @@
                     listEl.innerHTML += `<div class="col-12 col-md-6 col-lg-4 mb-3">
                         <a href="/annonces/${a.id}" class="text-decoration-none">
                             <div class="card h-100 shadow-sm">
-                                <img src="${a.image || '/img/logo.png'}" class="card-img-top" style="height:160px;object-fit:cover;">
+                                <img src="${a.image || '/img/logo-teranga.png'}" class="card-img-top" style="height:160px;object-fit:cover;">
                                 <div class="card-body p-2">
                                     <p class="mb-1 fw-bold" style="font-size:13px;">${a.name}</p>
                                     <p class="mb-0 text-muted" style="font-size:12px;">${Number(a.prix).toLocaleString('fr-FR')} CFA</p>
-                                    <p class="mb-0" style="font-size:11px;color:#27E3C0;">📍 ${(a.distance).toFixed(1)} km</p>
+                                    <p class="mb-0" style="font-size:11px;color:#2E7D32;">📍 ${(a.distance).toFixed(1)} km</p>
                                 </div>
                             </div>
                         </a>
@@ -525,15 +525,15 @@
             }
 
             if (userMarker) userMarker.remove();
-            userMarker = new mapboxgl.Marker({ color: '#27E3C0' }).setLngLat([lon, lat]).addTo(map);
+            userMarker = new mapboxgl.Marker({ color: '#2E7D32' }).setLngLat([lon, lat]).addTo(map);
             map.flyTo({ center: [lon, lat], zoom: 12 });
 
             if (map.getSource('user-circle')) {
                 map.getSource('user-circle').setData(makeCircle(lon, lat, rayon));
             } else {
                 map.addSource('user-circle', { type: 'geojson', data: makeCircle(lon, lat, rayon) });
-                map.addLayer({ id: 'user-circle-fill', type: 'fill', source: 'user-circle', paint: { 'fill-color': '#27E3C0', 'fill-opacity': 0.1 } });
-                map.addLayer({ id: 'user-circle-line', type: 'line', source: 'user-circle', paint: { 'line-color': '#27E3C0', 'line-width': 2 } });
+                map.addLayer({ id: 'user-circle-fill', type: 'fill', source: 'user-circle', paint: { 'fill-color': '#2E7D32', 'fill-opacity': 0.1 } });
+                map.addLayer({ id: 'user-circle-line', type: 'line', source: 'user-circle', paint: { 'line-color': '#2E7D32', 'line-width': 2 } });
             }
         })
         .catch(function() {

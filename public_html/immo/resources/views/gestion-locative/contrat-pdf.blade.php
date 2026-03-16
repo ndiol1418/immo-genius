@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <style>
   body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #333; margin: 0; padding: 20px; }
-  .header { text-align: center; border-bottom: 3px solid #27E3C0; padding-bottom: 15px; margin-bottom: 20px; }
+  .header { text-align: center; border-bottom: 3px solid #2E7D32; padding-bottom: 15px; margin-bottom: 20px; }
   h1 { font-size: 20px; color: #0d1c2e; }
-  h2 { font-size: 14px; color: #0d1c2e; border-left: 4px solid #27E3C0; padding-left: 8px; margin-top: 20px; }
+  h2 { font-size: 14px; color: #0d1c2e; border-left: 4px solid #2E7D32; padding-left: 8px; margin-top: 20px; }
   table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
   td, th { padding: 7px 10px; border: 1px solid #ddd; }
   th { background: #f0f0f0; font-weight: bold; }

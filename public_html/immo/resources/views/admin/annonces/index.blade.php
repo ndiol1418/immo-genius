@@ -24,7 +24,7 @@ Liste des annonces {{ isset($titre)?$titre:'' }}
         @php $i = 1 @endphp
         @foreach ($annonces as $annonce)
         <tr>
-            <td>{{$annonce->immo->fournisseur?$annonce->immo->fournisseur->nom_complet:'Vytimo' }} </td>
+            <td>{{$annonce->immo->fournisseur?$annonce->immo->fournisseur->nom_complet:'Teranga Immobilier' }} </td>
             <td>{{ $annonce->created_at->format('d-m-Y') }} <br><small class="text-danger">{{  $annonce->created_at->diffForHumans() }}</small></td>
             <td>{{ $annonce->name }} </td>
             <td>{{ number_format($annonce->prix,0,'',' ') }} </td>

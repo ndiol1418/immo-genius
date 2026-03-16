@@ -12,7 +12,7 @@
     }
   .highlight {
     outline: 2px solid #071a5f;
-    background-color: #06e5ca54;
+    background-color: #2E7D3254;
     transition: all 0.3s ease;
   }
 </style>
@@ -20,13 +20,13 @@
     @csrf
     @method('POST')
 
-    <div class="col-12 _btn-focus btn-get-started border-top-1" style="border-radius:0 15px 15px !important;background: #fff;border: 2px solid #0be6cb;">
+    <div class="col-12 _btn-focus btn-get-started border-top-1" style="border-radius:0 15px 15px !important;background: #fff;border: 2px solid #2E7D32;">
     {{-- <div class="col-12 p-1 btn-get-started btn-focus"> --}}
         <div class="row p-1">
 
             <div class="col-12 col-lg-3 p-1 mb-1 mt-1">
                 <div class="d-flex justify-content-left align-items-center inputMaterial" style="gap: 10px">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 32"><g fill="#27E3C0"><path d="M12 0C5.383 0 0 5.394 0 12.022c0 9.927 11.201 19.459 11.678 19.86a.5.5 0 0 0 .64.004C12.795 31.492 24 22.124 24 12.022C24 5.394 18.617 0 12 0m.002 30.838C10.161 29.193 1 20.579 1 12.022C1 5.944 5.935 1 12 1s11 4.944 11 11.022c0 8.702-9.152 17.193-10.998 18.816"/><path d="M12 6c-3.309 0-6 2.691-6 6s2.691 6 6 6s6-2.691 6-6s-2.691-6-6-6m0 11c-2.757 0-5-2.243-5-5s2.243-5 5-5s5 2.243 5 5s-2.243 5-5 5"/></g></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 32"><g fill="#2E7D32"><path d="M12 0C5.383 0 0 5.394 0 12.022c0 9.927 11.201 19.459 11.678 19.86a.5.5 0 0 0 .64.004C12.795 31.492 24 22.124 24 12.022C24 5.394 18.617 0 12 0m.002 30.838C10.161 29.193 1 20.579 1 12.022C1 5.944 5.935 1 12 1s11 4.944 11 11.022c0 8.702-9.152 17.193-10.998 18.816"/><path d="M12 6c-3.309 0-6 2.691-6 6s2.691 6 6 6s6-2.691 6-6s-2.691-6-6-6m0 11c-2.757 0-5-2.243-5-5s2.243-5 5-5s5 2.243 5 5s-2.243 5-5 5"/></g></svg>
 
                     <div class="w-100">
                         <label for="lieu">Lieu</label>
@@ -55,7 +55,7 @@
             </div>            
             <div class="col-12 col-lg-2 p-1 mb-1 mt-1">
                 <div class="d-flex justify-content-left align-items-center inputMaterial" style="gap: 10px">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 16 16"><path fill="none" stroke="#27E3C0" stroke-linejoin="round" d="M5 10.5h6M2.5 6v7.5h11V6L8 2.5z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 16 16"><path fill="none" stroke="#2E7D32" stroke-linejoin="round" d="M5 10.5h6M2.5 6v7.5h11V6L8 2.5z"/></svg>
                     <div class="w-100">
                         <label for="type">Type de Propriete</label>
                         <select name="search[type]" class="form-control p-1 radius-input2 select-2" required>
@@ -69,7 +69,7 @@
 
             <div class="col-12 col-lg-2 p-1 mb-1 mt-1">
                 <div class="d-flex justify-content-left align-items-center inputMaterial" style="gap: 10px">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="none" stroke="#27E3C0" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" d="M5 9V6.8c0-.44.36-.8.8-.8h16.4c.44 0 .8.36.8.8v8.4c0 .44-.36.8-.8.8H20M2.8 9h16.4a.8.8 0 0 1 .8.8v8.4a.8.8 0 0 1-.8.8H2.8a.8.8 0 0 1-.8-.8V9.8a.8.8 0 0 1 .8-.8Zm9.2 5a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="none" stroke="#2E7D32" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5" d="M5 9V6.8c0-.44.36-.8.8-.8h16.4c.44 0 .8.36.8.8v8.4c0 .44-.36.8-.8.8H20M2.8 9h16.4a.8.8 0 0 1 .8.8v8.4a.8.8 0 0 1-.8.8H2.8a.8.8 0 0 1-.8-.8V9.8a.8.8 0 0 1 .8-.8Zm9.2 5a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z"/></svg>
                     <div class="w-100">
                         <label for="">Budget</label>
                         <select name="search[prix]" class="form-control p-1 radius-input2 select-2" required>
@@ -86,7 +86,7 @@
             </div>
             <div class="col-10 col-lg-2 p-1 mb-1 mt-1">
                 <div class="d-flex justify-content-left align-items-center inputMaterial" style="gap: 10px">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="none" stroke="#27E3C0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21v-3m10 3v-6m0-9V3M7 9V3m0 15c-.932 0-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C4 16.398 4 15.932 4 15s0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C5.602 12 6.068 12 7 12s1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C10 13.602 10 14.068 10 15s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C8.398 18 7.932 18 7 18m10-6c-.932 0-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C14 10.398 14 9.932 14 9s0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C15.602 6 16.068 6 17 6s1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C20 7.602 20 8.068 20 9s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C18.398 12 17.932 12 17 12" color="#27E3C0"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24"><path fill="none" stroke="#2E7D32" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21v-3m10 3v-6m0-9V3M7 9V3m0 15c-.932 0-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C4 16.398 4 15.932 4 15s0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C5.602 12 6.068 12 7 12s1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C10 13.602 10 14.068 10 15s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C8.398 18 7.932 18 7 18m10-6c-.932 0-1.398 0-1.765-.152a2 2 0 0 1-1.083-1.083C14 10.398 14 9.932 14 9s0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C15.602 6 16.068 6 17 6s1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C20 7.602 20 8.068 20 9s0 1.398-.152 1.765a2 2 0 0 1-1.083 1.083C18.398 12 17.932 12 17 12" color="#2E7D32"/></svg>
                     <div class="w-100">
                         <label for="">Plus de filtre</label> <br>
                         <span class="text-sm form-control radius-input2 select-2" style="cursor:pointer"  data-toggle="modal" data-target="#exampleModal">

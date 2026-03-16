@@ -80,7 +80,7 @@
         <div class="col-12">
             <div class="row">
                 <div class="col-12 col-lg-3 col-sm-6 mb-4">
-                    <h3><strong>Vytimo, c’est les meilleurs agents</strong></h3>
+                    <h3><strong>Teranga Immobilier, c’est les meilleurs agents</strong></h3>
                     <span style="font-size: 12px">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas eget rutrum urna.</span>
                     @include('template.components.c_button',[
                     'title'=>'voir les agents ',
@@ -154,7 +154,7 @@
 
     <!-- Section Title -->
     <div class="container section-title p-4 mb-4 radius-theme" data-aos="fade-up" style="text-align: center !important;padding:90px !important;background:#061630">
-        <span class="text-left text-secondary">Vendez sur Vytimo</span>
+        <span class="text-left text-secondary">Vendez sur Teranga Immobilier</span>
         <h3 class="text-white">Etes-vous propriétaire ?</h3>
         <p class="text-white text-sm">Découvrez des moyens d'augmenter la valeur de votre maison et de la faire répertorier.</p>
         <div class="row d-flex justify-content-center">

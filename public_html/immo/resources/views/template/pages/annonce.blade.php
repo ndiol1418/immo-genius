@@ -91,7 +91,7 @@
                 @if(!empty($annonce->visite_virtuelle_type) && $annonce->visite_virtuelle_type !== 'none')
                   <button type="button"
                     onclick="document.getElementById('modalVisiteVirtuelle').style.display='flex'"
-                    style="position:absolute;left:10px;bottom:10px;background:#27E3C0;color:#fff;border:none;
+                    style="position:absolute;left:10px;bottom:10px;background:#2E7D32;color:#fff;border:none;
                            border-radius:20px;padding:6px 14px;font-size:12px;font-weight:bold;cursor:pointer;
                            display:flex;align-items:center;gap:6px;z-index:5;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.55 2.876L4.595 6.182a2.98 2.98 0 0 0-1.529 2.611v6.414a2.98 2.98 0 0 0 1.529 2.61l5.957 3.307a2.98 2.98 0 0 0 2.898 0l5.957-3.306a2.98 2.98 0 0 0 1.529-2.611V8.793a2.98 2.98 0 0 0-1.529-2.61L13.45 2.876a2.98 2.98 0 0 0-2.898 0Z"/><path d="M20.33 6.996L12 12L3.67 6.996M12 21.49V12"/></g></svg>
@@ -179,7 +179,7 @@
                           var lbl = document.getElementById('copierLabel');
                           lbl.textContent = 'Copié ✓';
                           btn.style.background = '#d1fae5';
-                          btn.style.borderColor = '#27E3C0';
+                          btn.style.borderColor = '#2E7D32';
                           setTimeout(function() {
                               lbl.textContent = 'Copier';
                               btn.style.background = '#f8f9fa';
@@ -289,7 +289,7 @@
                     ids.push(String(id));
                     btn.style.borderColor = '#0d1c2e';
                     btn.style.background = '#0d1c2e';
-                    btn.style.color = '#27E3C0';
+                    btn.style.color = '#2E7D32';
                     label.textContent = 'Dans la comparaison ✓';
                 }
                 localStorage.setItem('compareIds', JSON.stringify(ids));
@@ -304,7 +304,7 @@
                     if (btn) {
                         btn.style.borderColor = '#0d1c2e';
                         btn.style.background = '#0d1c2e';
-                        btn.style.color = '#27E3C0';
+                        btn.style.color = '#2E7D32';
                         document.getElementById('compareDetailLabel').textContent = 'Dans la comparaison ✓';
                     }
                 }
@@ -324,20 +324,20 @@
                 @csrf
                 <textarea name="contenu" rows="4" required placeholder="Bonjour, je suis intéressé par cette annonce..."
                   style="width:100%;border:1px solid #ddd;border-radius:10px;padding:12px;font-size:13px;resize:none;outline:none;"></textarea>
-                <button type="submit" style="margin-top:12px;width:100%;background:#27E3C0;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:bold;cursor:pointer;">
+                <button type="submit" style="margin-top:12px;width:100%;background:#2E7D32;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:bold;cursor:pointer;">
                   Envoyer le message
                 </button>
               </form>
             @else
               <p style="text-align:center;color:#555;font-size:13px;">Vous devez être connecté pour envoyer un message.</p>
-              <a href="{{ route('login') }}" style="display:block;text-align:center;background:#27E3C0;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-weight:bold;">Se connecter</a>
+              <a href="{{ route('login') }}" style="display:block;text-align:center;background:#2E7D32;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-weight:bold;">Se connecter</a>
             @endif
           </div>
         </div>
 
         {{-- Simulateur de prêt / coût mensuel --}}
         <div class="container mt-4 mb-2">
-          <div class="card border-0 shadow-sm p-4" style="border-left:4px solid #27E3C0 !important;">
+          <div class="card border-0 shadow-sm p-4" style="border-left:4px solid #2E7D32 !important;">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="mb-0">
                 💰
@@ -361,7 +361,7 @@
               <div class="col-md-3 col-6">
                 <div class="rounded p-2 text-center" style="background:#0d1c2e;color:#fff;">
                   <div style="font-size:10px;opacity:.7;">Mensualité</div>
-                  <div id="sim_result" style="font-size:18px;font-weight:700;color:#27E3C0;">—</div>
+                  <div id="sim_result" style="font-size:18px;font-weight:700;color:#2E7D32;">—</div>
                   <div style="font-size:10px;opacity:.6;">CFA/mois</div>
                 </div>
               </div>
@@ -423,7 +423,7 @@
               <div class="mb-3" style="max-height:220px;overflow-y:auto;">
                 @foreach($avisListe as $avi)
                   <div class="d-flex" style="gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5;">
-                    <div style="width:36px;height:36px;border-radius:50%;background:#0d1c2e;color:#27E3C0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">
+                    <div style="width:36px;height:36px;border-radius:50%;background:#0d1c2e;color:#2E7D32;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;">
                       {{ strtoupper(substr($avi->user->name ?? 'A', 0, 1)) }}
                     </div>
                     <div class="flex-grow-1">
@@ -708,7 +708,7 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') document.getEle
             @if($vvType === 'pannellum' && !empty($vv360))Salon@else Visite Matterport 3D @endif
         </span>
         <button onclick="fermerVisiteVirtuelle()"
-                style="background:#27E3C0;border:none;border-radius:50%;width:36px;height:36px;
+                style="background:#2E7D32;border:none;border-radius:50%;width:36px;height:36px;
                        color:#fff;font-size:20px;cursor:pointer;line-height:1;">✕</button>
     </div>
 

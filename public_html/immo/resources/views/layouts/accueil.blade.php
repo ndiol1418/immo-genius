@@ -12,10 +12,10 @@
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> --}}
   <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}" sizes="32x32" />
   <link rel="icon" type="image/png" href="{{ asset('favicon-16x16.png') }}" sizes="16x16" />
-  <meta name="theme-color" content="#27E3C0">
+  <meta name="theme-color" content="#2E7D32">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Vytimo">
+  <meta name="apple-mobile-web-app-title" content="Teranga Immobilier">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -75,7 +75,7 @@
     color-mix(in srgb, #f8f9fa, transparent 60%) !important;
 }
 .premium{position:absolute;z-index: 10;border: 1px solid #fff;
-        background: #06e5ca;
+        background: #2E7D32;
         font-size: 11px;
         border-radius: 10px;
         padding: 0 10px;
@@ -109,7 +109,7 @@ font-size: 10px;
     }
 
     ::-webkit-scrollbar-thumb {
-        background: #06e5ca;
+        background: #2E7D32;
         border-radius: 2px;
         /*box-shadow: inset 0 0 1px #ccc;*/
     }
@@ -196,22 +196,22 @@ font-size: 10px;
     }
  .btn-outline-secondary {
     --bs-btn-color: #071a5f !important;
-    --bs-btn-border-color: #06e5ca !important;
+    --bs-btn-border-color: #2E7D32 !important;
     --bs-btn-hover-color: #fff !important;
-    --bs-btn-hover-bg: #06e5ca !important;
-    --bs-btn-hover-border-color: #06e5ca !important;
+    --bs-btn-hover-bg: #2E7D32 !important;
+    --bs-btn-hover-border-color: #2E7D32 !important;
     --bs-btn-focus-shadow-rgb: 13, 110, 253 !important;
     --bs-btn-active-color: #fff !important;
-    --bs-btn-active-bg: #06e5ca !important;
-    --bs-btn-active-border-color: #06e5ca !important;
+    --bs-btn-active-bg: #2E7D32 !important;
+    --bs-btn-active-border-color: #2E7D32 !important;
     --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125) !important;
-    --bs-btn-disabled-color: #06e5ca !important;
+    --bs-btn-disabled-color: #2E7D32 !important;
     --bs-btn-disabled-bg: transparent !important;
-    --bs-btn-disabled-border-color: #06e5ca !important;
+    --bs-btn-disabled-border-color: #2E7D32 !important;
     --bs-gradient: none !important;
 }
 .form-check-input:checked {
-    background-color: #06e5ca !important;
+    background-color: #2E7D32 !important;
     border-color: #071a5f !important;
 }
         @media (max-width: 768px) {

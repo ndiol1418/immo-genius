@@ -80,19 +80,19 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
 
-    <div id="vytimo-chatbot" style="position:fixed;bottom:30px;right:30px;z-index:999999;font-family:sans-serif;">
+    <div id="teranga-chatbot" style="position:fixed;bottom:30px;right:30px;z-index:999999;font-family:sans-serif;">
       <button id="chatbot-toggle" onclick="document.getElementById('chatbot-window').style.display = document.getElementById('chatbot-window').style.display === 'none' ? 'flex' : 'none'"
-        style="width:60px;height:60px;border-radius:50%;background:#27E3C0;border:none;cursor:pointer;font-size:26px;box-shadow:0 4px 15px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;">
+        style="width:60px;height:60px;border-radius:50%;background:#2E7D32;border:none;cursor:pointer;font-size:26px;box-shadow:0 4px 15px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;">
         💬
       </button>
       <div id="chatbot-window" style="display:none;flex-direction:column;position:absolute;bottom:70px;right:0;width:320px;height:420px;background:white;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,0.2);overflow:hidden;">
-        <div style="background:#27E3C0;padding:15px;color:white;font-weight:bold;font-size:14px;">
-          🏠 Assistant Vytimo
+        <div style="background:#2E7D32;padding:15px;color:white;font-weight:bold;font-size:14px;">
+          🏠 Assistant Teranga Immobilier
           <button onclick="document.getElementById('chatbot-window').style.display='none'" style="float:right;background:none;border:none;color:white;font-size:18px;cursor:pointer;">✕</button>
         </div>
         <div id="chatbot-messages" style="flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px;">
-          <div style="background:#e8fdf9;padding:10px;border-radius:10px;font-size:13px;max-width:85%;">
-            👋 Bonjour ! Je suis l'assistant Vytimo. Comment puis-je vous aider ?
+          <div style="background:#f1f8e9;padding:10px;border-radius:10px;font-size:13px;max-width:85%;">
+            👋 Bonjour ! Je suis l'assistant Teranga Immobilier. Comment puis-je vous aider ?
           </div>
         </div>
         <div style="padding:10px;border-top:1px solid #eee;display:flex;gap:8px;">
@@ -100,7 +100,7 @@
             style="flex:1;padding:8px;border:1px solid #ddd;border-radius:20px;font-size:13px;outline:none;color:#333;background:#fff;"
             onkeypress="if(event.key==='Enter') sendChatMessage()">
           <button onclick="sendChatMessage()"
-            style="background:#27E3C0;border:none;border-radius:50%;width:35px;height:35px;cursor:pointer;font-size:16px;">
+            style="background:#2E7D32;border:none;border-radius:50%;width:35px;height:35px;cursor:pointer;font-size:16px;">
             ➤
           </button>
         </div>
@@ -112,17 +112,17 @@
       var messages = document.getElementById('chatbot-messages');
       var text = input.value.trim();
       if (!text) return;
-      messages.innerHTML += '<div style="background:#27E3C0;color:white;padding:10px;border-radius:10px;font-size:13px;max-width:85%;align-self:flex-end;margin-left:auto;">' + text + '</div>';
+      messages.innerHTML += '<div style="background:#2E7D32;color:white;padding:10px;border-radius:10px;font-size:13px;max-width:85%;align-self:flex-end;margin-left:auto;">' + text + '</div>';
       input.value = '';
-      var response = "Je vous mets en contact avec un agent → <a href='/agents' style='color:#27E3C0'>Voir les agents</a>";
+      var response = "Je vous mets en contact avec un agent → <a href='/agents' style='color:#2E7D32'>Voir les agents</a>";
       var t = text.toLowerCase();
       if (t.includes('publier') || t.includes('annonce')) response = "Pour publier une annonce, cliquez sur 'Publier une annonce' en haut de la page.";
       else if (t.includes('contact') || t.includes('agent')) response = "Pour contacter un agent, ouvrez une annonce et cliquez sur 'Message' ou 'Appeler'.";
-      else if (t.includes('tarif') || t.includes('commission')) response = "Vytimo prend une commission de seulement 2% sur les transactions !";
+      else if (t.includes('tarif') || t.includes('commission')) response = "Teranga Immobilier prend une commission de seulement 2% sur les transactions !";
       else if (t.includes('visite') || t.includes('360')) response = "La visite virtuelle est disponible sur certaines annonces. Cherchez le badge 'Visite Virtuelle'.";
       else if (t.includes('compte') || t.includes('inscription')) response = "Pour créer un compte, cliquez sur 'Se connecter' puis 'Inscription'. C'est gratuit !";
       setTimeout(function() {
-        messages.innerHTML += '<div style="background:#e8fdf9;padding:10px;border-radius:10px;font-size:13px;max-width:85%;">' + response + '</div>';
+        messages.innerHTML += '<div style="background:#f1f8e9;padding:10px;border-radius:10px;font-size:13px;max-width:85%;">' + response + '</div>';
         messages.scrollTop = messages.scrollHeight;
       }, 500);
       messages.scrollTop = messages.scrollHeight;

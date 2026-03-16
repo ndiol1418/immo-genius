@@ -5,7 +5,7 @@
         <div class="card-header bg-white border-0 pt-3">
             <div class="logo d-flex justify-content-center align-items-center">
                 {{-- <a href="/" class="btn btn-outline-light2 px-4">{{ config('app.name', '') }}</a> --}}
-                <img src="{{ asset('img/logo.png') }}" alt="logo">
+                <img src="{{ asset('img/logo-teranga.png') }}" alt="logo">
             </div>
             <h3 class="title mt-4 login_police">
               <strong>Connexion</strong>

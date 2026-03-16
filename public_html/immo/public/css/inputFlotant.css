@@ -51,7 +51,7 @@
 .input-container input:not(:placeholder-shown),
 .input-container select:focus,
 .input-container select:not([value=""]) {
-    border-color: #06e5ca;
+    border-color: #2E7D32;
 }
 
 .input-container input:focus + label,

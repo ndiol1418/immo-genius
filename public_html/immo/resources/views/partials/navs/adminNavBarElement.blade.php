@@ -16,7 +16,7 @@
     <div class="site_info">
         <a href="/">
             <h1 class="h6 ml-2 font-weight-bold m-0 text-primary text-uppercase d-flex align-items-center text-sm">
-              <span class="d-lg-none d-md-none mr-1"><img src="{{ asset('img/logo.png') }}" alt="" height="20" class="brand-image mr-2"> </span>
+              <span class="d-lg-none d-md-none mr-1"><img src="{{ asset('img/logo-teranga.png') }}" alt="" height="20" class="brand-image mr-2"> </span>
                 {{-- {{ config('app.name', '') }} --}}
             </h1>
         </a>

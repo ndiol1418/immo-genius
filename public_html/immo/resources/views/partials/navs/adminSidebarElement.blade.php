@@ -30,7 +30,7 @@ $ref = isset($explode_path[2]) ? $explode_path[2] : null;
 <aside class="main-sidebar text-sm elevation-0 sidebar-light-primary">
     <!-- Brand Logo -->
     <a href="/" class="brand-link bg-white d-flex justify-content-center align-items-center">
-        <img src="{{ asset('img/logo.png') }}" alt="" class="brand-image">
+        <img src="{{ asset('img/logo-teranga.png') }}" alt="" class="brand-image">
         {{-- <span class="brand-text font-weight-light">{{ env('APP_NAME') }}</span> --}}
     </a>
 

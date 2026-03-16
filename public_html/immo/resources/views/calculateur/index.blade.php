@@ -50,7 +50,7 @@
                 <div class="col-6">
                   <div class="rounded p-3 text-center" style="background:#0d1c2e;color:#fff;">
                     <div style="font-size:11px;opacity:.7;margin-bottom:4px;">Mensualité</div>
-                    <div id="mensualite" style="font-size:22px;font-weight:700;color:#27E3C0;">—</div>
+                    <div id="mensualite" style="font-size:22px;font-weight:700;color:#2E7D32;">—</div>
                     <div style="font-size:10px;opacity:.6;">CFA / mois</div>
                   </div>
                 </div>
