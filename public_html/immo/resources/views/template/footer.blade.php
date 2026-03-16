@@ -4,7 +4,7 @@
       <div class="row gy-3">
 
         <div class="col-lg-4 col-md-6">
-          <img src="{{ asset('logo.png') }}" alt="" width="300px">
+          <img src="{{ asset('img/logo-teranga.png') }}" alt="Teranga Immobilier" height="60">
         </div>
         <div class="col-lg-2 col-md-6">
           <h4>Acheter</h4>
@@ -19,18 +19,18 @@
         <div class="col-lg-2 col-md-6">
           <h4>Louer</h4>
           <div class="d-grid">
-            <a href="#" class="">Buy and sell properties</a>
-            <a href="#" class="">Rent Home</a>
-            <a href="{{ route('cgu') }}" class="">Builder trade-up</a>
+            <a href="#" class="">Acheter et vendre</a>
+            <a href="#" class="">Louer un bien</a>
+            <a href="{{ route('cgu') }}" class="">Construire</a>
           </div>
         </div>        
         <div class="col-lg-2 col-md-6">
           <h4>Agents</h4>
           <div class="d-grid">
-            <a href="#" class="">Company</a>
-            <a href="#" class="">How it works</a>
+            <a href="#" class="">Notre entreprise</a>
+            <a href="#" class="">Comment ça marche</a>
             <a href="{{ route('cgu') }}" class="">Contact</a>
-            <a href="#" class="">Investor</a>
+            <a href="#" class="">Investisseurs</a>
           </div>
         </div>
         <div class="col-lg-2 col-md-6">

@@ -10,7 +10,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        background: #08E5CB;
+        background: #2E7D32;
 
         height: 100%;
         width: 10px;

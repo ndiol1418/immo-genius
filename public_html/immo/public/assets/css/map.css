@@ -216,7 +216,7 @@ body {
 }
 
 .price-tag {
-    background-color: #08E5CB;
+    background-color: #2E7D32;
     border-radius: 8px;
     color: #FFFFFF;
     font-size: 10px;
@@ -234,7 +234,7 @@ body {
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-top: 8px solid #08E5CB;
+    border-top: 8px solid #2E7D32;
 }
 
 #place-autocomplete-card {
