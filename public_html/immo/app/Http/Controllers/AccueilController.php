@@ -75,13 +75,23 @@ class AccueilController extends Controller
         $apiKey = $this->apiKey;
         $type_locations = TypeLocation::all();
         // event(new MailEvent('inscription:new', 'abnsndoye@gmail.com'));
-        // 4 annonces recommandées aléatoires
-        $annoncesRecommandees = Annonce::withoutGlobalScope(AnnonceScope::class)
-            ->inRandomOrder()
-            ->limit(4)
-            ->get();
+        // Recommandations IA avec scores
+        $annoncesRecommandees = collect();
+        try {
+            $annoncesRecommandees = (new \App\Services\RecommandationService())->recommander();
+        } catch (\Exception $e) {
+            $annoncesRecommandees = Annonce::withoutGlobalScope(AnnonceScope::class)
+                ->inRandomOrder()->limit(4)->get()
+                ->map(fn($a) => ['annonce' => $a, 'score' => 70, 'raisons' => ['Sélection pour vous']]);
+        }
 
-        return view('welcome',compact('types','type_immos','annonce_news','agents','annonce_premium','regions','apiKey','annonce_zones','type_locations','annoncesRecommandees'));
+        // 5 recherches populaires
+        $recherchesPopulaires = collect();
+        try {
+            $recherchesPopulaires = \App\Models\RecherchePopulaire::orderByDesc('nombre_recherches')->limit(5)->get();
+        } catch (\Exception $e) {}
+
+        return view('welcome',compact('types','type_immos','annonce_news','agents','annonce_premium','regions','apiKey','annonce_zones','type_locations','annoncesRecommandees','recherchesPopulaires'));
     }
     public function acheter(){
         $types = Type::actif()->get();

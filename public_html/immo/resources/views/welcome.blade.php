@@ -45,6 +45,56 @@
     @include('template.filtre-mobile')
 </div>
 
+{{-- Recherche IA — Langage naturel --}}
+<div class="container mt-3 mb-2">
+  <form method="POST" action="{{ route('recherche.ia') }}" autocomplete="off" id="formRechercheIA">
+    @csrf
+    <div style="background:#0d1c2e;border-radius:14px;padding:16px 20px;">
+      <div style="font-size:11px;color:#4CAF50;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">
+        🤖 Recherche IA — Langage naturel
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;position:relative;">
+        <input id="inputIA" name="q" type="text"
+          placeholder="Décrivez votre bien idéal... ex: appartement 3 chambres à Dakar moins de 300 000 CFA avec piscine"
+          style="flex:1;background:#1a2d44;border:1px solid #2E7D32;border-radius:10px;padding:10px 14px;font-size:13px;color:#fff;outline:none;"
+          onkeyup="suggesterIA(this.value)"
+          onfocus="document.getElementById('suggestionsIA').style.display='block'"
+          onblur="setTimeout(()=>document.getElementById('suggestionsIA').style.display='none',200)">
+        <button type="submit" style="background:#2E7D32;border:none;border-radius:10px;padding:10px 20px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">
+          Rechercher 🔍
+        </button>
+        {{-- Suggestions autocomplete --}}
+        <div id="suggestionsIA" style="display:none;position:absolute;top:100%;left:0;right:0;background:#1a2d44;border:1px solid #2E7D32;border-radius:0 0 10px 10px;z-index:1000;overflow:hidden;"></div>
+      </div>
+      {{-- Historique session --}}
+      @php $historique = session('historique_recherches_ia', []); @endphp
+      @if(count($historique))
+      <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;">
+        <span style="font-size:11px;color:#aaa;">Récentes :</span>
+        @foreach($historique as $h)
+          <span onclick="document.getElementById('inputIA').value='{{ $h }}'"
+            style="font-size:11px;color:#4CAF50;cursor:pointer;background:#0d2a1a;border-radius:20px;padding:2px 10px;">
+            {{ $h }}
+          </span>
+        @endforeach
+      </div>
+      @endif
+      {{-- Recherches populaires en suggestions rapides --}}
+      @if(isset($recherchesPopulaires) && $recherchesPopulaires->isNotEmpty())
+      <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+        <span style="font-size:11px;color:#aaa;">🔥 Populaires :</span>
+        @foreach($recherchesPopulaires as $rp)
+          <button type="button" onclick="document.getElementById('inputIA').value='{{ $rp->terme }}';document.getElementById('formRechercheIA').submit()"
+            style="font-size:11px;color:#C49A0C;background:none;border:1px solid #C49A0C;border-radius:20px;padding:2px 10px;cursor:pointer;">
+            {{ $rp->terme }}
+          </button>
+        @endforeach
+      </div>
+      @endif
+    </div>
+  </form>
+</div>
+
 <!-- Services Section -->
 @include('template.components.c_section_agents')
 <section id="services" class="services section bg-light" style="padding-top:20px;margin-top:0;">
@@ -133,20 +183,7 @@
 
 </section><!-- /Services Section -->
 
-<section id="recommandations" class="py-5">
-  <div class="container">
-    <div class="section-title mb-4" data-aos="fade-up">
-      <h3>🤖 Recommandé pour vous</h3>
-    </div>
-    <div class="row">
-      @foreach($annoncesRecommandees as $annonce)
-        <div class="col-12 col-sm-6 col-lg-3">
-          @include('template.components.card-annonce', ['annonce' => $annonce])
-        </div>
-      @endforeach
-    </div>
-  </div>
-</section>
+@include('recommandations.widget', ['recommandations' => $annoncesRecommandees])
 
 @include('template.pages.regions',['annonces'=>$annonce_zones])
 <!-- Agents Section -->
@@ -360,6 +397,35 @@
         alert("grecaptcha is ready!");
     };
 
+</script>
+<script>
+// Autocomplete Recherche IA
+var _iaTimer;
+function suggesterIA(val) {
+    clearTimeout(_iaTimer);
+    var box = document.getElementById('suggestionsIA');
+    if (!val || val.length < 3) { box.innerHTML=''; return; }
+    _iaTimer = setTimeout(function() {
+        fetch('/recherche-ia/suggestions?q=' + encodeURIComponent(val))
+            .then(function(r){ return r.json(); })
+            .then(function(data) {
+                box.innerHTML = '';
+                if (!data || !data.length) return;
+                data.forEach(function(terme) {
+                    var div = document.createElement('div');
+                    div.textContent = terme;
+                    div.style.cssText = 'padding:10px 14px;color:#ccc;font-size:13px;cursor:pointer;border-bottom:1px solid #2a3f55;';
+                    div.onmousedown = function() {
+                        document.getElementById('inputIA').value = terme;
+                        document.getElementById('formRechercheIA').submit();
+                    };
+                    div.onmouseover = function(){ this.style.background='#1e3a52'; };
+                    div.onmouseout  = function(){ this.style.background=''; };
+                    box.appendChild(div);
+                });
+            }).catch(function(){});
+    }, 300);
+}
 </script>
 @endsection
 

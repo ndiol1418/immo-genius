@@ -68,6 +68,10 @@ Route::middleware(['auth'])->group(function () {
 // Géolocalisation — annonces près de moi
 Route::post('/annonces/near-me', [App\Http\Controllers\SearchController::class, 'nearMe'])->name('annonces.nearMe');
 
+// Recherche IA — langage naturel
+Route::post('/recherche-ia', [App\Http\Controllers\SearchController::class, 'aiSearch'])->name('recherche.ia');
+Route::get('/recherche-ia/suggestions', [App\Http\Controllers\SearchController::class, 'recherchesSuggestions'])->name('recherche.ia.suggestions');
+
 // Gestion Locative
 Route::middleware(['auth'])->group(function () {
     Route::get('/gestion-locative', [App\Http\Controllers\GestionLocativeController::class, 'index'])->name('gestion-locative.index');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Annonce;
 use App\Models\Fournisseur;
+use App\Models\RecherchePopulaire;
 use App\Models\Specialisation;
 use App\Models\Type;
 use App\Models\TypeImmo;
@@ -227,5 +228,159 @@ class SearchController extends Controller
         $agents = $query->paginate(18)->appends(['sort' => 'id']);
         $specialisations = Specialisation::all();
         return view('template.pages.agents',compact('agents','specialisations'));
+    }
+
+    // ────────────────────────────────────────────────────────────
+    // RECHERCHE IA — Langage naturel
+    // ────────────────────────────────────────────────────────────
+
+    public function aiSearch(Request $request)
+    {
+        $texte = trim($request->input('q', ''));
+
+        if (empty($texte)) {
+            return redirect('/');
+        }
+
+        // ── 1. Enregistrement / incrémentation recherche populaire ──
+        try {
+            $rp = RecherchePopulaire::where('terme', $texte)->first();
+            if ($rp) {
+                $rp->increment('nombre_recherches');
+            } else {
+                RecherchePopulaire::create(['terme' => $texte, 'nombre_recherches' => 1]);
+            }
+        } catch (\Exception $e) {}
+
+        // ── 2. Extraction des critères par regex ────────────────────
+        $t = mb_strtolower($texte);
+
+        // Type de bien
+        $typeBien = null;
+        $typesMots = [
+            'appartement' => ['appartement','appart'],
+            'villa'       => ['villa'],
+            'maison'      => ['maison','résidence','residence'],
+            'terrain'     => ['terrain','parcelle'],
+            'bureau'      => ['bureau','local commercial','commerce'],
+            'duplex'      => ['duplex'],
+            'studio'      => ['studio'],
+        ];
+        foreach ($typesMots as $type => $mots) {
+            foreach ($mots as $mot) {
+                if (str_contains($t, $mot)) { $typeBien = $type; break 2; }
+            }
+        }
+
+        // Nombre de chambres
+        $chambres = null;
+        if (preg_match('/(\d+)\s*(?:chambre|pièce|piece|ch\b)/u', $t, $m)) {
+            $chambres = (int) $m[1];
+        }
+
+        // Budget maximum
+        $budgetMax = null;
+        if (preg_match('/(?:moins de|max(?:imum)?|jusqu\'à|jusqua|≤|inf[eé]rieur)\s*(\d[\d\s]*(?:\d))\s*(?:cfa|fcfa|f)?/u', $t, $m)) {
+            $budgetMax = (int) preg_replace('/\s+/', '', $m[1]);
+        } elseif (preg_match('/(\d[\d\s]{2,})\s*(?:cfa|fcfa|f)\b/u', $t, $m)) {
+            $budgetMax = (int) preg_replace('/\s+/', '', $m[1]);
+        }
+
+        // Localisation (quartiers / villes sénégalaises)
+        $localisations = [
+            'dakar','pikine','guédiawaye','guediawaye','rufisque','bargny',
+            'plateau','almadies','ngor','mermoz','fann','point e','liberté','liberte',
+            'sacré coeur','sacre coeur','mamelles','médina','medina','hlm','grand dakar',
+            'yoff','parcelles','ouakam','ouest foire','niarela','grand yoff',
+            'thiès','thies','saint-louis','ziguinchor','kaolack','mbour','touba',
+            'dieuppeul','sicap','keur massar','malika','tivaouane',
+        ];
+        $lieuDetecte = null;
+        foreach ($localisations as $lieu) {
+            if (str_contains($t, $lieu)) { $lieuDetecte = $lieu; break; }
+        }
+
+        // Commodités
+        $comodites = [];
+        $comoMots = [
+            'piscine'   => ['piscine','pool'],
+            'garage'    => ['garage','parking'],
+            'terrasse'  => ['terrasse','balcon'],
+            'jardin'    => ['jardin'],
+            'meublé'    => ['meublé','meuble'],
+            'gardien'   => ['gardien','securite','sécurité'],
+            'climatisé' => ['clim','climatisé','climatise'],
+        ];
+        foreach ($comoMots as $key => $mots) {
+            foreach ($mots as $mot) {
+                if (str_contains($t, $mot)) { $comodites[] = $key; break; }
+            }
+        }
+
+        // ── 3. Construction de la requête Eloquent ──────────────────
+        $query = Annonce::withoutGlobalScope(AnnonceScope::class)
+            ->with(['images', 'commune', 'type_immo'])
+            ->where('status', 1);
+
+        $criteresBadges = [];
+
+        if ($typeBien) {
+            $query->whereHas('type_immo', fn($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.$typeBien.'%']));
+            $criteresBadges[] = ['label' => ucfirst($typeBien), 'color' => '#2E7D32'];
+        }
+
+        if ($chambres !== null) {
+            $query->where('chambres', '>=', $chambres);
+            $criteresBadges[] = ['label' => $chambres . ' chambre(s)', 'color' => '#0d1c2e'];
+        }
+
+        if ($budgetMax) {
+            $query->where('prix', '<=', $budgetMax);
+            $criteresBadges[] = ['label' => '≤ ' . number_format($budgetMax, 0, ',', ' ') . ' CFA', 'color' => '#C49A0C'];
+        }
+
+        if ($lieuDetecte) {
+            $query->where(function ($q) use ($lieuDetecte) {
+                $q->whereHas('commune', fn($q2) => $q2->whereRaw('LOWER(name) LIKE ?', ['%'.$lieuDetecte.'%']))
+                  ->orWhereRaw('LOWER(adresse) LIKE ?', ['%'.$lieuDetecte.'%']);
+            });
+            $criteresBadges[] = ['label' => '📍 ' . ucfirst($lieuDetecte), 'color' => '#6c757d'];
+        }
+
+        foreach ($comodites as $c) {
+            $query->whereRaw('LOWER(comodites) LIKE ?', ['%'.$c.'%']);
+            $criteresBadges[] = ['label' => ucfirst($c), 'color' => '#17a2b8'];
+        }
+
+        $annonces = $query->latest()->paginate(12);
+
+        // ── 4. Historique de session ────────────────────────────────
+        $historique = session()->get('historique_recherches_ia', []);
+        array_unshift($historique, $texte);
+        $historique = array_unique(array_slice($historique, 0, 5));
+        session(['historique_recherches_ia' => $historique]);
+
+        $type_immos    = TypeImmo::actif()->get();
+        $type_locations = TypeLocation::all();
+
+        return view('template.pages.recherche-ia', compact(
+            'annonces', 'texte', 'criteresBadges',
+            'typeBien', 'chambres', 'budgetMax', 'lieuDetecte',
+            'type_immos', 'type_locations'
+        ));
+    }
+
+    public function recherchesSuggestions(Request $request)
+    {
+        $q = $request->input('q', '');
+        try {
+            $suggestions = RecherchePopulaire::where('terme', 'like', '%'.$q.'%')
+                ->orderByDesc('nombre_recherches')
+                ->limit(5)
+                ->pluck('terme');
+        } catch (\Exception $e) {
+            $suggestions = collect();
+        }
+        return response()->json($suggestions);
     }
 }
