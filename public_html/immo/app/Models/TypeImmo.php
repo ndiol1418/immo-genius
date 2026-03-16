@@ -12,6 +12,9 @@ class TypeImmo extends Model
     public function immos() {
         return $this->hasMany(Immo::class);
     }
+    public function annonces() {
+        return $this->hasMany(Annonce::class);
+    }
     public function bien() {
         return $this->belongsTo(Bien::class);
     }

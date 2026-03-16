@@ -40,17 +40,17 @@
             <a href="{{ route('cgu') }}" class="">Conditions d'utilisation</a>
             <a href="#" class="">Politique de confidentialité</a>
           </div>
-          {{-- <div class="address">
-            <h4>A propos</h4>
-            <p>A108 Adam Street</p>
-            <p>Dakar, Senegal</p>
-            <p></p>
-            <p>
-              <strong>Phone:</strong> <span>+1 5589 55488 55</span><br>
-              <strong>Email:</strong> <span>info@example.com</span><br>
-            </p>
-          </div> --}}
+        </div>
 
+        <div class="col-lg-2 col-md-6">
+          <h4>Guides & Ressources</h4>
+          <div class="d-grid">
+            <a href="{{ route('guide.acheteur') }}" class="">Guide Acheteur</a>
+            <a href="{{ route('guide.vendeur') }}" class="">Guide Vendeur</a>
+            <a href="{{ route('faq') }}" class="">FAQ</a>
+            <a href="{{ route('marche.index') }}" class="">Marché Immobilier</a>
+            <a href="{{ route('blog.index') }}" class="">Blog Actualités</a>
+          </div>
         </div>
 
       </div>

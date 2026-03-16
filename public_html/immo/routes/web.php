@@ -25,6 +25,26 @@ Route::get('/louer', [App\Http\Controllers\AccueilController::class, 'louer'])->
 Route::get('/cgu', [App\Http\Controllers\AccueilController::class, 'cgu'])->name('cgu');
 Route::get('/faq', [App\Http\Controllers\AccueilController::class, 'faq'])->name('faq');
 
+// Blog
+Route::get('/blog', [App\Http\Controllers\ArticleController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [App\Http\Controllers\ArticleController::class, 'show'])->name('blog.show');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/blog', [App\Http\Controllers\ArticleController::class, 'adminIndex'])->name('blog.admin.index');
+    Route::get('/admin/blog/creer', [App\Http\Controllers\ArticleController::class, 'create'])->name('blog.create');
+    Route::post('/admin/blog', [App\Http\Controllers\ArticleController::class, 'store'])->name('blog.store');
+    Route::get('/admin/blog/{id}/editer', [App\Http\Controllers\ArticleController::class, 'edit'])->name('blog.edit');
+    Route::put('/admin/blog/{id}', [App\Http\Controllers\ArticleController::class, 'update'])->name('blog.update');
+    Route::post('/admin/blog/{id}/toggle', [App\Http\Controllers\ArticleController::class, 'toggleStatut'])->name('blog.toggle');
+});
+
+// Marché immobilier
+Route::get('/marche-immobilier', [App\Http\Controllers\MarcheController::class, 'index'])->name('marche.index');
+Route::get('/marche-immobilier/pdf', [App\Http\Controllers\MarcheController::class, 'pdf'])->name('marche.pdf');
+
+// Guides
+Route::get('/guide-acheteur', fn() => view('guide.acheteur'))->name('guide.acheteur');
+Route::get('/guide-vendeur', fn() => view('guide.vendeur'))->name('guide.vendeur');
+
 // Inscription
 Route::get('/inscriptions', [App\Http\Controllers\AccueilController::class, 'inscriptionFormShow'])->name('inscriptions');
 Route::post('/inscriptions/create', [App\Http\Controllers\AccueilController::class, 'inscrire'])->name('inscriptions.create');
