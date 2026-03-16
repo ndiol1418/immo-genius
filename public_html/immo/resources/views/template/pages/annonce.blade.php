@@ -153,24 +153,46 @@
                     $whatsappMsg= urlencode("🏠 *{$annonce->name}*\n💰 " . number_format($annonce->prix, 0, ',', ' ') . " CFA\n📍 {$annonce->adresse}\n🔗 {$url}");
                   @endphp
                   <div class="d-flex flex-wrap align-items-center mt-1 mb-1" style="gap:6px;">
-                    {{-- Facebook --}}
-                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}&quote={{ $shareText }}" target="_blank" rel="noopener"
+                    {{-- Web Share API (mobile natif) --}}
+                    <button id="btn-native-share" onclick="nativeShare()" style="display:none;background:#2E7D32;color:#fff;border:none;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;cursor:pointer;">
+                      📤 Partager
+                    </button>
+                    {{-- Facebook (desktop uniquement) --}}
+                    <a id="btn-fb-share" href="https://www.facebook.com/sharer/sharer.php?u={{ $shareUrl }}&quote={{ $shareText }}" target="_blank" rel="noopener"
                        style="background:#1877F2;color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669c1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                       Facebook
                     </a>
                     {{-- Twitter/X --}}
-                    <a href="https://twitter.com/intent/tweet?text={{ $shareText }}&url={{ $shareUrl }}" target="_blank" rel="noopener"
+                    <a id="btn-tw-share" href="https://twitter.com/intent/tweet?text={{ $shareText }}&url={{ $shareUrl }}" target="_blank" rel="noopener"
                        style="background:#000;color:#fff;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:5px;">
                       <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26l8.502 11.24H16.17l-4.714-6.231l-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                       X
                     </a>
+                    {{-- QR Code --}}
+                    <button onclick="document.getElementById('modal-qr').style.display='flex'"
+                       style="background:#f8f9fa;color:#333;border:1px solid #ddd;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
+                      📱 QR Code
+                    </button>
                     {{-- Copier le lien --}}
                     <button onclick="copierLien('{{ $url }}')" id="btnCopier"
                        style="background:#f8f9fa;color:#333;border:1px solid #ddd;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;">
                       <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"><path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2m0 16H8V7h11z"/></svg>
                       <span id="copierLabel">Copier</span>
                     </button>
+                  </div>
+
+                  {{-- Modal QR Code --}}
+                  <div id="modal-qr" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);align-items:center;justify-content:center;" onclick="if(event.target===this)this.style.display='none'">
+                    <div style="background:#fff;border-radius:20px;padding:32px;text-align:center;max-width:320px;width:90%;position:relative;">
+                      <button onclick="document.getElementById('modal-qr').style.display='none'" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">×</button>
+                      <h6 class="fw-bold mb-3">📱 Scanner pour voir l'annonce</h6>
+                      <div style="background:#f8f9fa;border-radius:12px;padding:16px;display:inline-block;margin-bottom:16px;">
+                        {!! QrCode::size(180)->style('round')->color(46,125,50)->generate($url) !!}
+                      </div>
+                      <p style="font-size:12px;color:#888;margin:0;">Pointez votre caméra sur ce QR code<br>pour accéder directement à cette annonce</p>
+                      <div style="font-size:11px;color:#aaa;margin-top:8px;word-break:break-all;">{{ $url }}</div>
+                    </div>
                   </div>
                   <script>
                   function copierLien(url) {
@@ -781,4 +803,40 @@ document.getElementById('modalVisiteVirtuelle')
 </script>
 @endif
 
+<script>
+// ─── Web Share API (mobile natif) ─────────────────────
+(function() {
+  if (navigator.share) {
+    var nativeBtn = document.getElementById('btn-native-share');
+    if (nativeBtn) { nativeBtn.style.display = 'inline-flex'; }
+    var fbBtn = document.getElementById('btn-fb-share');
+    var twBtn = document.getElementById('btn-tw-share');
+    if (fbBtn) fbBtn.style.display = 'none';
+    if (twBtn) twBtn.style.display = 'none';
+  }
+})();
+
+function nativeShare() {
+  if (!navigator.share) return;
+  navigator.share({
+    title: '{{ addslashes($annonce->name) }}',
+    text:  '{{ addslashes(\Str::limit(strip_tags($annonce->description ?? ""), 80)) }} — {{ number_format($annonce->prix, 0, ",", " ") }} CFA',
+    url:   '{{ $url }}'
+  }).catch(function(){});
+}
+
+// ─── Cache annonce dans IndexedDB pour mode offline ───
+if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+  navigator.serviceWorker.controller.postMessage({
+    type:    'CACHE_ANNONCE',
+    url:     '{{ $url }}',
+    annonce: {
+      titre:   '{{ addslashes($annonce->name) }}',
+      prix:    {{ $annonce->prix ?? 0 }},
+      commune: '{{ addslashes($annonce->commune?->name ?? "") }}',
+      image:   '{{ $annonce->images->first()?->url ?? "" }}'
+    }
+  });
+}
+</script>
 @endsection

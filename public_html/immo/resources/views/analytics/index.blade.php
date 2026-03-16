@@ -32,8 +32,64 @@
     $tarifs = \App\Models\BoostAnnonce::tarifs();
   @endphp
   <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius:16px;">
-    <h6 class="fw-bold mb-3">🚀 Booster mes annonces</h6>
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+      <h6 class="fw-bold mb-0">🚀 Booster mes annonces</h6>
+      <button onclick="document.getElementById('modal-paiement').style.display='flex'" class="btn btn-sm fw-bold"
+              style="background:#0d1c2e;color:#fff;border-radius:8px;font-size:11px;">
+        📱 Payer par Mobile Money
+      </button>
+    </div>
     <p class="text-muted mb-3" style="font-size:13px;">Augmentez la visibilité de vos annonces en les boostant en haut des résultats.</p>
+
+    {{-- Modal paiement Mobile Money --}}
+    <div id="modal-paiement" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);align-items:center;justify-content:center;" onclick="if(event.target===this)this.style.display='none'">
+      <div style="background:#fff;border-radius:20px;padding:28px;max-width:400px;width:90%;position:relative;">
+        <button onclick="document.getElementById('modal-paiement').style.display='none'" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;">×</button>
+        <h6 class="fw-bold mb-4 text-center">📱 Paiement Mobile Money</h6>
+        <p class="text-muted text-center mb-4" style="font-size:13px;">Choisissez votre opérateur et envoyez le montant correspondant à votre boost</p>
+
+        {{-- Wave --}}
+        <div style="background:#f0f7ff;border-radius:14px;padding:16px 20px;margin-bottom:12px;border-left:4px solid #1877F2;">
+          <div class="d-flex align-items-center gap-3 mb-2">
+            <div style="width:40px;height:40px;background:#1877F2;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🌊</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#1877F2;">Wave</div>
+              <div style="font-size:12px;color:#666;">Envoi instantané</div>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:#888;margin-bottom:4px;">NUMÉRO WAVE</div>
+            <div style="font-size:22px;font-weight:800;color:#1877F2;letter-spacing:2px;" onclick="copyNumber(this)">+221 77 000 00 00</div>
+            <div style="font-size:11px;color:#aaa;margin-top:4px;">Cliquez pour copier</div>
+          </div>
+          <div style="font-size:11px;color:#666;margin-top:10px;padding:8px;background:#e8f0fe;border-radius:8px;">
+            💡 Objet du paiement : votre email + type de boost (Standard/Premium/Vedette)
+          </div>
+        </div>
+
+        {{-- Orange Money --}}
+        <div style="background:#fff8f0;border-radius:14px;padding:16px 20px;margin-bottom:20px;border-left:4px solid #FF6600;">
+          <div class="d-flex align-items-center gap-3 mb-2">
+            <div style="width:40px;height:40px;background:#FF6600;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🟠</div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#FF6600;">Orange Money</div>
+              <div style="font-size:12px;color:#666;">Disponible 24h/24</div>
+            </div>
+          </div>
+          <div style="background:#fff;border-radius:10px;padding:12px;text-align:center;">
+            <div style="font-size:11px;color:#888;margin-bottom:4px;">NUMÉRO ORANGE MONEY</div>
+            <div style="font-size:22px;font-weight:800;color:#FF6600;letter-spacing:2px;" onclick="copyNumber(this)">+221 77 000 00 01</div>
+            <div style="font-size:11px;color:#aaa;margin-top:4px;">Cliquez pour copier</div>
+          </div>
+        </div>
+
+        <div style="background:#f8f9fa;border-radius:12px;padding:14px;font-size:12px;color:#555;text-align:center;">
+          Après paiement, envoyez une capture à notre admin via WhatsApp au
+          <strong>+221 77 000 00 02</strong> avec votre annonce.<br>
+          <span style="color:#2E7D32;font-weight:600;">Activation sous 2h maximum.</span>
+        </div>
+      </div>
+    </div>
 
     @if($mesAnnonces->isEmpty())
       <p class="text-muted" style="font-size:13px;">Vous n'avez pas encore d'annonces.</p>
@@ -222,6 +278,36 @@
     </div>
   </div>
 
+  {{-- Section admin : envoyer notification push --}}
+  @php $isAdmin = auth()->user()?->is_admin ?? false; @endphp
+  @if($isAdmin)
+  <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius:16px;">
+    <h6 class="fw-bold mb-3">📢 Envoyer une notification à tous les abonnés</h6>
+    @if(session('success') && str_contains(session('success'), 'Notification'))
+      <div class="alert alert-success rounded-3 mb-3" style="font-size:13px;">{{ session('success') }}</div>
+    @endif
+    <form method="POST" action="{{ route('push.sendAll') }}">
+      @csrf
+      <div class="row g-2">
+        <div class="col-md-4">
+          <input type="text" name="title" class="form-control" placeholder="Titre de la notification" required style="font-size:13px;">
+        </div>
+        <div class="col-md-5">
+          <input type="text" name="body" class="form-control" placeholder="Message (ex: Nouvelle annonce vedette !)" required style="font-size:13px;">
+        </div>
+        <div class="col-md-2">
+          <input type="text" name="url" class="form-control" placeholder="URL (optionnel)" style="font-size:13px;">
+        </div>
+        <div class="col-md-1">
+          <button type="submit" class="btn w-100 fw-bold" style="background:#2E7D32;color:#fff;border-radius:8px;font-size:12px;">
+            Envoyer
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  @endif
+
 </div>
 </section>
 @endsection
@@ -280,5 +366,16 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 });
+</script>
+<script>
+function copyNumber(el) {
+  var num = el.textContent.trim();
+  navigator.clipboard.writeText(num).then(function() {
+    var orig = el.style.color;
+    el.textContent = '✓ Copié !';
+    el.style.color = '#2E7D32';
+    setTimeout(function() { el.textContent = num; el.style.color = orig; }, 2000);
+  }).catch(function() {});
+}
 </script>
 @endsection

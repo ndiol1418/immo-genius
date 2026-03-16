@@ -237,6 +237,7 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'QrCode'    => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
     ],
     "extensions" => [
         "image" => "png;jpg;jpeg",

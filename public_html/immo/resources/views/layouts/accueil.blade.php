@@ -13,9 +13,11 @@
   <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}" sizes="32x32" />
   <link rel="icon" type="image/png" href="{{ asset('favicon-16x16.png') }}" sizes="16x16" />
   <meta name="theme-color" content="#2E7D32">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Teranga Immobilier">
+  <meta name="apple-mobile-web-app-title" content="Teranga">
+  <link rel="apple-touch-icon" href="/img/logo-teranga.png">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -165,6 +167,26 @@
 
 <body class="contact-page">
 
+    {{-- ═══ Indicateur hors ligne ═══ --}}
+    <div id="offline-indicator" style="display:none;position:fixed;top:0;left:0;right:0;z-index:99999;background:#dc3545;color:#fff;text-align:center;padding:7px;font-size:12px;font-weight:700;">
+      📡 Mode hors ligne — Certaines fonctionnalités peuvent ne pas être disponibles
+    </div>
+
+    {{-- ═══ Bannière PWA ═══ --}}
+    <div id="pwa-banner" style="display:none;position:fixed;bottom:70px;left:12px;right:12px;z-index:9990;background:#0d1c2e;color:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 8px 32px rgba(0,0,0,.3);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <img src="/img/logo-teranga.png" style="width:44px;height:44px;border-radius:10px;object-fit:contain;background:#fff;padding:2px;">
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:700;margin-bottom:2px;">📱 Installer l'application Teranga</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.7);">Accès rapide, mode hors ligne, notifications</div>
+        </div>
+        <button id="pwa-install-btn" onclick="installPWA()" style="background:#2E7D32;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">
+          Installer
+        </button>
+        <button onclick="dismissPWA()" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:20px;cursor:pointer;padding:0 4px;line-height:1;">×</button>
+      </div>
+    </div>
+
     @include('template.nav.navBar',['is_inscription'=>isset($is_inscription)?true:false])
 
     <main>
@@ -250,27 +272,30 @@
         }
 
     </style>
-    <!-- Menu Footer Fixe -->
-    <div class="footer-navigation d-block d-sm-none">
-        <ul>
-            <li>
-                <a href="/">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1"><path d="M5 12.76c0-1.358 0-2.037.274-2.634c.275-.597.79-1.038 1.821-1.922l1-.857C9.96 5.75 10.89 4.95 12 4.95s2.041.799 3.905 2.396l1 .857c1.03.884 1.546 1.325 1.82 1.922c.275.597.275 1.276.275 2.634V17c0 1.886 0 2.828-.586 3.414S16.886 21 15 21H9c-1.886 0-2.828 0-3.414-.586S5 18.886 5 17z"/><path stroke-linecap="round" stroke-linejoin="round" d="M14.5 21v-5a1 1 0 0 0-1-1h-3a1 1 0 0 0-1 1v5"/></g></svg>
-                Accueil
-                </a>
-            </li>
-            <li><a href="/louer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" d="m20.516 14.154l-6.362 6.362q-.245.242-.551.363t-.61.121t-.605-.121t-.546-.363L3.48 12.17q-.237-.217-.358-.518q-.121-.3-.121-.632V4.634q0-.674.472-1.154T4.635 3h6.386q.324 0 .629.131t.527.354l8.339 8.344q.25.245.364.551t.114.617t-.114.61t-.364.547m-7.075 5.654l6.361-6.362q.192-.192.192-.452t-.192-.452L11.266 4.02H4.635q-.27 0-.452.173Q4 4.366 4 4.635v6.38q0 .116.039.231q.038.116.134.212l8.364 8.35q.192.192.451.192q.26 0 .453-.192M6.55 7.558q.421 0 .714-.292t.294-.708q0-.425-.292-.722t-.708-.298q-.425 0-.722.295t-.297.717t.295.714t.716.294m5.489 4.48"/></svg>
-            Louer</a></li>
-            <li><a href="/louer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 1024 1024"><path fill="currentColor" d="M704 288h131.072a32 32 0 0 1 31.808 28.8L886.4 512h-64.384l-16-160H704v96a32 32 0 1 1-64 0v-96H384v96a32 32 0 0 1-64 0v-96H217.92l-51.2 512H512v64H131.328a32 32 0 0 1-31.808-35.2l57.6-576a32 32 0 0 1 31.808-28.8H320v-22.336C320 154.688 405.504 64 512 64s192 90.688 192 201.664v22.4zm-64 0v-22.336C640 189.248 582.272 128 512 128s-128 61.248-128 137.664v22.4h256zm201.408 483.84L768 698.496V928a32 32 0 1 1-64 0V698.496l-73.344 73.344a32 32 0 1 1-45.248-45.248l128-128a32 32 0 0 1 45.248 0l128 128a32 32 0 1 1-45.248 45.248"/></svg>
-            Acheter</a></li>
-            <li><a href="/agents">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="6" r="4"/><path d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5Z" opacity="0.5"/></g></svg>
-            
-            Agents</a></li>
-        </ul>
-    </div>
+    {{-- ═══ Bottom Navigation Mobile ═══ --}}
+    <nav class="d-block d-sm-none" id="bottom-nav" style="position:fixed;bottom:0;left:0;right:0;z-index:9980;background:#fff;box-shadow:0 -2px 12px rgba(0,0,0,.1);padding:0;">
+      @php $curPath = request()->path(); @endphp
+      <ul style="display:flex;list-style:none;margin:0;padding:0;">
+        @php
+          $navItems = [
+            ['url'=>'/','label'=>'Accueil','icon'=>'<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"/>','active'=>$curPath===''],
+            ['url'=>'/acheter','label'=>'Rechercher','icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>','active'=>in_array($curPath,['acheter','louer'])],
+            ['url'=>'/favoris','label'=>'Favoris','icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>','active'=>$curPath==='favoris'],
+            ['url'=>auth()->check()?'/mon-profil-agent':'/inscriptions','label'=>'Profil','icon'=>'<path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>','active'=>in_array($curPath,['mon-profil-agent','inscriptions'])],
+          ];
+        @endphp
+        @foreach($navItems as $item)
+        <li style="flex:1;text-align:center;">
+          <a href="{{ $item['url'] }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;text-decoration:none;color:{{ $item['active'] ? '#2E7D32' : '#888' }};font-size:10px;font-weight:{{ $item['active'] ? '700' : '500' }};gap:2px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="{{ $item['active'] ? '#2E7D32' : '#888' }}" stroke-width="1.8">
+              {!! $item['icon'] !!}
+            </svg>
+            {{ $item['label'] }}
+          </a>
+        </li>
+        @endforeach
+      </ul>
+    </nav>
 
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -324,10 +349,69 @@
             @endif
     </script>
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(function(){});
-        }
+    // ─── Service Worker + PWA ─────────────────────────────
+    let deferredPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', e => {
+      e.preventDefault();
+      deferredPrompt = e;
+      if (!localStorage.getItem('pwa-dismissed')) {
+        setTimeout(() => { document.getElementById('pwa-banner').style.display = 'block'; }, 3000);
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      document.getElementById('pwa-banner').style.display = 'none';
+      localStorage.setItem('pwa-dismissed', '1');
+    });
+
+    function installPWA() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(r => {
+        if (r.outcome === 'accepted') localStorage.setItem('pwa-dismissed', '1');
+        document.getElementById('pwa-banner').style.display = 'none';
+        deferredPrompt = null;
+      });
+    }
+
+    function dismissPWA() {
+      document.getElementById('pwa-banner').style.display = 'none';
+      localStorage.setItem('pwa-dismissed', '1');
+    }
+
+    // ─── Service Worker registration ─────────────────────
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(function(){});
+    }
+
+    // ─── Offline indicator ────────────────────────────────
+    function updateOnlineStatus() {
+      const el = document.getElementById('offline-indicator');
+      if (el) el.style.display = navigator.onLine ? 'none' : 'block';
+    }
+    window.addEventListener('online',  updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
     </script>
+
+    {{-- Mobile CSS improvements --}}
+    <style>
+    @media (max-width: 576px) {
+      /* Inputs plus grands sur mobile */
+      .form-control, select.form-control, input.form-control { min-height: 48px !important; font-size: 16px !important; }
+      .btn { min-height: 44px; }
+      /* Padding bas pour le bottom nav */
+      main { padding-bottom: 70px !important; }
+      footer { margin-bottom: 60px !important; }
+      /* Cartes annonces en liste sur mobile */
+      .row.annonces-grid > [class*="col-"] { padding-left: 8px !important; padding-right: 8px !important; }
+      /* Swiper photos */
+      .swiper-container { border-radius: 12px; overflow: hidden; }
+      /* Header caché partiellement sur très petit écran */
+      #header { padding: 4px 0 !important; }
+    }
+    </style>
 
 </body>
 

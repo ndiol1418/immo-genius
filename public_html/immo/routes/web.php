@@ -45,6 +45,15 @@ Route::get('/marche-immobilier/pdf', [App\Http\Controllers\MarcheController::cla
 Route::get('/guide-acheteur', fn() => view('guide.acheteur'))->name('guide.acheteur');
 Route::get('/guide-vendeur', fn() => view('guide.vendeur'))->name('guide.vendeur');
 
+// Offline fallback
+Route::get('/offline', fn() => response()->view('offline')->header('Cache-Control', 'public, max-age=86400'))->name('offline');
+
+// Push Notifications
+Route::get('/notifications', [App\Http\Controllers\PushController::class, 'page'])->name('push.page');
+Route::post('/push/subscribe', [App\Http\Controllers\PushController::class, 'subscribe'])->name('push.subscribe');
+Route::post('/push/unsubscribe', [App\Http\Controllers\PushController::class, 'unsubscribe'])->name('push.unsubscribe');
+Route::middleware(['auth'])->post('/push/send-all', [App\Http\Controllers\PushController::class, 'sendAll'])->name('push.sendAll');
+
 // Inscription
 Route::get('/inscriptions', [App\Http\Controllers\AccueilController::class, 'inscriptionFormShow'])->name('inscriptions');
 Route::post('/inscriptions/create', [App\Http\Controllers\AccueilController::class, 'inscrire'])->name('inscriptions.create');
