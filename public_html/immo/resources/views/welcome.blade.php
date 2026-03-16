@@ -133,8 +133,20 @@
 
 </section><!-- /Services Section -->
 
-{{-- Section Recommandations IA --}}
-@include('recommandations.widget')
+<section id="recommandations" class="py-5">
+  <div class="container">
+    <div class="section-title mb-4" data-aos="fade-up">
+      <h3>🤖 Recommandé pour vous</h3>
+    </div>
+    <div class="row">
+      @foreach($annoncesRecommandees as $annonce)
+        <div class="col-12 col-sm-6 col-lg-3">
+          @include('template.components.card-annonce', ['annonce' => $annonce])
+        </div>
+      @endforeach
+    </div>
+  </div>
+</section>
 
 @include('template.pages.regions',['annonces'=>$annonce_zones])
 <!-- Agents Section -->

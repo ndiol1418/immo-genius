@@ -82,7 +82,7 @@
 
     <!-- Chatbot flottant Vytimo -->
     <style>
-    #vyt-chat-btn{position:fixed;bottom:20px;right:20px;width:52px;height:52px;border-radius:50%;background:#27E3C0;color:#fff;border:none;font-size:22px;cursor:pointer;z-index:9999;box-shadow:0 4px 14px rgba(39,227,192,.5);display:flex;align-items:center;justify-content:center;transition:transform .2s;}
+    #vyt-chat-btn{position:fixed !important;bottom:30px !important;right:30px !important;z-index:99999 !important;width:60px;height:60px;background:#27E3C0;border-radius:50%;border:none;cursor:pointer;font-size:24px;box-shadow:0 4px 15px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#fff;transition:transform .2s;}
     #vyt-chat-btn:hover{transform:scale(1.1);}
     #vyt-chat-win{position:fixed;bottom:82px;right:20px;width:300px;height:400px;background:#fff;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.15);display:flex;flex-direction:column;z-index:9998;overflow:hidden;transform:scale(0);transform-origin:bottom right;transition:transform .25s cubic-bezier(.34,1.56,.64,1);}
     #vyt-chat-win.open{transform:scale(1);}

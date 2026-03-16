@@ -75,10 +75,13 @@ class AccueilController extends Controller
         $apiKey = $this->apiKey;
         $type_locations = TypeLocation::all();
         // event(new MailEvent('inscription:new', 'abnsndoye@gmail.com'));
-        // Recommandations IA pour la page d'accueil
-        $recommandations = (new \App\Services\RecommandationService())->recommander();
+        // 4 annonces recommandées aléatoires
+        $annoncesRecommandees = Annonce::withoutGlobalScope(AnnonceScope::class)
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
 
-        return view('welcome',compact('types','type_immos','annonce_news','agents','annonce_premium','regions','apiKey','annonce_zones','type_locations','recommandations'));
+        return view('welcome',compact('types','type_immos','annonce_news','agents','annonce_premium','regions','apiKey','annonce_zones','type_locations','annoncesRecommandees'));
     }
     public function acheter(){
         $types = Type::actif()->get();
