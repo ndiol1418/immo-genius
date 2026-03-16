@@ -63,7 +63,7 @@ class EstimationController extends Controller
 
         // Tentative précise : même commune + même type de bien
         $annonces = Annonce::withoutGlobalScopes()
-            ->where('status', 1)->where('surface', '>', 0)->where('prix', '>', 0)
+            ->where('status', 1)->where('superficie', '>', 0)->where('prix', '>', 0)
             ->whereHas('type_immo', fn($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($typeBien).'%']))
             ->when($communeId, fn($q) => $q->where('commune_id', $communeId))
             ->get();
@@ -71,14 +71,14 @@ class EstimationController extends Controller
         // Fallback 1 : même commune, tous types
         if ($annonces->count() < 3 && $communeId) {
             $annonces = Annonce::withoutGlobalScopes()
-                ->where('status', 1)->where('surface', '>', 0)->where('prix', '>', 0)
+                ->where('status', 1)->where('superficie', '>', 0)->where('prix', '>', 0)
                 ->where('commune_id', $communeId)->get();
         }
 
         // Fallback 2 : tout le pays, même type
         if ($annonces->count() < 3) {
             $annonces = Annonce::withoutGlobalScopes()
-                ->where('status', 1)->where('surface', '>', 0)->where('prix', '>', 0)
+                ->where('status', 1)->where('superficie', '>', 0)->where('prix', '>', 0)
                 ->whereHas('type_immo', fn($q) => $q->whereRaw('LOWER(name) LIKE ?', ['%'.strtolower($typeBien).'%']))
                 ->get();
         }
@@ -86,10 +86,10 @@ class EstimationController extends Controller
         // Fallback 3 : marché national
         if ($annonces->isEmpty()) {
             $annonces = Annonce::withoutGlobalScopes()
-                ->where('status', 1)->where('surface', '>', 0)->where('prix', '>', 0)->get();
+                ->where('status', 1)->where('superficie', '>', 0)->where('prix', '>', 0)->get();
         }
 
-        $prixParM2 = $annonces->avg(fn($a) => $a->prix / $a->surface) ?: 300000;
+        $prixParM2 = $annonces->avg(fn($a) => $a->superficie > 0 ? $a->prix / $a->superficie : null) ?: 300000;
 
         // ── 2. Coefficient quartier ──────────────────────────────────────────
         $coeffQuartier = 1.0;
@@ -153,10 +153,10 @@ class EstimationController extends Controller
         // ── 9. 3 annonces les plus similaires ───────────────────────────────
         $similaires = Annonce::withoutGlobalScopes()
             ->with(['images', 'commune'])
-            ->where('status', 1)->where('surface', '>', 0)
+            ->where('status', 1)->where('superficie', '>', 0)
             ->when($communeId, fn($q) => $q->where('commune_id', $communeId))
             ->whereBetween('prix', [$result['prix_min'] * 0.7, $result['prix_max'] * 1.3])
-            ->orderByRaw('ABS(surface - ?) ASC', [$surface])
+            ->orderByRaw('ABS(COALESCE(superficie, 0) - ?) ASC', [$surface])
             ->limit(3)
             ->get();
 

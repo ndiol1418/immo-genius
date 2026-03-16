@@ -221,10 +221,10 @@
                     {{ number_format($annonce->prix, 0, ',', ' ') }} CFA
                   </div>
                   <div style="font-size:11px;color:#888;">📍 {{ $annonce->commune?->name ?? '' }}</div>
-                  @if($annonce->surface)
+                  @if($annonce->superficie)
                   <div style="font-size:11px;color:#888;">
-                    📐 {{ $annonce->surface }} m²
-                    &nbsp;·&nbsp; {{ number_format($annonce->prix / $annonce->surface, 0, ',', ' ') }} CFA/m²
+                    📐 {{ $annonce->superficie }} m²
+                    &nbsp;·&nbsp; {{ number_format($annonce->prix / $annonce->superficie, 0, ',', ' ') }} CFA/m²
                   </div>
                   @endif
                 </div>
