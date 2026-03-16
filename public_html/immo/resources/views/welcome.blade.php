@@ -79,20 +79,31 @@
         @endforeach
       </div>
       @endif
-      {{-- Recherches populaires en suggestions rapides --}}
-      @if(isset($recherchesPopulaires) && $recherchesPopulaires->isNotEmpty())
-      <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
-        <span style="font-size:11px;color:#aaa;">🔥 Populaires :</span>
-        @foreach($recherchesPopulaires as $rp)
-          <button type="button" onclick="document.getElementById('inputIA').value='{{ $rp->terme }}';document.getElementById('formRechercheIA').submit()"
-            style="font-size:11px;color:#C49A0C;background:none;border:1px solid #C49A0C;border-radius:20px;padding:2px 10px;cursor:pointer;">
-            {{ $rp->terme }}
-          </button>
-        @endforeach
-      </div>
-      @endif
+      {{-- Les recherches populaires sont affichées en dessous du bloc IA --}}
     </div>
   </form>
+</div>
+
+{{-- 🔥 Recherches populaires --}}
+@php
+$defaultRecherches = ['Villa Dakar', 'Appartement Pikine', 'Studio Médina', 'Duplex Almadies', 'Maison Thiès'];
+$listeRecherches   = (isset($recherchesPopulaires) && $recherchesPopulaires->isNotEmpty())
+    ? $recherchesPopulaires->pluck('terme')->toArray()
+    : $defaultRecherches;
+@endphp
+<div class="container mt-2 mb-3">
+  <div class="d-flex flex-wrap align-items-center gap-2">
+    <span style="font-size:13px;font-weight:700;color:#333;">🔥 Recherches populaires :</span>
+    @foreach($listeRecherches as $terme)
+    <button type="button"
+      onclick="document.getElementById('inputIA').value='{{ $terme }}';document.getElementById('formRechercheIA').submit()"
+      style="background:#fff;border:1.5px solid #2E7D32;border-radius:20px;padding:4px 14px;font-size:12px;color:#2E7D32;cursor:pointer;transition:all .2s;"
+      onmouseover="this.style.background='#2E7D32';this.style.color='#fff'"
+      onmouseout="this.style.background='#fff';this.style.color='#2E7D32'">
+      {{ $terme }}
+    </button>
+    @endforeach
+  </div>
 </div>
 
 <!-- Services Section -->

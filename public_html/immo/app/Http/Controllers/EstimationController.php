@@ -119,20 +119,28 @@ class EstimationController extends Controller
         // ── 6. Prix calculé ──────────────────────────────────────────────────
         $prixEstime = $prixParM2 * $surface * $coeffQuartier * $coeffEtat * $coeffMeuble * $coeffChambres;
 
-        $result = [
-            'prix_min'       => round($prixEstime * 0.85 / 1000) * 1000,
-            'prix_estime'    => round($prixEstime / 1000) * 1000,
-            'prix_max'       => round($prixEstime * 1.15 / 1000) * 1000,
-            'prix_m2'        => round($prixParM2),
-            'nb_annonces'    => $annonces->count(),
-            'commune_name'   => $commune?->name ?? 'Toutes communes',
-        ];
+        $prixMin   = round($prixEstime * 0.85 / 1000) * 1000;
+        $prixMax   = round($prixEstime * 1.15 / 1000) * 1000;
+        $nbAnnonces = $annonces->count();
 
-        // ── 7. Niveau de confiance ───────────────────────────────────────────
-        $nb = $result['nb_annonces'];
-        $result['confiance']       = $nb >= 10 ? 'Élevé' : ($nb >= 3 ? 'Moyen' : 'Faible');
-        $result['confiance_color'] = $nb >= 10 ? '#2E7D32' : ($nb >= 3 ? '#C49A0C' : '#dc3545');
-        $result['confiance_pct']   = $nb >= 10 ? 90 : ($nb >= 3 ? 55 : 25);
+        // ── 7. Niveau de confiance (seuils : >5 = Élevé, 2-5 = Moyen, <2 = Faible)
+        $niveauConfiance      = $nbAnnonces > 5  ? 'Élevé' : ($nbAnnonces >= 2 ? 'Moyen' : 'Faible');
+        $confianceCouleur     = $nbAnnonces > 5  ? '#2E7D32' : ($nbAnnonces >= 2 ? '#C49A0C' : '#dc3545');
+        $confiancePct         = $nbAnnonces > 5  ? 90 : ($nbAnnonces >= 2 ? 55 : 20);
+
+        $result = [
+            'prix_min'       => $prixMin,
+            'prix_estime'    => round($prixEstime / 1000) * 1000,
+            'prix_max'       => $prixMax,
+            'prix_m2'        => round($prixParM2),
+            'nb_annonces'    => $nbAnnonces,
+            'nombreAnnonces' => $nbAnnonces,
+            'commune_name'   => $commune?->name ?? 'Toutes communes',
+            'confiance'      => $niveauConfiance,
+            'niveauConfiance'=> $niveauConfiance,
+            'confiance_color'=> $confianceCouleur,
+            'confiance_pct'  => $confiancePct,
+        ];
 
         // ── 8. Détail des coefficients ───────────────────────────────────────
         $result['detail'] = [
@@ -174,16 +182,26 @@ class EstimationController extends Controller
         }
 
         // ── 11. Compteur hebdomadaire dans la zone ───────────────────────────
-        $estimationsSemaine = 0;
+        $historiqueCount = 0;
         try {
-            $estimationsSemaine = EstimationHistorique::where('created_at', '>=', now()->startOfWeek())
+            $historiqueCount = EstimationHistorique::where('created_at', '>=', now()->startOfWeek())
                 ->when($communeId, fn($q) => $q->where('commune_id', $communeId))
                 ->count();
         } catch (\Exception $e) {}
 
         $communes = Commune::actif()->orderBy('name')->get();
 
-        return view('estimation.index', compact('communes', 'result', 'similaires', 'estimationsSemaine'))
-            ->with('request', $request);
+        return view('estimation.index', compact(
+            'communes',
+            'result',
+            'similaires',
+            'historiqueCount',
+            // Variables individuelles accessibles directement dans la vue
+            'prixEstime',
+            'prixMin',
+            'prixMax',
+            'niveauConfiance',
+            'nbAnnonces'
+        ));
     }
 }

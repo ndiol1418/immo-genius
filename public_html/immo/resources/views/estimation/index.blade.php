@@ -22,6 +22,7 @@
           <form method="POST" action="{{ route('estimation.estimer') }}">
             @csrf
             <div class="row g-3">
+
               <div class="col-md-6">
                 <label class="form-label fw-bold" style="font-size:13px;">Type de bien *</label>
                 <select name="type_bien" class="form-control" required>
@@ -33,25 +34,29 @@
                   <option value="duplex"       @if(old('type_bien')=='duplex') selected @endif>Duplex</option>
                 </select>
               </div>
+
               <div class="col-md-6">
                 <label class="form-label fw-bold" style="font-size:13px;">Surface (m²) *</label>
                 <input type="number" name="surface" class="form-control" min="10"
                   value="{{ old('surface') }}" placeholder="Ex: 120" required>
               </div>
+
               <div class="col-md-6">
                 <label class="form-label fw-bold" style="font-size:13px;">Commune / Quartier</label>
                 <select name="commune_id" class="form-control select2">
                   <option value="">— Toutes communes —</option>
-                  @foreach($communes as $commune)
-                    <option value="{{ $commune->id }}" @if(old('commune_id')==$commune->id) selected @endif>{{ $commune->name }}</option>
+                  @foreach($communes as $c)
+                    <option value="{{ $c->id }}" @if(old('commune_id')==$c->id) selected @endif>{{ $c->name }}</option>
                   @endforeach
                 </select>
               </div>
+
               <div class="col-md-2">
                 <label class="form-label fw-bold" style="font-size:13px;">Chambres</label>
                 <input type="number" name="chambres" class="form-control" min="0" max="20"
                   value="{{ old('chambres', 3) }}" placeholder="3">
               </div>
+
               <div class="col-md-4">
                 <label class="form-label fw-bold" style="font-size:13px;">État du bien</label>
                 <select name="etat" class="form-control">
@@ -61,6 +66,7 @@
                   <option value="a_renover" @if(old('etat')=='a_renover') selected @endif>À rénover (-25%)</option>
                 </select>
               </div>
+
               <div class="col-md-4">
                 <label class="form-label fw-bold" style="font-size:13px;">Mobilier</label>
                 <select name="meuble" class="form-control">
@@ -68,114 +74,129 @@
                   <option value="meuble"     @if(old('meuble')=='meuble') selected @endif>Meublé (+15%)</option>
                 </select>
               </div>
+
               <div class="col-12">
                 <button type="submit" class="btn btn-lg px-5"
                   style="background:#2E7D32;color:#fff;border-radius:10px;font-weight:600;">
                   🤖 Estimer mon bien
                 </button>
               </div>
+
             </div>
           </form>
         </div>
 
-        {{-- Résultat --}}
-        @isset($result)
-
-        @if(isset($estimationsSemaine) && $estimationsSemaine > 0)
-        <div class="mb-3 text-center p-2 rounded-3" style="background:#f1f8e9;font-size:13px;color:#2E7D32;">
-          📊 <strong>{{ $estimationsSemaine }}</strong> estimation(s) faite(s) cette semaine dans la zone <strong>{{ $result['commune_name'] }}</strong>
-        </div>
-        @endif
+        {{-- ═══════════════════════════════════════
+             RÉSULTAT — affiché uniquement après POST
+             ═══════════════════════════════════════ --}}
+        @if($prixEstime ?? false)
 
         <div class="card border-0 shadow-sm p-4 mb-4" style="border-radius:16px;border-left:5px solid #2E7D32 !important;">
 
-          <h6 class="fw-bold mb-1">Résultat de l'estimation</h6>
-          <p class="text-muted mb-3" style="font-size:12px;">
-            Basé sur <strong>{{ $result['nb_annonces'] }}</strong> annonce(s) —
-            Prix/m² moyen : <strong>{{ number_format($result['prix_m2'], 0, ',', ' ') }} CFA/m²</strong>
+          <h6 class="fw-bold mb-3">📋 Résultat de l'estimation</h6>
+
+          {{-- Message 1 : nombre d'annonces similaires --}}
+          <p style="font-size:13px;color:#555;margin-bottom:6px;">
+            📊 Basé sur <strong>{{ $nbAnnonces }}</strong> annonce(s) similaires dans votre zone
           </p>
 
-          {{-- Fourchette --}}
+          {{-- Message 2 : compteur hebdomadaire --}}
+          @if(isset($historiqueCount) && $historiqueCount > 0)
+          <p style="font-size:13px;color:#2E7D32;margin-bottom:16px;">
+            🗓️ <strong>{{ $historiqueCount }}</strong> estimation(s) faites cette semaine dans cette commune
+          </p>
+          @else
+          <div style="margin-bottom:16px;"></div>
+          @endif
+
+          {{-- Fourchette de prix : [Min] ──●── [Max] --}}
           <div class="row g-3 text-center mb-3">
             <div class="col-4">
               <div class="rounded-3 p-3" style="background:#f8f9fa;">
-                <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Minimum</div>
-                <div style="font-size:15px;font-weight:700;color:#6c757d;">{{ number_format($result['prix_min'], 0, ',', ' ') }}</div>
+                <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Min</div>
+                <div style="font-size:14px;font-weight:700;color:#6c757d;">{{ number_format($prixMin, 0, ',', ' ') }}</div>
                 <div style="font-size:10px;color:#aaa;">CFA</div>
               </div>
             </div>
             <div class="col-4">
               <div class="rounded-3 p-3" style="background:#0d1c2e;color:#fff;transform:scale(1.05);box-shadow:0 6px 24px rgba(0,0,0,.25);">
                 <div style="font-size:10px;opacity:.7;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Estimation IA</div>
-                <div style="font-size:22px;font-weight:800;color:#4CAF50;">{{ number_format($result['prix_estime'], 0, ',', ' ') }}</div>
+                <div style="font-size:22px;font-weight:800;color:#4CAF50;">{{ number_format($prixEstime, 0, ',', ' ') }}</div>
                 <div style="font-size:10px;opacity:.6;">CFA</div>
               </div>
             </div>
             <div class="col-4">
               <div class="rounded-3 p-3" style="background:#f8f9fa;">
-                <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Maximum</div>
-                <div style="font-size:15px;font-weight:700;color:#6c757d;">{{ number_format($result['prix_max'], 0, ',', ' ') }}</div>
+                <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Max</div>
+                <div style="font-size:14px;font-weight:700;color:#6c757d;">{{ number_format($prixMax, 0, ',', ' ') }}</div>
                 <div style="font-size:10px;color:#aaa;">CFA</div>
               </div>
             </div>
           </div>
 
-          {{-- Barre de progression --}}
+          {{-- Barre de progression colorée --}}
           <div class="mb-4 px-1">
-            <div style="position:relative;height:10px;background:#e9ecef;border-radius:10px;overflow:visible;">
+            <div style="position:relative;height:10px;background:#e9ecef;border-radius:10px;">
               <div style="height:100%;width:100%;background:linear-gradient(to right,#ccc,#2E7D32,#ccc);border-radius:10px;"></div>
               <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;background:#fff;border:3px solid #2E7D32;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.2);"></div>
             </div>
             <div class="d-flex justify-content-between mt-1" style="font-size:10px;color:#aaa;">
-              <span>{{ number_format($result['prix_min'], 0, ',', ' ') }} CFA</span>
-              <span>{{ number_format($result['prix_max'], 0, ',', ' ') }} CFA</span>
+              <span>{{ number_format($prixMin, 0, ',', ' ') }} CFA</span>
+              <span>{{ number_format($prixMax, 0, ',', ' ') }} CFA</span>
             </div>
           </div>
 
-          {{-- Niveau de confiance --}}
+          {{-- Badge niveau de confiance --}}
+          @php
+            $confianceCouleur = $result['confiance_color'] ?? '#888';
+            $confiancePct     = $result['confiance_pct']   ?? 50;
+          @endphp
           <div class="d-flex align-items-center gap-3 p-3 rounded-3 mb-3" style="background:#f8f9fa;">
-            <div style="min-width:90px;">
-              <div style="font-size:10px;color:#888;margin-bottom:2px;">Niveau de confiance</div>
-              <div class="fw-bold" style="color:{{ $result['confiance_color'] }};font-size:17px;">
-                {{ $result['confiance'] }}
-              </div>
+            <div>
+              <div style="font-size:10px;color:#888;margin-bottom:3px;">Niveau de confiance</div>
+              <span class="badge px-3 py-2" style="background:{{ $confianceCouleur }};font-size:13px;border-radius:8px;">
+                {{ $niveauConfiance }}
+              </span>
             </div>
             <div class="flex-grow-1">
               <div style="height:8px;background:#e9ecef;border-radius:8px;overflow:hidden;">
-                <div style="height:100%;width:{{ $result['confiance_pct'] }}%;background:{{ $result['confiance_color'] }};border-radius:8px;"></div>
+                <div style="height:100%;width:{{ $confiancePct }}%;background:{{ $confianceCouleur }};border-radius:8px;"></div>
               </div>
               <div style="font-size:10px;color:#aaa;margin-top:3px;">
-                @if($result['confiance'] == 'Élevé') Données de marché abondantes
-                @elseif($result['confiance'] == 'Moyen') Quelques références disponibles
+                @if($niveauConfiance == 'Élevé') Données de marché abondantes
+                @elseif($niveauConfiance == 'Moyen') Quelques références disponibles
                 @else Peu de données dans cette zone
                 @endif
-                — {{ $result['nb_annonces'] }} annonce(s) analysée(s)
+                — {{ $nbAnnonces }} annonce(s) analysée(s)
               </div>
             </div>
           </div>
 
-          {{-- Détail coefficients (collapsable) --}}
-          <div>
-            <button class="btn btn-sm p-0 text-decoration-none" style="font-size:12px;color:#2E7D32;background:none;border:none;"
+          {{-- Détail des coefficients (collapsable) --}}
+          @if(isset($result['detail']))
+          <div class="mb-3">
+            <button type="button" style="font-size:12px;color:#2E7D32;background:none;border:none;padding:0;cursor:pointer;"
               onclick="var el=document.getElementById('detailCoeffs');el.style.display=el.style.display==='none'?'block':'none'">
-              🔍 Voir le détail des coefficients appliqués ▾
+              🔍 Voir le détail des coefficients ▾
             </button>
             <div id="detailCoeffs" style="display:none;margin-top:8px;">
               <table class="table table-sm mb-0" style="font-size:12px;">
                 <tbody>
                   @foreach($result['detail'] as $row)
+                  @php
+                    $val   = $row['valeur'];
+                    $color = (strpos($val, '+') === 0) ? '#2E7D32' : ((strpos($val, '-') === 0) ? '#dc3545' : '#333');
+                  @endphp
                   <tr>
-                    <td class="text-muted border-0">{{ $row['label'] }}</td>
-                    <td class="fw-bold text-end border-0"
-                      style="color:{{ str_starts_with($row['valeur'],'+') ? '#2E7D32' : (str_starts_with($row['valeur'],'-') ? '#dc3545' : '#333') }}">
-                      {{ $row['valeur'] }}
-                    </td>
+                    <td class="text-muted" style="border:none;">{{ $row['label'] }}</td>
+                    <td class="fw-bold text-end" style="border:none;color:{{ $color }};">{{ $val }}</td>
                   </tr>
                   @endforeach
                 </tbody>
               </table>
             </div>
           </div>
+          @endif
 
           <hr class="my-3">
           <p class="text-muted mb-0" style="font-size:11px;">⚠️ Estimation indicative basée sur les données du marché. Consultez un agent Teranga pour une évaluation précise.</p>
@@ -214,7 +235,7 @@
         </div>
         @endif
 
-        @endisset
+        @endif {{-- fin @if($prixEstime ?? false) --}}
 
       </div>
     </div>
