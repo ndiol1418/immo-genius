@@ -1,4 +1,16 @@
-@if(isset($recommandations) && $recommandations->isNotEmpty())
+@php
+    // Fallback : si $recommandations n'est pas fourni par le contrôleur,
+    // on charge 4 annonces aléatoires directement depuis la BD
+    if (!isset($recommandations) || $recommandations->isEmpty()) {
+        $recommandations = \App\Models\Annonce::withoutGlobalScope(\App\Scopes\AnnonceScope::class)
+            ->with('images')
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+    }
+@endphp
+
+@if($recommandations->isNotEmpty())
 <section class="py-4" style="background:#f8fffe;">
   <div class="container">
     <div class="d-flex align-items-center gap-2 mb-3">
@@ -6,7 +18,7 @@
       <div>
         <h5 class="mb-0 fw-bold" style="color:#0d1c2e;">Recommandé pour vous</h5>
         <p class="mb-0" style="font-size:12px;color:#888;">
-          @auth Basé sur votre historique de navigation @else Basé sur votre session @endauth
+          @auth Sélectionné selon votre historique @else Sélectionné pour vous @endauth
         </p>
       </div>
     </div>

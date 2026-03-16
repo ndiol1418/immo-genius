@@ -132,6 +132,10 @@
     </div>
 
 </section><!-- /Services Section -->
+
+{{-- Section Recommandations IA --}}
+@include('recommandations.widget')
+
 @include('template.pages.regions',['annonces'=>$annonce_zones])
 <!-- Agents Section -->
 <section id="agents" class="agents section mb-4">
@@ -156,9 +160,6 @@
     </div><!-- End Section Title -->
 
 </section><!-- /Agents Section -->
-
-{{-- Section Recommandations IA --}}
-@include('recommandations.widget')
 
 <!-- Testimonials Section -->
 <section id="testimonials" class="testimonials section d-none">
