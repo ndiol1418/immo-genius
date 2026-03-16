@@ -4,7 +4,7 @@
       <div class="row gy-3">
 
         <div class="col-lg-4 col-md-6">
-          <img src="{{ asset('img/logo-teranga.png') }}" alt="Teranga Immobilier" height="60">
+          <img src="{{ asset('img/logo-teranga.png') }}" alt="Teranga Immobilier" style="height:90px;max-width:260px;object-fit:contain;">
         </div>
         <div class="col-lg-2 col-md-6">
           <h4>Acheter</h4>

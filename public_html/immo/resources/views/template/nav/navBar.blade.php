@@ -18,7 +18,7 @@ $ref = isset($explode_path[1]) ? $explode_path[1] : null;
 
       <a href="/" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-         <img src="{{ asset('img/logo-teranga.png') }}" alt="">
+         <img src="{{ asset('img/logo-teranga.png') }}" alt="Teranga Immobilier" style="height:70px;max-width:220px;object-fit:contain;">
         {{-- <h1 class="sitename">VITTY<span>IMMO</span></h1> --}}
         {{-- <h1 class="sitename text-secondary">VYT<span>IMO</span></h1> --}}
       </a>
@@ -90,7 +90,7 @@ $ref = isset($explode_path[1]) ? $explode_path[1] : null;
             </li>
           @else
           {{-- <li><a href="{{ route('login') }}" class="d-block d-sm-none btn btn-xs btn-primary text-white mb-2 btn-style">Se connecter</a></li> --}}
-          <li><a href="{{ route('inscriptions') }}" class="d-block d-sm-none btn btn-xs btn-secondary text-white btn-style">Se connecter</a></li>
+          <li><a href="{{ route('inscriptions') }}" class="d-block d-sm-none btn btn-xs btn-style" style="background:#2E7D32 !important;color:#fff !important;">Se connecter</a></li>
           <li>
             @include('template.nav.btnNav',['css'=>'d-block d-sm-none'])
 
@@ -100,13 +100,13 @@ $ref = isset($explode_path[1]) ? $explode_path[1] : null;
             @include('template.nav.btnNav',['css'=>'d-none d-sm-block d-md-none'])
 
             </li>
-            <li><a href="{{ route('inscriptions') }}" class="d-none d-sm-block d-md-none  btn btn-xs btn-secondary text-white btn-style" style="border-radius: 30px">Se connecter</a></li>
+            <li><a href="{{ route('inscriptions') }}" class="d-none d-sm-block d-md-none btn btn-xs btn-style" style="border-radius:30px;background:#2E7D32 !important;color:#fff !important;">Se connecter</a></li>
             
             {{-- <li><a href="{{ route('login') }}" class="d-none d-md-block d-lg-none  btn btn-xs btn-primary text-white mb-2 btn-style" style="border-radius: 30px">Se connecter</a></li> --}}
             <li>
               @include('template.nav.btnNav',['css'=>'d-none d-md-block d-lg-none'])
             </li>
-            <li><a href="{{ route('inscriptions') }}" class="d-none d-md-block d-lg-none  btn btn-xs btn-secondary text-white btn-style">Se connecter</a></li>
+            <li><a href="{{ route('inscriptions') }}" class="d-none d-md-block d-lg-none btn btn-xs btn-style" style="background:#2E7D32 !important;color:#fff !important;">Se connecter</a></li>
           @endif
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -138,7 +138,7 @@ $ref = isset($explode_path[1]) ? $explode_path[1] : null;
           @else
             @if(!$is_inscription)
               {{-- @include('template.nav.btnNav') --}}
-              <a href="" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#staticBackdrop" style="border-radius: 11px">
+              <a href="" class="btn btn-sm" data-toggle="modal" data-target="#staticBackdrop" style="border-radius:11px;background:#2E7D32 !important;color:#fff !important;">
                 Se connecter
               </a>
               

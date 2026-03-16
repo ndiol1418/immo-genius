@@ -87,13 +87,13 @@
     position: absolute;
     z-index: 10;
     border: 1px solid #fff;
-    background: #fff;
-    font-size: 11px;
+    background: #2E7D32;
+    color: #fff;
+    font-size: 10px;
     border-radius: 10px;
     padding: 0px 15px;
     top: 10;
     left: 10;
-font-size: 10px;
     font-weight: bold;
     margin-top: 25px;
 }
