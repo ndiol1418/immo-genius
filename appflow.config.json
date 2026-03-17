@@ -1,21 +1,10 @@
 {
   "appId": "com.teranga.immobilier",
   "appName": "Teranga Immobilier",
-  "webDir": "public",
-  "bundledWebRuntime": false,
-  "server": {
-    "url": "https://votre-domaine.com",
-    "cleartext": true
+  "webDir": "public_html/immo/public",
+  "type": "capacitor",
+  "integrations": {
+    "capacitor": {}
   },
-  "android": {
-    "allowMixedContent": true,
-    "minSdkVersion": 22,
-    "targetSdkVersion": 33
-  },
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 3000,
-      "backgroundColor": "#2E7D32"
-    }
-  }
+  "defaultCapacitorVersion": 5
 }
