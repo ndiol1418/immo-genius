@@ -10181,3 +10181,23 @@ input[type="search"] {
   color-scheme: light !important;
   -webkit-text-fill-color: #333333 !important;
 }
+
+/* ── Fix fond noir champ Lieu – Bootstrap 5.3 dark color-scheme ─────────── */
+:root { color-scheme: light only !important; }
+
+input[id="ship-address"],
+input.pac-target-input,
+input[type="search"] {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  color: #333333 !important;
+  color-scheme: light only !important;
+  -webkit-text-fill-color: #333333 !important;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+}
+input[id="ship-address"]:-webkit-autofill,
+input.pac-target-input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #333333 !important;
+}

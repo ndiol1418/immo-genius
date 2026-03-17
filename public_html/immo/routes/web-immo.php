@@ -95,6 +95,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/disponibilites/{creneau}/reserver', [App\Http\Controllers\DisponibiliteController::class, 'reserver'])->name('disponibilite.reserver');
 });
 
+// RDV public (sans auth obligatoire)
+Route::post('/rendez-vous/store', [App\Http\Controllers\RendezVousController::class, 'store'])->name('rdv.store');
+
+// Message direct à un agent
+Route::post('/agent/{fournisseur_id}/message', [App\Http\Controllers\RendezVousController::class, 'sendMessage'])->name('agent.message')->middleware('auth');
+
 // Gestion Locative
 Route::middleware(['auth'])->group(function () {
     Route::get('/gestion-locative', [App\Http\Controllers\GestionLocativeController::class, 'index'])->name('gestion-locative.index');

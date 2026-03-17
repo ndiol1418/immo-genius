@@ -1,31 +1,59 @@
-<style>
-    .text-sm{font-size: 12px}
+@php
+    $noteVal   = $note ?? 0;
+    $nbEtoiles = round($noteVal);
+    $telRaw    = preg_replace('/[^0-9]/', '', $tel ?? '');
+    $telValide = strlen($telRaw) >= 8;
+    $dispColor = match($dispo ?? '') {
+        'disponible' => '#2E7D32', 'occupe' => '#C49A0C', 'conge' => '#dc3545', default => '#aaa'
+    };
+    $dispLabel = match($dispo ?? '') {
+        'disponible' => 'Disponible', 'occupe' => 'Occupé', 'conge' => 'En congé', default => null
+    };
+@endphp
+<div class="card h-100" style="border-radius:12px;border:1px solid #e8e8e8;overflow:hidden;transition:box-shadow .2s;" onmouseover="this.style.boxShadow='0 4px 18px rgba(0,0,0,.12)'" onmouseout="this.style.boxShadow='none'">
+    <div class="card-body p-3 d-flex flex-column align-items-center text-center">
 
-</style>
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-12 d-flex justify-content-between">
-                <div class="img">
-                    <img src="{{ asset($img??'img/user.png') }}" alt="" width="100%" style="height:50px;width:50px;object-fit:cover;">
-                </div>
-                <span>
-                    <span style="font-size: 10px">{{ $note??4.7 }}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 128 128"><path fill="#fdd835" d="m68.05 7.23l13.46 30.7a7.05 7.05 0 0 0 5.82 4.19l32.79 2.94c3.71.54 5.19 5.09 2.5 7.71l-24.7 20.75c-2 1.68-2.91 4.32-2.36 6.87l7.18 33.61c.63 3.69-3.24 6.51-6.56 4.76L67.56 102a7.03 7.03 0 0 0-7.12 0l-28.62 16.75c-3.31 1.74-7.19-1.07-6.56-4.76l7.18-33.61c.54-2.55-.36-5.19-2.36-6.87L5.37 52.78c-2.68-2.61-1.2-7.17 2.5-7.71l32.79-2.94a7.05 7.05 0 0 0 5.82-4.19l13.46-30.7c1.67-3.36 6.45-3.36 8.11-.01"/><path fill="#ffff8d" d="m67.07 39.77l-2.28-22.62c-.09-1.26-.35-3.42 1.67-3.42c1.6 0 2.47 3.33 2.47 3.33l6.84 18.16c2.58 6.91 1.52 9.28-.97 10.68c-2.86 1.6-7.08.35-7.73-6.13"/><path fill="#f4b400" d="M95.28 71.51L114.9 56.2c.97-.81 2.72-2.1 1.32-3.57c-1.11-1.16-4.11.51-4.11.51l-17.17 6.71c-5.12 1.77-8.52 4.39-8.82 7.69c-.39 4.4 3.56 7.79 9.16 3.97"/></svg>
-                </span>
-            </div>
-            <div class="col-12 text-sm">
-                <p style="white-space: nowrap;text-overflow:ellipsis;overflow:hidden" title="{{ $title??'' }}">{{ $title??'' }}</p>
-            </div>
-            <div class="col-12 text-sm">{{ $info??'' }}</div>
-            <div class="col-12">
-
-                @include('template.components.c_button',[
-                    'title'=>'contacter',
-                    'bg'=>'white border text-sm',
-                    'color'=>'dark',
-                ])
-            </div>
+        {{-- Avatar --}}
+        <div class="position-relative mb-2">
+            <img src="{{ $img ?? 'https://ui-avatars.com/api/?name=Agent&background=2E7D32&color=fff&size=128&bold=true' }}"
+                 alt="{{ $title ?? 'Agent' }}"
+                 style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:3px solid #2E7D32;">
+            @if($dispLabel)
+            <span style="position:absolute;bottom:2px;right:2px;width:13px;height:13px;border-radius:50%;background:{{ $dispColor }};border:2px solid #fff;" title="{{ $dispLabel }}"></span>
+            @endif
         </div>
+
+        {{-- Nom --}}
+        <p class="mb-0 fw-semibold" style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;" title="{{ $title ?? '' }}">{{ $title ?? '' }}</p>
+
+        {{-- Spécialité --}}
+        @if(!empty($specialite))
+        <span style="font-size:10px;color:#2E7D32;font-weight:600;">{{ $specialite }}</span>
+        @endif
+
+        {{-- Étoiles + note --}}
+        <div class="d-flex align-items-center gap-1 my-1">
+            @for($i = 1; $i <= 5; $i++)
+                <span style="font-size:12px;color:{{ $i <= $nbEtoiles ? '#f5a623' : '#ccc' }};">★</span>
+            @endfor
+            <span style="font-size:11px;color:#666;">({{ number_format($noteVal, 1) }})</span>
+        </div>
+
+        {{-- Propriétés --}}
+        <p class="mb-1" style="font-size:11px;color:#888;">{{ $info ?? '' }}</p>
+
+        {{-- Badge dispo --}}
+        @if($dispLabel)
+        <span class="mb-2" style="font-size:10px;padding:2px 8px;border-radius:20px;background:{{ $dispColor }}22;color:{{ $dispColor }};border:1px solid {{ $dispColor }}44;">● {{ $dispLabel }}</span>
+        @endif
+
+        {{-- Boutons --}}
+        <div class="d-flex gap-1 w-100 mt-auto">
+            <a href="{{ $profil_url ?? '#' }}" class="btn btn-success btn-sm flex-fill" style="font-size:11px;">Voir profil</a>
+            @if($telValide)
+            <a href="tel:{{ $tel }}" class="btn btn-sm flex-fill" style="font-size:11px;border:1px solid #2E7D32;color:#2E7D32;background:#fff;">Contacter</a>
+            @endif
+        </div>
+
     </div>
 </div>

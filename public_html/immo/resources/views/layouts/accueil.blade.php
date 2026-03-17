@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 
 <head>
   <meta charset="utf-8">
@@ -116,11 +116,28 @@
         /*box-shadow: inset 0 0 1px #ccc;*/
     }
     .col-form-label{font-size: 14px}
+    /* Force thème clair global — bloque le rendu sombre natif du navigateur */
+    :root {
+        color-scheme: light only !important;
+    }
     /* Fix champ Lieu (ship-address) */
-    input#ship-address, input[id="ship-address"] {
+    input#ship-address,
+    input[id="ship-address"],
+    input.pac-target-input,
+    input[type="search"] {
         background-color: #ffffff !important;
+        background: #ffffff !important;
         color: #333333 !important;
-        color-scheme: light !important;
+        color-scheme: light only !important;
+        -webkit-text-fill-color: #333333 !important;
+        -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+        box-shadow: 0 0 0 1000px #ffffff inset !important;
+    }
+    /* Fix autofill Chrome/Safari */
+    input#ship-address:-webkit-autofill,
+    input[id="ship-address"]:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+        -webkit-text-fill-color: #333333 !important;
     }
     /* Google Places Autocomplete dropdown */
     .pac-container {
