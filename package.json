@@ -1,0 +1,12 @@
+{
+  "name": "teranga-immobilier",
+  "version": "1.0.0",
+  "description": "Plateforme immobilière Teranga",
+  "scripts": {
+    "build": "echo 'Build Laravel'"
+  },
+  "dependencies": {
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/core": "^5.0.0"
+  }
+}

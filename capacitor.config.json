@@ -1,0 +1,12 @@
+{
+  "appId": "com.teranga.immobilier",
+  "appName": "Teranga Immobilier",
+  "webDir": "public",
+  "server": {
+    "url": "http://10.0.2.2:8001",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}
