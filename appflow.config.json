@@ -4,7 +4,8 @@
   "webDir": "public_html/immo/public",
   "type": "capacitor",
   "integrations": {
-    "capacitor": {}
-  },
-  "defaultCapacitorVersion": 5
+    "capacitor": {
+      "enabled": true
+    }
+  }
 }
