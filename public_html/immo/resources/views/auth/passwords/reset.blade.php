@@ -4,7 +4,7 @@
     <div class="card card__login py-4 px-3 shadow-sm  @error('email') @else animate__animated animate__fadeInDown @enderror">
         <div class="card-header bg-white border-0 pt-3">
             <div class="logo d-flex justify-content-between align-items-center">
-                <img src="{{ asset('img/logo_total.png') }}" alt="logo">
+                <img src="{{ asset('img/logo-teranga.png') }}" alt="Teranga Immobilier" style="height:60px; width:auto;">
             </div>
             <h3 class="title">
                 Réinitialisez votre mot de passe

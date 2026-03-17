@@ -262,8 +262,14 @@
             </div>
 
             <div class="col-lg-4 col-12">
-              @include('template.components.premium-agent',['tel'=>$annonce->immo->fournisseur?$annonce->immo->fournisseur->telephone:env('tel'),
-              'nom_complet'=>$annonce->immo->fournisseur?$annonce->immo->fournisseur->nom_complet:'---','agent_id'=>$annonce->immo->fournisseur?$annonce->immo->fournisseur->id:null])
+              @php
+                $annonceAgent = $annonce->fournisseur ?? $annonce->immo?->fournisseur;
+              @endphp
+              @include('template.components.premium-agent',[
+                'tel'          => $annonceAgent?->telephone ?? env('tel'),
+                'nom_complet'  => $annonceAgent?->nom_complet ?? '---',
+                'agent_id'     => $annonceAgent?->id ?? null,
+              ])
             </div>
           </div>
 

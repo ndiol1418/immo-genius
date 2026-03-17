@@ -5,8 +5,8 @@
         'i'=>$i,
         'id'=>$i,
         'param'=>'CFA',
-        'titre'=>$annonce->immo->name,
-        'adresse'=>$annonce->commune?($annonce->adresse??'---').', '.$annonce->commune->name.', '.$annonce->commune->departement->name:$annonce->adresse
+        'titre'=>$annonce->immo?->name ?? $annonce->adresse,
+        'adresse'=>$annonce->commune ? ($annonce->adresse ?? '').', '.$annonce->commune->name.', '.($annonce->commune->departement?->name ?? '') : ($annonce->adresse ?? '')
 
     ])
 @endforeach

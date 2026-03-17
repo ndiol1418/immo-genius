@@ -11,11 +11,11 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <!-- Font Awesome Icons -->
-        <link rel="stylesheet" href="{{ asset('css/biblio/fontawesome-free/css/all.min.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" >
-        <link href="{{ asset('css/custum.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/biblio/animate.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
         <link rel="manifest" href="{{ asset('manifest.json') }}" />
     </head>
     <body>
@@ -41,7 +41,8 @@
 
 <style>
     #login-container{
-        background-image: url({{ asset('img/bg-cnx11.jpg') }}) !important;
+        background-color: #2E7D32;
+        background-image: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
         background-repeat: no-repeat;
         background-size: cover;
         height: calc(100vh - 28px);

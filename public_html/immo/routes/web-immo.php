@@ -26,6 +26,7 @@ Route::post('/search', [App\Http\Controllers\SearchController::class, 'search'])
 Route::post('/search-more', [App\Http\Controllers\SearchController::class, 'searchMore'])->name('annonce.searchMore');
 
 // Favoris
+Route::get('/favoris', fn() => redirect()->route('favoris.index'))->name('favoris.redirect');
 Route::middleware(['auth'])->group(function () {
     Route::post('/favoris/toggle/{annonce_id}', [App\Http\Controllers\FavorisController::class, 'toggle'])->name('favoris.toggle');
     Route::get('/mes-favoris', [App\Http\Controllers\FavorisController::class, 'index'])->name('favoris.index');

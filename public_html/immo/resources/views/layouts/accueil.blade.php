@@ -30,7 +30,7 @@
   <link href="{{ asset("assets/biblio/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet">
   <link href="{{ asset("assets/biblio/bootstrap-icons/bootstrap-icons.css") }}" rel="stylesheet">
   <link href="{{ asset("assets/biblio/aos/aos.css") }}" rel="stylesheet">
-  <link href="{{ asset("assets/biblio/fontawesome-free/css/all.min.css") }}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="{{ asset("assets/biblio/swiper/swiper-bundle.min.css") }}" rel="stylesheet">
   <link rel="manifest" href="{{ asset('manifest.json') }}" />
   <link href="{{ asset('assets/css/map.css') }}" rel="stylesheet">
@@ -152,7 +152,7 @@
   <!-- Main CSS File -->
   <link href="{{ asset("assets/css/style.css") }}" rel="stylesheet">
   <link href="{{ asset("assets/css/main.css") }}" rel="stylesheet">
-  <link href="{{ asset('css/biblio/select2.min.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
   <link href="{{ asset('css/step.css') }}" rel="stylesheet">
   <link href="{{ asset('css/inputFlotant.css') }}" rel="stylesheet">
 

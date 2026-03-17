@@ -2,7 +2,7 @@
 <link href="{{ asset("assets/css/agent.css") }}" rel="stylesheet">
 
 @php
-    $agentPhoto   = $agent->user->image ? asset($agent->user->image->url) : asset('img/agent-default.png');
+    $agentPhoto   = asset($agent->picture);
     $zonesNoms    = $agent->mes_zones()->pluck('name')->implode(', ');
     $bioText      = Str::limit(strip_tags($agent->bio ?? $agent->description ?? ''), 155)
                     ?: "Agent immobilier spécialisé à {$zonesNoms}. Contactez {$agent->nom_complet} pour vos projets d'achat ou de location.";
@@ -122,7 +122,7 @@
         <div class="left-column">
             <div class="profile-card d-flex justify-content-between align-items-center">
                 <div class="profile-photo">
-                    <img src="{{ asset($agent->user->image?$agent->user->image->url:'/img/agent-default.png') }}" alt="{{ $agent->nom_complet }}">
+                    <img src="{{ asset($agent->picture) }}" alt="{{ $agent->nom_complet }}">
                 </div>
                 <div class="profile-details">
                     <div class="profile-info">
@@ -158,7 +158,7 @@
                         <p class="text-sm">{{ Str::limit($agent->bio, 230) }}</p>
 
                     </div>
-                    <img class="agency-logo" src="{{ asset($agent->user->image?$agent->user->image->url:'/img/agence-default.png') }}" alt="Logo agence">
+                    <img class="agency-logo" src="{{ asset($agent->picture) }}" alt="Logo agence">
                 </div>
             </div>
 
@@ -379,7 +379,7 @@
                     </div>
                 </div>
                 {{-- <div class="contact-agency">
-                    <img class="contact-agency-logo" src="{{ asset($agent->user->image?$agent->user->image->url:'/img/agence-default.png') }}" alt="Logo agence">
+                    <img class="contact-agency-logo" src="{{ asset($agent->picture) }}" alt="Logo agence">
                 </div> --}}
                 <div class="contact-actions">
                     <div class="contact-action">

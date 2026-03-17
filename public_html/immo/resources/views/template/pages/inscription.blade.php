@@ -76,10 +76,7 @@
                                 @endif
                             </div>
                             <div class="form-group text-right mt-2">
-                                    <button type="submit" class="btn btn-primary btn-block shadow-sm g-recaptcha"
-                                        {{-- data-sitekey="6Le0Hp4pAAAAAKgWHvh73Hdsn2DyEvzLle1mgo9_"
-                                        data-callback='onSubmit'
-                                        data-action='submit' --}}
+                                    <button type="submit" class="btn btn-primary btn-block shadow-sm"
                                     >
                                         {{ __("Valider") }}
                                     </button>
@@ -97,12 +94,6 @@
 @endsection
 
 @section('scriptBottom')
-<script src="https://www.google.com/recaptcha/api.js"></script>
-    <script>
-        function onSubmit(token) {
-        document.getElementById("demo-form").submit();
-        }
-    </script>
     <script>
         $(function() {
             $("#password").on('change keyup', function(e) {
@@ -110,10 +101,6 @@
                 $(this).val(sanitizePassword);
             });
         });
-
-        var onloadCallback = function() {
-            alert("grecaptcha is ready!");
-        };
     </script>
 @endsection
 

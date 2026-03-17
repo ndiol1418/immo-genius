@@ -80,7 +80,7 @@
                 @include('template.components.c_agent',[
                   'title'=>$agent->nom_complet,
                   'info'=>$agent->annonces->count()?'+'.$agent->annonces->count().' proprieté(s)':' aucune proprieté',
-                  'img'=>$agent->picture!=null?$agent->picture:'img/user.png',
+                  'img'=>$agent->picture,
                   'tel'=>$agent->telephone,
                 ])
 

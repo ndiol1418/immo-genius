@@ -73,7 +73,10 @@ class Fournisseur extends Model
     }
 
     public function getPictureAttribute(){
-        return $this->user->image?$this->user->image->url:null;
+        if ($this->user && $this->user->image) {
+            return $this->user->image->url;
+        }
+        return 'https://ui-avatars.com/api/?name='.urlencode(($this->prenom ?? '').' '.($this->nom ?? '')).'&background=2E7D32&color=fff&size=128';
     }
     public function agent_specialisations(){
         return $this->hasMany(AgentSpecialisation::class,'fournisseur_id');

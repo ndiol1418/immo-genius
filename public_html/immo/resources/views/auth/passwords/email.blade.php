@@ -8,7 +8,7 @@
         <div class="card-header bg-white border-0 pt-3">
             <div class="logo d-flex justify-content-between align-items-center">
                 <a href="{{ url()->previous() }}" class="btn btn-outline-primary px-4"><i class="fas fa-long-arrow-alt-left"></i></a>
-                <img src="{{ asset('img/logo_total.png') }}" alt="logo">
+                <img src="{{ asset('img/logo-teranga.png') }}" alt="Teranga Immobilier" style="height:60px; width:auto;">
             </div>
 
             <h3 class="title">

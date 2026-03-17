@@ -5,7 +5,7 @@
         <div class="card-header bg-white border-0 pt-3">
             <div class="logo d-flex justify-content-between align-items-center mb-0">
                 <a href="/" class="btn btn-outline-light2 px-0">{{ config('app.name', 'E-COMMANDE') }}</a>
-                <img src="{{ asset('img/logo_total.png') }}" alt="logo">
+                <img src="{{ asset('img/logo-teranga.png') }}" alt="Teranga Immobilier" style="height:60px; width:auto;">
             </div>
             {{-- <h3 class="title mt-4 login_police">
                 <strong>Connexion</strong>
@@ -92,12 +92,6 @@
 @endsection
 
 @section('scriptBottom')
-    <script src="https://www.google.com/recaptcha/api.js"></script>
-    <script>
-        function onSubmit(token) {
-            document.getElementById("demo-form").submit();
-        }
-    </script>
     <script>
         $(function() {
             $("#password").on('change keyup', function(e) {
@@ -105,10 +99,6 @@
                 $(this).val(sanitizePassword);
             });
         });
-
-        var onloadCallback = function() {
-            alert("grecaptcha is ready!");
-        };
     </script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {

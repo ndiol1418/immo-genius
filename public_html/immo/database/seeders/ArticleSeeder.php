@@ -48,10 +48,13 @@ class ArticleSeeder extends Seeder
             ],
         ];
 
+        $auteurId = \App\Models\User::first()?->id;
         foreach ($articles as $data) {
-            $data['slug']      = Str::slug($data['titre']);
-            $data['auteur_id'] = \App\Models\User::first()?->id;
-            Article::create($data);
+            $slug = Str::slug($data['titre']);
+            Article::updateOrCreate(
+                ['slug' => $slug],
+                array_merge($data, ['slug' => $slug, 'auteur_id' => $auteurId])
+            );
         }
     }
 }

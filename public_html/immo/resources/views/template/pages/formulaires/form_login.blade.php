@@ -1,8 +1,8 @@
-<div class="card btn-primary border-0 card__login py-3 px-3 shadow-sm  @error('email') @else animate__animated animate__fadeInDown @enderror">
-    <div class="card-header btn-primary border-0 pt-3">
+<div class="card border-0 card__login py-3 px-3 shadow-sm @error('email') @else animate__animated animate__fadeInDown @enderror" style="background:#1B5E20;">
+    <div class="card-header border-0 pt-3" style="background:#1B5E20;">
         <div class="logo d-flex justify-content-center align-items-center">
             {{-- <a href="/" class="btn btn-outline-light2 px-4">{{ config('app.name', '') }}</a> --}}
-            <img src="{{ asset('img/logo_transparent.png') }}" alt="logo">
+            <img src="{{ asset('img/logo-teranga.png') }}" alt="Teranga Immobilier" style="height:60px; width:auto;">
         </div>
         <h3 class="title mt-4 text-white text-white">
           <strong>Connexion</strong>
@@ -56,10 +56,7 @@
                 @endif
             </div>
             <div class="form-group text-right">
-                    <button type="submit" class="btn btn-secondary mt-2 btn-block shadow-sm g-recaptcha"
-                        {{-- data-sitekey="6Le0Hp4pAAAAAKgWHvh73Hdsn2DyEvzLle1mgo9_"
-                        data-callback='onSubmit'
-                        data-action='submit' --}}
+                    <button type="submit" class="btn btn-secondary mt-2 btn-block shadow-sm"
                     >
                         {{ __('Se connecter') }}
                     </button>

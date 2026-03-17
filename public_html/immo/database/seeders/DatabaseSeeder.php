@@ -2,45 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\Annonce;
-use App\Models\Bien;
-use App\Models\Fournisseur;
-use App\Models\Image;
-use App\Models\Immo;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
     public function run()
     {
         $this->call([
             RolesSeeder::class,
-            // CollaborateurSeeder::class,
-            // ProfilSeeder::class,
+            SenegalGeoSeeder::class,    // Régions, Départements, Communes
+            TypeImmoSeeder::class,       // Types de biens, Type locations, Commodités
+            AgentsSeeder::class,         // 8 agents immobiliers sénégalais
+            AnnoncesSeeder::class,       // 30 annonces réalistes du Sénégal
+            ArticleSeeder::class,        // 5 articles blog
         ]);
-                // \App\Models\User::factory(2)->create();
-
-        User::factory(1)
-            ->has(Fournisseur::factory(1)
-                ->has(
-                    Bien::factory(1)
-                        ->has(
-                            Immo::factory(2)
-                                ->has(Annonce::factory(1)
-                                    ->hasImages(1)
-                                )
-                            )
-                )
-            )
-            ->has(Role::factory(1))
-            ->create();
     }
 }

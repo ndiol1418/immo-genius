@@ -21,16 +21,20 @@
 
 </style>
 @php
-    $adresse= $annonce->immo&&$annonce->immo->bien?$annonce->immo->bien->adresse.', '.$annonce->commune->name.', '.$annonce->commune->departement->name:$annonce->adresse;
+    $adresse= $annonce->immo && $annonce->immo->bien
+        ? $annonce->immo->bien->adresse.', '.($annonce->commune?->name ?? '').', '.($annonce->commune?->departement?->name ?? '')
+        : ($annonce->commune
+            ? ($annonce->adresse ? $annonce->adresse.', ' : '').$annonce->commune->name.', '.($annonce->commune->departement?->name ?? '')
+            : ($annonce->adresse ?? ''));
 @endphp
 
-<div class="{{ $col??'col-12' }} component checkShop"                 
-    data-lat ="{{ $annonce->immo->bien?$annonce->immo->bien->lat:0 }}"
-    data-nom ="{{ $annonce->immo->bien?$annonce->immo->bien->name:'' }}"
+<div class="{{ $col??'col-12' }} component checkShop"
+    data-lat ="{{ $annonce->immo?->bien?->lat ?? $annonce->lat ?? 0 }}"
+    data-nom ="{{ $annonce->immo?->bien?->name ?? $annonce->adresse ?? '' }}"
     data-image ="{{ $annonce->images && count($annonce->images)?$annonce->images[0]->url:'' }}"
     data-montant ="{{ number_format($annonce->prix,0,'',' ').' CFA' }}"
-    data-adresse ="{{ $annonce->immo->bien?$annonce->immo->bien->adresse:'' }}"
-    data-lon ="{{ $annonce->immo->bien?$annonce->immo->bien->lon:''  }}">
+    data-adresse ="{{ $annonce->immo?->bien?->adresse ?? $annonce->adresse ?? '' }}"
+    data-lon ="{{ $annonce->immo?->bien?->lon ?? $annonce->lon ?? '' }}">
     <div class="_card mb-4 border-0">
         <div class="card-body">
             <div class="row">
@@ -92,11 +96,17 @@
                     <section id="hero" class="hero section dark-background" style="border-radius: 20px">
                         <div id="hero-carousel-{{ $id??'' }}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000" style="min-height: 250px !important;">
                             @isset($annonce)
-                                @foreach($annonce->images as $key => $image)
-                                    <div class="carousel-item {{ $key == 0 ?'active':'' }}">
-                                        <img src="{{ asset($image->url) }}" alt="">
+                                @if($annonce->images && count($annonce->images) > 0)
+                                    @foreach($annonce->images as $key => $image)
+                                        <div class="carousel-item {{ $key == 0 ?'active':'' }}">
+                                            <img src="{{ asset($image->url) }}" alt="" class="img_annonce" style="width:100%;height:200px;object-fit:cover;">
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="carousel-item active">
+                                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800" alt="" class="img_annonce" style="width:100%;height:200px;object-fit:cover;">
                                     </div>
-                                @endforeach
+                                @endif
                             @endisset
 
                             <ol class="carousel-indicators"></ol>
