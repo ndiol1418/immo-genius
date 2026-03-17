@@ -31,6 +31,7 @@
                             required
                             autocomplete="off"
                             name="search[adresse]"
+                            style="background-color:#ffffff !important; color:#333333 !important; color-scheme: light !important;"
                             required class="form-control p-1 border-radius-left radius-input2" placeholder="Dakar,Thies ...">
                     </div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="#2E7D32" stroke-linecap="round" stroke-width="1"><path d="M5 12V4m14 16v-3M5 20v-4m14-3V4m-7 3V4m0 16v-9"/><circle cx="5" cy="14" r="2"/><circle cx="12" cy="9" r="2"/><circle cx="19" cy="15" r="2"/></g></svg>

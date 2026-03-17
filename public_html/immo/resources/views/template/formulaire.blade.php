@@ -68,6 +68,7 @@
                             required
                             autocomplete="off"
                             name="search[adresse]"
+                            style="background-color:#ffffff !important; color:#333333 !important; color-scheme: light !important;"
                             required class="form-control p-1 border-radius-left radius-input" placeholder="Dakar,Thies ...">
                     </div>
                 </div>

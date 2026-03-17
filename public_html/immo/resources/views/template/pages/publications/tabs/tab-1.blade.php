@@ -167,6 +167,7 @@
                                 required
                                 autocomplete="off"
                                 name="adresse"
+                                style="background-color:#ffffff !important; color:#333333 !important; color-scheme: light !important;"
                                 required placeholder="rue xxx , Dakar">
                                 {{-- <input type="text" id="address" required placeholder="Commencez à taper une adresse..." name="immo[adresse]" oninput="handleInput()" autocomplete="off"/>
                                 <ul id="suggestions"></ul> --}}

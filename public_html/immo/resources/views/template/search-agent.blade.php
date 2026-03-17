@@ -51,6 +51,7 @@
                             id="ship-address"
                             autocomplete="off"
                             name="lieu"
+                            style="background-color:#ffffff !important; color:#333333 !important; color-scheme: light !important;"
                             class="form-control p-1 border-radius-left radius-input" placeholder="Ville,Departemnt,Quartier ...">
                     </div>
                 </div>

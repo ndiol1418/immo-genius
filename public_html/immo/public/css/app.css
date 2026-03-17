@@ -10171,3 +10171,13 @@ input[id="ship-address"],
     color-scheme: light only !important;
     forced-color-adjust: none !important;
 }
+
+/* Fix champ Lieu - fond noir (ship-address) */
+input[id="ship-address"],
+input.pac-target-input,
+input[type="search"] {
+  background-color: #ffffff !important;
+  color: #333333 !important;
+  color-scheme: light !important;
+  -webkit-text-fill-color: #333333 !important;
+}
